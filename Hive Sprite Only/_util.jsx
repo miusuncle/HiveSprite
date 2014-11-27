@@ -1,14 +1,22 @@
-function newLayersFromFiles(specList) {
-	var keyfileList = app.stringIDToTypeID('fileList');
-	var keyAddLayerFromFile = app.stringIDToTypeID('addLayerFromFile');
+var _ = require('../Vendor Only/underscore');
 
-	var myFileList = _(specList).reduce(function (ret, spec) {
-		ret.putPath(new File(spec));
-		return ret;
-	}, new ActionList());
+module.exports = {
+  newLayersFromFiles: function newLayersFromFiles(specList) {
+    // this method must work with current active document
+    // so we check it first
+    try { app.activeDocument } catch (e) { return; }
 
-	var myOpenDescriptor = new ActionDescriptor();
-	myOpenDescriptor.putList(keyfileList, myFileList);
+    var keyfileList = app.stringIDToTypeID('fileList');
+    var keyAddLayerFromFile = app.stringIDToTypeID('addLayerFromFile');
 
-	app.executeAction(keyAddLayerFromFile, myOpenDescriptor, DialogModes.NO);
-}
+    var myFileList = _(specList).reduce(function (ret, spec) {
+      ret.putPath(new File(spec));
+      return ret;
+    }, new ActionList());
+
+    var myOpenDescriptor = new ActionDescriptor();
+    myOpenDescriptor.putList(keyfileList, myFileList);
+
+    app.executeAction(keyAddLayerFromFile, myOpenDescriptor, DialogModes.NO);
+  }
+};
