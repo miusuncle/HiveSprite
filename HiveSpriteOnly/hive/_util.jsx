@@ -1,4 +1,4 @@
-var _ = require('../Vendor Only/underscore');
+var _ = require('../vendor/underscore');
 
 module.exports = {
   newLayersFromFiles: function newLayersFromFiles(specList) {
@@ -9,7 +9,7 @@ module.exports = {
     var keyfileList = app.stringIDToTypeID('fileList');
     var keyAddLayerFromFile = app.stringIDToTypeID('addLayerFromFile');
 
-    var myFileList = _(specList).reduce(function (ret, spec) {
+    var myFileList = _([].concat(specList)).reduce(function (ret, spec) {
       ret.putPath(new File(spec));
       return ret;
     }, new ActionList());

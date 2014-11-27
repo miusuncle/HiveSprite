@@ -13,11 +13,6 @@
     return path;
   }
 
-  function endswith(str, pattern) {
-    var d = str.length - pattern.length;
-    return d >= 0 && str.indexOf(pattern, d) === d;
-  }
-
   function wrap(contents) {
     var prefix = '!(function (module, exports) {';
     var suffix = '}).call(global, module, exports);';
@@ -26,31 +21,38 @@
 
   function require() {
     return global['eval'].call(global, """(function require(moduleId) {
-      var sep = '/', ext = '.jsx', cur = './';
+      var cur = './', sep = '/';
 
       if (moduleId.indexOf(cur) === 0) {
         moduleId = moduleId.slice(2);
       }
 
-      if (!endswith(moduleId, ext)) {
-        moduleId += ext;
-      }
-
       var parts = $.fileName.split(sep);
       parts.splice(parts.length - 1, 1, moduleId);
       moduleId = normpath(parts.join(sep));
+      moduleId = File.decode(moduleId);
 
       return MODULE_CACHES[moduleId] || (function () {
         try {
           var nakedFile = new File(moduleId);
+          var exts = ['.jsx', '.js'];
 
-          if (!nakedFile.exists) {
-            throw Error(File.decode(nakedFile) + ' is NOT a MODULE!');
-            return;
+          while (!nakedFile.exists) {
+            var extension = exts.shift();
+
+            if (!extension) {
+              throw Error(File.decode(moduleId) + ' is NOT a MODULE!');
+              return;
+            }
+
+            nakedFile = new File(moduleId + extension);
           }
+
+          moduleId = nakedFile.fullName;
 
           var module = { exports: function () {} };
           var basename = nakedFile.displayName.split('.')[0];
+          var regExt = /\.jsx?$/;
 
           if (shims[basename]) {
             $.evalFile(moduleId);
@@ -61,7 +63,7 @@
             var contents = wrap(nakedFile.read());
             nakedFile.close();
 
-            var wrappedModuleId = moduleId.replace(/\.jsx?$/, '_wrapped$&');
+            var wrappedModuleId = moduleId.replace(regExt, '_wrapped$&');
             var wrappedFile = new File(wrappedModuleId);
 
             wrappedFile.open('w');
@@ -74,6 +76,9 @@
               wrappedFile.remove();
             }
           }
+
+          // when we cached module id, it SHOULD have no extension
+          moduleId = moduleId.replace(regExt, '');
 
           return (MODULE_CACHES[moduleId] = module.exports);
         } catch (e) {
