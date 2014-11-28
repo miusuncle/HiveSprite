@@ -1,8 +1,13 @@
 !(function () {
   var global = this;
+
   var MODULE_CACHES = {};
   var SHIM = {};
-  var _w = '_wrapped';
+  var DIR_QUEUE = [];
+
+  var EXT = /\.jsx?$/;
+  var WAP = '_wrapped';
+  var SEP = '/';
 
   function normpath(path) {
     while (path.indexOf('/../') !== -1) {
@@ -12,14 +17,19 @@
   }
 
   function wrap(contents) {
-    var prefix = '!(function (module, exports) {';
-    var suffix = '}).call(global, module, exports);';
+    var prefix = '!(function (require, exports, module) {';
+    var suffix = '}).call(global, require, exports, module);';
     return [prefix, contents, suffix].join('\n');
   }
 
   function haswrap(path) {
-    var sep = '/', parts = path.split(sep);
-    return [RegExp(_w + '(\.jsx?)?$').test(parts.pop()), parts];
+    var parts = path.split(SEP);
+    return RegExp(WAP + '(\.jsx?)?$').test(parts.pop());
+  }
+
+  function wrapmid(F) {
+    var mid = '#' + Date.now() + '@' + F.name.replace(EXT, WAP + '$&');
+    return [Folder.temp, mid].join(SEP);
   }
 
   function mixin(target, source, _) {
@@ -28,23 +38,20 @@
 
   function require() {
     return global['eval'].call(global, """(function require(moduleId) {
-      var cur = './', sep = '/';
+      var filepath = $.fileName, parts;
 
-      if (moduleId.indexOf(cur) === 0) {
+      if (moduleId.indexOf('./') === 0) {
         moduleId = moduleId.slice(2);
       }
 
-      var filepath = $.fileName;
-      var ret = haswrap(filepath), parts;
-
-      if (ret.shift()) {
-        parts = ret.shift().concat(moduleId);
+      if (haswrap(filepath)) {
+        parts = DIR_QUEUE.slice(-1).concat(moduleId);
       } else {
-        parts = filepath.split(sep);
+        parts = filepath.split(SEP);
         parts.splice(parts.length - 1, 1, moduleId);
       }
 
-      moduleId = normpath(parts.join(sep));
+      moduleId = normpath(parts.join(SEP));
       moduleId = File.decode(moduleId);
 
       return MODULE_CACHES[moduleId] || (function () {
@@ -67,33 +74,32 @@
 
           var module = { exports: function () {} };
           var basename = nakedFile.displayName.split('.')[0];
-          var regExt = /\.jsx?$/;
 
           if (SHIM[basename]) {
             $.evalFile(moduleId);
             module.exports = this[SHIM[basename]];
           } else {
-            nakedFile.open('r');
+            DIR_QUEUE.push(nakedFile.path);
 
-            var contents = wrap(nakedFile.read());
+            nakedFile.open('r');
+            var wrappedContents = wrap(nakedFile.read());
             nakedFile.close();
 
-            var wrappedModuleId = moduleId.replace(regExt, _w + '$&');
-            var wrappedFile = new File(wrappedModuleId);
-
+            var wrappedFile = new File(wrapmid(nakedFile));
             wrappedFile.open('w');
-            wrappedFile.write(contents);
+            wrappedFile.write(wrappedContents);
             wrappedFile.close();
 
             try {
               with (module) { $.evalFile(wrappedFile); }
             } finally {
               wrappedFile.remove();
+              DIR_QUEUE.pop();
             }
           }
 
-          // The module id being cached SHOULD have no extension
-          moduleId = moduleId.replace(regExt, '');
+          // the module id being cached SHOULD have no extension
+          moduleId = moduleId.replace(EXT, '');
 
           return (MODULE_CACHES[moduleId] = (module || {}).exports);
         } catch (e) {
@@ -103,5 +109,5 @@
     })""");
   }
 
-  mixin(SHIM, (global.require = require())('./shim'));
+  mixin(SHIM, (global.require = require())('./_shim'));
 }).call($.global);

@@ -4,7 +4,7 @@ module.exports = {
   newLayersFromFiles: function newLayersFromFiles(specList) {
     // this method must work with current active document
     // so we check it first
-    try { app.activeDocument } catch (e) { return; }
+    try { app.activeDocument; } catch (e) { return; }
 
     var keyfileList = app.stringIDToTypeID('fileList');
     var keyAddLayerFromFile = app.stringIDToTypeID('addLayerFromFile');
