@@ -201,18 +201,20 @@ module.exports = """dialog {
 
         g1: Group {
           orientation: 'row',
+          alignChildren: 'fill',
+
+          txtOutputFolder: EditText {
+            text: '',
+            preferredSize: [370, -1],
+            properties: {
+              name: 'txtOutputFolder'
+            }
+          },
 
           cmdChooseFolder: Button {
             text: 'Choose Folder...',
             properties: {
               name: 'cmdChooseFolder'
-            }
-          },
-
-          lblOutputFolder: StaticText {
-            text: 'No output folder has been chosen.',
-            properties: {
-              name: 'lblOutputFolder'
             }
           }
         },
@@ -234,7 +236,6 @@ module.exports = """dialog {
             indent: 20,
             preferredSize: [300, -1],
             text: 'Close Generated Document',
-            value: false,
             properties: {
               name: 'chkCloseGeneratedDocument'
             }
@@ -245,7 +246,6 @@ module.exports = """dialog {
             indent: 20,
             preferredSize: [300, -1],
             text: 'Open Output Folder',
-            value: true,
             properties: {
               name: 'chkOpenOutputFolder'
             }

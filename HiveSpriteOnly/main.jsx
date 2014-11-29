@@ -7,6 +7,7 @@ var validator = require('./hive/_validator');
 var bizImg    = require('./biz/_img');
 var bizCss    = require('./biz/_css');
 var bizSprite = require('./biz/_sprite');
+var bizOut    = require('./biz/_out');
 
 module.exports = {
   init: function () {
@@ -16,6 +17,11 @@ module.exports = {
     var img = bizImg($);
     var sprite = bizSprite($);
     var css = bizCss($);
+    var out = bizOut($);
+
+    var ret = _.reduce([img, sprite, css, out], function (ret, which) {
+      return _.extend(ret, which.getData());
+    }, {});
   },
 
   startup: function () {
