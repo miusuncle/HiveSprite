@@ -1,6 +1,31 @@
-var _ = require('../lib/underscore');
+var _    = require('../lib/underscore');
+var JSON = require('../lib/json2');
+
+var prefs = (function () {
+  return {
+    originalRulerUnits: this.rulerUnits
+  };
+}).call(app.preferences);
+
+var newDocument = _.wrap(newDocument, _.bind(function (original) {
+  this.rulerUnits = Units.PIXELS;
+  var ret = original.apply(null, _.rest(arguments));
+  this.rulerUnits = prefs.originalRulerUnits;
+  return ret;
+}, app.preferences));
 
 module.exports = {
+  isFile             : isFile,
+  isFolder           : isFolder,
+  isImageType        : isImageType,
+  isFolderOrImageType: isFolderOrImageType,
+  dialogFilter       : dialogFilter,
+  newDocument        : newDocument,
+
+  inspect: function (obj) {
+    alert(JSON.stringify(obj, null, 2));
+  },
+
   $: function (base, name) {
     return base.findElement(name);
   },
@@ -16,12 +41,6 @@ module.exports = {
       ctrl.enabled = true;
     });
   },
-
-  isFile: isFile,
-  isFolder: isFolder,
-  isImageType: isImageType,
-  isFolderOrImageType: isFolderOrImageType,
-  dialogFilter: dialogFilter,
 
   getImages: function (folder) {
     return folder.getFiles(isFolderOrImageType) || [];
@@ -39,7 +58,7 @@ module.exports = {
     }, []);
   },
 
-  newLayersFromFiles: function newLayersFromFiles(specList) {
+  newLayersFromFiles: function (specList) {
     // this method must work with current active document
     // so we check it first
     try { app.activeDocument; } catch (e) { return; }
@@ -83,4 +102,30 @@ function dialogFilter() {
     // TODO: add file type filter
     return '';
   }
+}
+
+function newDocument(options) {
+  options = _.defaults({}, options, {
+    'width'           : 960,
+    'height'          : 720,
+    'resolution'      : 72,
+    'name'            : 'Hive Sprite',
+    'mode'            : NewDocumentMode.RGB,
+    'initialFill'     : DocumentFill.TRANSPARENT,
+    'pixelAspectRatio': 1,
+    'bitsPerChannel'  : BitsPerChannelType.EIGHT,
+    'colorProfileName': undefined
+  });
+
+  return app.documents.add(
+    options.width,
+    options.height,
+    options.resolution,
+    options.name,
+    options.mode,
+    options.initialFill,
+    options.pixelAspectRatio,
+    options.bitsPerChannel,
+    options.colorProfileName
+  );
 }
