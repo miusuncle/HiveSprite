@@ -1,7 +1,7 @@
 var take = require('../lib/take');
 var on   = require('../lib/on');
 var _    = require('../lib/underscore');
-var util = require('../hive/_util');
+var util = require('../hive/util');
 
 var IMG = take({
   init: function ($) {
