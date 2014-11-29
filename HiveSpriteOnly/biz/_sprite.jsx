@@ -8,6 +8,13 @@ var SPRITE = take({
     return this;
   },
 
+  getData: function () {
+    return {
+      buildDirection: this.ddlBuildDirection.selection.text,
+      offsetDistance: this.txtOffsetDistance.text
+    };
+  },
+
   initView: function () {
     var Directions = this.Directions = { Horizontal: 0, Vertical: 1 };
 
@@ -19,13 +26,6 @@ var SPRITE = take({
     // `build direction` default to `Vertical`
     this.ddlBuildDirection.selection = 1;
     this.txtOffsetDistance.text = '0';
-  },
-
-  getData: function () {
-    return {
-      buildDirection: this.ddlBuildDirection.selection.text,
-      offsetDistance: this.txtOffsetDistance.text
-    };
   },
 
   bindCtrls: function ($) {

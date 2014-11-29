@@ -155,7 +155,6 @@ module.exports = """dialog {
           },
           txtClassPrefix: EditText {
             preferredSize: [100, -1],
-            text: 'sprite-',
             properties: {
               name: 'txtClassPrefix'
             }
@@ -187,7 +186,6 @@ module.exports = """dialog {
         chkIncludeWidthHeight: Checkbox {
           text: 'Include Width and Height',
           helpTip: 'Provides the height and width of each sprite in the CSS.',
-          value: true,
           properties: {
             name: 'chkIncludeWidthHeight'
           }
