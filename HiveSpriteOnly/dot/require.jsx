@@ -36,6 +36,10 @@
     for (_ in source) target[_] = source[_];
   }
 
+  function isfolder(target) {
+    return target instanceof Folder;
+  }
+
   function require() {
     return global['eval'].call(global, """(function require(moduleId) {
       var filepath = $.fileName, parts;
@@ -56,10 +60,10 @@
 
       return MODULE_CACHES[moduleId] || (function () {
         try {
-          var nakedFile = new File(moduleId);
+          var nakedFile = File(moduleId);
           var exts = ['.jsx', '.js'];
 
-          while (!nakedFile.exists) {
+          while (!nakedFile.exists || isfolder(nakedFile)) {
             var extension = exts.shift();
 
             if (!extension) {
