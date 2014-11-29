@@ -5,13 +5,19 @@ var on = function (target, type, listener) {
     return on.multiple(target, type);
   }
 
+  if (typeof target.on === 'function' && typeof type !== 'function') {
+    target.on(type, listener);
+    return {
+      remove: _(target.off).bind(target, type, listener)
+    };
+  }
+
   var uber = type.match(/(.+):(.+)/);
 
   if (uber) {
     return on.delegate.apply(on, uber.slice(-2))(target, listener);
   } else {
     target.addEventListener(type, listener, false);
-
     return {
       remove: function () {
         target.removeEventListener(type, listener, false);
