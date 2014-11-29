@@ -14,8 +14,8 @@ module.exports = {
     var $ = _.partial(util.$, w);
 
     var img = bizImg($);
-    var css = bizCss($);
     var sprite = bizSprite($);
+    var css = bizCss($);
   },
 
   startup: function () {

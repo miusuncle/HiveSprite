@@ -4,7 +4,7 @@ var _    = require('../lib/underscore');
 var util = require('../hive/_util');
 
 var IMG = take({
-  init: function($) {
+  init: function ($) {
     this.dataList = [];
 
     this.bindCtrls($);

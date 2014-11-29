@@ -95,8 +95,7 @@ module.exports = """dialog {
           ddlBuildDirection: DropDownList {
             preferredSize: [100, -1],
             properties: {
-              name: 'ddlBuildDirection',
-              items: ['Horizontal', 'Vertial']
+              name: 'ddlBuildDirection'
             }
           }
         },
@@ -111,7 +110,6 @@ module.exports = """dialog {
           },
           txtOffsetDistance: EditText {
             preferredSize: [100, -1],
-            text: 0,
             properties: {
               name: 'txtOffsetDistance'
             }
