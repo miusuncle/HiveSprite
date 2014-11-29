@@ -12,8 +12,8 @@ module.exports = """dialog {
       alignChildren: 'fill',
       spacing: 10,
 
-      pnlSourceFiles: Panel {
-        text: 'Source Files',
+      pnlSourceImages: Panel {
+        text: 'Source Images',
         orientation: 'row',
         alignChildren: 'top',
         margins: 15,
@@ -22,19 +22,20 @@ module.exports = """dialog {
           orientation: 'column',
           alignChildren: 'fill',
 
-          ddl: DropDownList {
+          ddlBrowseUse: DropDownList {
             title: 'Use: ',
             preferredSize: [400, -1],
             properties: {
-              items: ['Files', 'Folders']
+              name: 'ddlBrowseUse'
             }
           },
 
-          boxSourceFiles: ListBox {
+          lstSourceImages: ListBox {
             preferredSize: [367, 155],
             alignment: 'right',
             properties: {
-              items: ['ninja.png', 'robot.png', 'pizza.png']
+              name: 'lstSourceImages',
+              multiselect: true
             }
           }
         },
@@ -44,19 +45,34 @@ module.exports = """dialog {
           margins: [0, 30, 0, 0],
 
           cmdBrowse: Button {
-            text: 'Browse...'
+            text: 'Browse...',
+            properties: {
+              name: 'cmdBrowse'
+            }
           },
           cmdRemoveAll: Button {
-            text: 'Remove All'
+            text: 'Remove All',
+            properties: {
+              name: 'cmdRemoveAll'
+            }
           },
           cmdRemove: Button {
-            text: 'Remove'
+            text: 'Remove',
+            properties: {
+              name: 'cmdRemove'
+            }
           },
           cmdMoveUp: Button {
-            text: 'Move Up'
+            text: 'Move Up',
+            properties: {
+              name: 'cmdMoveUp'
+            }
           },
           cmdMoveDown: Button {
-            text: 'Move Down'
+            text: 'Move Down',
+            properties: {
+              name: 'cmdMoveDown'
+            }
           }
         }
       },
@@ -76,9 +92,10 @@ module.exports = """dialog {
             text: 'Build Direction: '
           },
 
-          ddl: DropDownList {
+          ddlBuildDirection: DropDownList {
             preferredSize: [100, -1],
             properties: {
+              name: 'ddlBuildDirection',
               items: ['Horizontal', 'Vertial']
             }
           }
@@ -94,7 +111,10 @@ module.exports = """dialog {
           },
           txtOffsetDistance: EditText {
             preferredSize: [100, -1],
-            text: 0
+            text: 0,
+            properties: {
+              name: 'txtOffsetDistance'
+            }
           },
           s: StaticText {
             text: 'px (range: 0-50)'
@@ -117,7 +137,10 @@ module.exports = """dialog {
             text: 'Selector Prefix: '
           },
           txtSelectorPrefix: EditText {
-            preferredSize: [100, -1]
+            preferredSize: [100, -1],
+            properties: {
+              name: 'txtSelectorPrefix'
+            }
           },
           s: StaticText {
             text: '(characters: 0-20)'
@@ -134,7 +157,10 @@ module.exports = """dialog {
           },
           txtClassPrefix: EditText {
             preferredSize: [100, -1],
-            text: 'sprite-'
+            text: 'sprite-',
+            properties: {
+              name: 'txtClassPrefix'
+            }
           },
           s: StaticText {
             text: '(characters: 0-20)'
@@ -150,7 +176,10 @@ module.exports = """dialog {
             text: 'Selector Suffix: '
           },
           txtSelectorSuffix: EditText {
-            preferredSize: [100, -1]
+            preferredSize: [100, -1],
+            properties: {
+              name: 'txtSelectorSuffix'
+            }
           },
           s: StaticText {
             text: '(characters: 0-20)'
@@ -160,7 +189,10 @@ module.exports = """dialog {
         chkIncludeWidthHeight: Checkbox {
           text: 'Include Width and Height',
           helpTip: 'Provides the height and width of each sprite in the CSS.',
-          value: true
+          value: true,
+          properties: {
+            name: 'chkIncludeWidthHeight'
+          }
         }
       },
 
@@ -169,17 +201,23 @@ module.exports = """dialog {
         orientation: 'column',
         alignChildren: 'fill',
         margins: 15,
-        spacing: 20,
+        spacing: 10,
 
         g1: Group {
           orientation: 'row',
 
           cmdChooseFolder: Button {
-            text: 'Choose Folder...'
+            text: 'Choose Folder...',
+            properties: {
+              name: 'cmdChooseFolder'
+            }
           },
 
           lblOutputFolder: StaticText {
-            text: 'No output folder has been chosen.'
+            text: 'No output folder has been chosen.',
+            properties: {
+              name: 'lblOutputFolder'
+            }
           }
         },
 
@@ -200,15 +238,21 @@ module.exports = """dialog {
             indent: 20,
             preferredSize: [300, -1],
             text: 'Close Generated Document',
-            value: false
-          }
+            value: false,
+            properties: {
+              name: 'chkCloseGeneratedDocument'
+            }
+          },
 
           chkOpenOutputFolder: Checkbox {
             alignment: 'left',
             indent: 20,
             preferredSize: [300, -1],
             text: 'Open Output Folder',
-            value: true
+            value: true,
+            properties: {
+              name: 'chkOpenOutputFolder'
+            }
           }
         }
       }
@@ -221,14 +265,14 @@ module.exports = """dialog {
       cmdOk: Button {
         text: 'OK',
         properties: {
-          name: 'ok'
+          name: 'cmdOk'
         }
       },
 
       cmdCancel: Button {
         text: 'Cancel',
         properties: {
-          name: 'cancel'
+          name: 'cmdCancel'
         }
       }
     }

@@ -1,4 +1,4 @@
-var _ = require('../vendor/underscore');
+var _ = require('./underscore');
 
 var Events = {
   // Bind an event to a `callback` function. Passing `"all"` will bind

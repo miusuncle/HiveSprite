@@ -1,4 +1,4 @@
-var _ = require('../vendor/underscore');
+var _ = require('./underscore');
 
 var on = function (target, type, listener) {
   if (_.isObject(type)) {
