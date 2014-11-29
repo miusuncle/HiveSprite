@@ -11,7 +11,7 @@ var SPRITE = take({
   getData: function () {
     return {
       buildDirection: this.ddlBuildDirection.selection.text,
-      offsetDistance: this.txtOffsetDistance.text
+      offsetDistance: +this.txtOffsetDistance.text
     };
   },
 

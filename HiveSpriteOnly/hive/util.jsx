@@ -1,5 +1,6 @@
-var _    = require('../lib/underscore');
-var JSON = require('../lib/json2');
+var _      = require('../lib/underscore');
+var JSON   = require('../lib/json2');
+var moment = require('../lib/moment');
 
 var prefs = (function () {
   return {
@@ -21,9 +22,18 @@ module.exports = {
   isFolderOrImageType: isFolderOrImageType,
   dialogFilter       : dialogFilter,
   newDocument        : newDocument,
+  saveAsPNG          : saveAsPNG,
+  exportAsPNG        : exportAsPNG,
+  saveAsTextFile     : saveAsTextFile,
 
   inspect: function (obj) {
     alert(JSON.stringify(obj, null, 2));
+  },
+
+  vsub: function (tmpl, vector) {
+    return ('' + tmpl).replace(/\$\{([^\{\}]+)\}/g, function (_, p) {
+      return (vector || {})[p] || '';
+    });
   },
 
   $: function (base, name) {
@@ -128,4 +138,70 @@ function newDocument(options) {
     options.bitsPerChannel,
     options.colorProfileName
   );
+}
+
+function saveAsPNG(doc, where) {
+  var filename = [
+    'HiveSprite',
+    moment().format("YYYY-MM-DD"),
+    (+String(Math.random()).slice(2)).toString(16)
+  ].join('-');
+
+  var saveIn = new File([where, filename].join('/'));
+
+  var pngSaveOptions = new PNGSaveOptions;
+  pngSaveOptions.compression = 9;
+  pngSaveOptions.interlaced = false;
+
+  var asCopy = true;
+  var extensionType = Extension.LOWERCASE;
+
+  doc.saveAs(saveIn, pngSaveOptions, asCopy, extensionType);
+}
+
+function exportAsPNG(doc, where) {
+  // var rand = (+String(Math.random()).slice(2)).toString(16);
+
+  var filename = [
+    'HiveSprite',
+    moment().format('MM-DD'),
+    Date.now() + '.png'
+  ].join('-');
+
+  var destination   = [where, filename].join('/');
+  // alert(destination);
+
+  var exportIn      = new File(destination);
+  var exportAs      = ExportType.SAVEFORWEB;
+  var exportOptions = new ExportOptionsSaveForWeb;
+
+  _.extend(exportOptions, {
+    'format'        : SaveDocumentType.PNG,
+    'PNG8'          : false,
+    'transparency'  : true,
+    'includeProfile': false,
+    'interlaced'    : false
+  });
+
+  doc.exportDocument(exportIn, exportAs, exportOptions);
+}
+
+function saveAsTextFile(text, where) {
+  var filename = [
+    'HiveCSS',
+    moment().format('MM-DD'),
+    Date.now() + '.css'
+  ].join('-');
+
+  var destination = [where, filename].join('/');
+  // alert(destination);
+
+  var file = new File(destination);
+
+  file.encoding = 'UTF8';
+  file.lineFeed = 'Unix';
+
+  file.open('w');
+  file.write(text);
+  file.close();
 }

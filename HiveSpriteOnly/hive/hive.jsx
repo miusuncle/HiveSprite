@@ -8,7 +8,9 @@ var Builder   = require('./_builder');
 var Hive = take({
   init: function ($, w) {
     this.window = w;
-    this.builder = new Builder().init($);
+
+    this.validator = new Validator($);
+    this.builder = new Builder($);
 
     this.bindCtrls($);
     this.bindEvents($);
@@ -17,27 +19,29 @@ var Hive = take({
   },
 
   bindCtrls: function ($) {
-    _.each(['cmdOk', 'cmdCancel'], function (name) {
+    _.each(['cmdBuild', 'cmdCancel'], function (name) {
       this[name] = $(name);
     }, this);
   },
 
   bindEvents: function ($) {
     var window = this.window;
+    var validator = this.validator;
     var builder = this.builder;
-    var cmdOk = this.cmdOk;
+    var cmdBuild = this.cmdBuild;
     var cmdCancel = this.cmdCancel;
 
-    on(window, 'close', function () {
-      var chkOpenOutputFolder = $('chkOpenOutputFolder');
-      if (chkOpenOutputFolder.value) {
-        return false;
+    on(cmdBuild, 'click', function () {
+      if (!validator.isValid()) {
+        return;
       }
-      return true;
+
+      window.close(1);
+      builder.build();
     });
 
-    on(cmdOk, 'click', function () {
-      builder.buildCss();
+    on(cmdCancel, 'click', function () {
+      window.close(2);
     });
   }
 });

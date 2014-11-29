@@ -21,7 +21,7 @@ var OUT = take({
 
   initView: function () {
     util.disable(this.txtOutputFolder);
-    this.chkCloseGeneratedDocument.value = false;
+    this.chkCloseGeneratedDocument.value = true;
     this.chkOpenOutputFolder.value = true;
   },
 

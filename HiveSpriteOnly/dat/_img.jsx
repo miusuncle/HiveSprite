@@ -43,8 +43,8 @@ var IMG = take({
       this.ddlBrowseUse.add('item', text);
     }, this);
 
-    // `browse use` default to `Files`
-    this.ddlBrowseUse.selection = 0;
+    // `browse use` default to `Folder`
+    this.ddlBrowseUse.selection = 1;
     this.renderListBox();
   },
 

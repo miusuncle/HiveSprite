@@ -258,10 +258,10 @@ module.exports = """dialog {
       orientation: 'column',
       margins: [0, 5, 0, 0],
 
-      cmdOk: Button {
-        text: 'OK',
+      cmdBuild: Button {
+        text: 'Build',
         properties: {
-          name: 'cmdOk'
+          name: 'cmdBuild'
         }
       },
 
