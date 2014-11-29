@@ -8,5 +8,5 @@
 
 !(function () {
   #include 'HiveSpriteOnly/dot/require.jsx'
-  require('./HiveSpriteOnly/main');
+  require('./HiveSpriteOnly/main').startup();
 }).call(this);

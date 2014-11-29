@@ -1,1 +1,26 @@
-var HIVE = './hive/';var VENDOR = './vendor/';var hiveUtil = require(HIVE + '_util');var hiveView = require(HIVE + '_view');var hiveValidator = require(HIVE + '_validator');var hiveWindow = new Window(hiveView);// ===========================================================var pnlSourceFiles = hiveWindow.g.g.pnlSourceFiles;var pnlSpriteOutputOptions = hiveWindow.g.g.pnlSpriteOutputOptions;var pnlCSSOutputOptions = hiveWindow.g.g.pnlCSSOutputOptions;var pnlOutputFolder = hiveWindow.g.g.pnlOutputFolder;// ===========================================================// -----------------------------------------------------------var ddlUse = pnlSourceFiles.g.ddl;ddlUse.selection = 0;var ddlBuildDirection = pnlSpriteOutputOptions.g1.ddl;ddlBuildDirection.selection = 1;// -----------------------------------------------------------hiveWindow.center();hiveWindow.show();
+var _         = require('./lib/underscore');
+
+var util      = require('./hive/_util');
+var view      = require('./hive/_view');
+var validator = require('./hive/_validator');
+
+var bizImg    = require('./biz/_img');
+var bizCss    = require('./biz/_css');
+var bizSprite = require('./biz/_sprite');
+
+module.exports = {
+  init: function () {
+    var w = this.window = new Window(view);
+    var $ = _.partial(util.$, w);
+
+    var img = bizImg($);
+    var css = bizCss($);
+    var sprite = bizSprite($);
+  },
+
+  startup: function () {
+    this.init();
+    this.window.center();
+    this.window.show();
+  }
+};
