@@ -5,7 +5,7 @@ module.exports = """dialog {
     orientation: 'row',
     alignChildren: 'top',
     margins: 0,
-    spacing: 20,
+    spacing: 16,
 
     g: Group {
       orientation: 'column',
@@ -22,16 +22,29 @@ module.exports = """dialog {
           orientation: 'column',
           alignChildren: 'fill',
 
-          ddlBrowseUse: DropDownList {
-            title: 'Use: ',
-            preferredSize: [400, -1],
-            properties: {
-              name: 'ddlBrowseUse'
+          g: Group {
+            orientation: 'row',
+            alignChildren: 'fill',
+            spacing: 20,
+
+            ddlBrowseUse: DropDownList {
+              title: 'Browse Use: ',
+              preferredSize: [200, -1],
+              properties: {
+                name: 'ddlBrowseUse'
+              }
+            },
+
+            chkIncludeSubFolders: Checkbox {
+              text: 'Include All Subfolders',
+              properties: {
+                name: 'chkIncludeSubFolders'
+              }
             }
           },
 
           lstSourceImages: ListBox {
-            preferredSize: [367, 155],
+            preferredSize: [550, 155],
             alignment: 'right',
             properties: {
               name: 'lstSourceImages',
@@ -42,7 +55,7 @@ module.exports = """dialog {
 
         actions: Group {
           orientation: 'column',
-          margins: [0, 30, 0, 0],
+          margins: [5, 30, 0, 0],
 
           cmdBrowse: Button {
             text: 'Browse...',
@@ -93,7 +106,7 @@ module.exports = """dialog {
           },
 
           ddlBuildDirection: DropDownList {
-            preferredSize: [100, -1],
+            preferredSize: [120, -1],
             properties: {
               name: 'ddlBuildDirection'
             }
@@ -109,7 +122,7 @@ module.exports = """dialog {
             text: 'Offset Distance: '
           },
           txtOffsetDistance: EditText {
-            preferredSize: [100, -1],
+            preferredSize: [120, -1],
             properties: {
               name: 'txtOffsetDistance'
             }
@@ -136,7 +149,7 @@ module.exports = """dialog {
           },
 
           ddlCSSFormat: DropDownList {
-            preferredSize: [100, -1],
+            preferredSize: [120, -1],
             properties: {
               name: 'ddlCSSFormat'
             }
@@ -152,7 +165,8 @@ module.exports = """dialog {
             text: 'Selector Prefix: '
           },
           txtSelectorPrefix: EditText {
-            preferredSize: [100, -1],
+            preferredSize: [250, -1],
+            helpTip: 'CSS to insert before the class name.',
             properties: {
               name: 'txtSelectorPrefix'
             }
@@ -171,13 +185,14 @@ module.exports = """dialog {
             text: 'Class Prefix: '
           },
           txtClassPrefix: EditText {
-            preferredSize: [100, -1],
+            preferredSize: [250, -1],
+            helpTip: 'can\\'t begin with number',
             properties: {
               name: 'txtClassPrefix'
             }
           },
           s: StaticText {
-            text: '(characters: 0-20)'
+            text: '(characters: 0-20, can\\'t begin with number)'
           }
         },
 
@@ -190,7 +205,8 @@ module.exports = """dialog {
             text: 'Selector Suffix: '
           },
           txtSelectorSuffix: EditText {
-            preferredSize: [100, -1],
+            preferredSize: [250, -1],
+            helpTip: 'CSS to insert after the class name.',
             properties: {
               name: 'txtSelectorSuffix'
             }
@@ -222,7 +238,7 @@ module.exports = """dialog {
 
           txtOutputFolder: EditText {
             text: '',
-            preferredSize: [370, -1],
+            alignment: 'fill',
             properties: {
               name: 'txtOutputFolder'
             }
@@ -274,19 +290,43 @@ module.exports = """dialog {
     actions: Group {
       orientation: 'column',
       margins: [0, 5, 0, 0],
+      spacing: 20,
 
-      cmdBuild: Button {
-        text: 'Build',
-        properties: {
-          name: 'cmdBuild'
+      actions: Group {
+        orientation: 'column',
+        cmdBuild: Button {
+          text: 'Build',
+          preferredSize: [100, -1],
+          properties: {
+            name: 'cmdBuild'
+          }
+        },
+
+        cmdCancel: Button {
+          text: 'Cancel',
+          preferredSize: [100, -1],
+          properties: {
+            name: 'cmdCancel'
+          }
         }
       },
 
-      cmdCancel: Button {
-        text: 'Cancel',
+      pnlImagePreview: Panel {
+        text: 'Preview',
+        preferredSize: [-1, 605],
+        orientation: 'column',
+        margins: [5, 20, 5, 5],
+        spacing: 6,
         properties: {
-          name: 'cmdCancel'
-        }
+          name: 'pnlImagePreview'
+        },
+
+        img0: Image { preferredSize: [90, 90] },
+        img1: Image { preferredSize: [90, 90] },
+        img2: Image { preferredSize: [90, 90] },
+        img3: Image { preferredSize: [90, 90] },
+        img4: Image { preferredSize: [90, 90] },
+        img5: Image { preferredSize: [90, 90] }
       }
     }
   }

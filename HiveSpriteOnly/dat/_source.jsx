@@ -3,7 +3,7 @@ var on   = require('../lib/on');
 var _    = require('../lib/underscore');
 var util = require('../lib/util');
 
-var IMG = take({
+var SOURCE = take({
   init: function ($) {
     this.dataList = [];
 
@@ -24,12 +24,14 @@ var IMG = take({
   bindCtrls: function ($) {
     _.each([
       'ddlBrowseUse',
+      'chkIncludeSubFolders',
       'lstSourceImages',
       'cmdBrowse',
       'cmdRemoveAll',
       'cmdRemove',
       'cmdMoveUp',
-      'cmdMoveDown'
+      'cmdMoveDown',
+      'pnlImagePreview'
     ], function (name) {
       this[name] = $(name);
     }, this);
@@ -45,26 +47,33 @@ var IMG = take({
 
     // `Browse Use` default to `Folder`
     this.ddlBrowseUse.selection = 1;
+
+    // `Include SubFolders` default to be checked
+    this.chkIncludeSubFolders.value = true;
+
     this.renderListBox();
+    this.pnlImagePreview.visible = false;
   },
 
   renderListBox: function () {
     this.lstSourceImages.removeAll();
 
     _.each(this.dataList, function (item) {
-      this.lstSourceImages.add('item', item['name']);
+      this.lstSourceImages.add('item', item.path);
     }, this);
   },
 
   bindEvents: function () {
-    var self = this;
-    var ddlBrowseUse = self.ddlBrowseUse;
-    var lstSourceImages = self.lstSourceImages;
-    var cmdBrowse = self.cmdBrowse;
-    var cmdRemoveAll = self.cmdRemoveAll;
-    var cmdRemove = self.cmdRemove;
-    var cmdMoveUp = self.cmdMoveUp;
-    var cmdMoveDown = self.cmdMoveDown;
+    var self                 = this;
+    var ddlBrowseUse         = self.ddlBrowseUse;
+    var chkIncludeSubFolders = self.chkIncludeSubFolders;
+    var lstSourceImages      = self.lstSourceImages;
+    var cmdBrowse            = self.cmdBrowse;
+    var cmdRemoveAll         = self.cmdRemoveAll;
+    var cmdRemove            = self.cmdRemove;
+    var cmdMoveUp            = self.cmdMoveUp;
+    var cmdMoveDown          = self.cmdMoveDown;
+    var pnlImagePreview      = self.pnlImagePreview;
 
     on(cmdBrowse, 'click', function () {
       var images;
@@ -75,7 +84,8 @@ var IMG = take({
         break;
       case self.Uses.Folder:
         var folder = Folder.selectDialog();
-        images = folder && util.getAllImages(folder);
+        var recursive = chkIncludeSubFolders.value;
+        images = folder && util[recursive ? 'getAllImages' : 'getImages'](folder);
         break;
       }
 
@@ -150,8 +160,16 @@ var IMG = take({
       self.trigger('listbox:update');
     });
 
-    on(lstSourceImages, 'click change', updateListBox);
+    on(ddlBrowseUse, 'change', browseUseChanged);
+    on(lstSourceImages, 'click', updateListBox);
+    on(lstSourceImages, 'change', updateImagePreview);
     on(self, { 'listbox:update': updateListBox });
+    on(self, { 'listbox:update': updateImagePreview });
+
+    function browseUseChanged() {
+      var useFolder = (+ddlBrowseUse.selection === self.Uses.Folder);
+      chkIncludeSubFolders.visible = useFolder;
+    }
 
     function updateListBox() {
       var selection = lstSourceImages.selection;
@@ -188,6 +206,32 @@ var IMG = take({
         util.disable([cmdMoveUp, cmdMoveDown]);
       }
     }
+
+    function updateImagePreview() {
+      var selection   = lstSourceImages.selection;
+      var imgControls = pnlImagePreview.children;
+      var imgCount    = imgControls.length;
+
+      _.each(imgControls, function (img) {
+        img.visible = false;
+      });
+
+      if (selection) {
+        var filtered = selection.slice(0, imgCount);
+        var sorted   = _(filtered).sortBy('index');
+
+        _.each(sorted, function (item, index, image) {
+          image               = imgControls[index];
+          image.preferredSize = [90, 90];
+          image.image         = self.dataList[item.index].path;
+          image.visible       = true;
+        });
+
+        pnlImagePreview.visible = true;
+      } else {
+        pnlImagePreview.visible = true;
+      }
+    }
   },
 
   reviveView: function () {
@@ -196,5 +240,5 @@ var IMG = take({
 });
 
 module.exports = function ($) {
-  return (new IMG).init($);
+  return (new SOURCE).init($);
 };

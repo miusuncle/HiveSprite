@@ -65,7 +65,7 @@ var util = module.exports = {
 
   getImages: function (folder) {
     if (!folder) return [];
-    return folder.getFiles(isFolderOrImageType) || [];
+    return folder.getFiles(isImageType) || [];
   },
 
   getAllImages: function gai(folder) {
