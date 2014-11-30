@@ -30,6 +30,13 @@ module.exports = {
     alert(JSON.stringify(obj, null, 2));
   },
 
+  platform: function () {
+    return ({
+      'Macintosh': 'osx',
+      'Windows': 'windows'
+    })[File.fs];
+  }(),
+
   vsub: function (tmpl, vector) {
     return ('' + tmpl).replace(/\$\{([^\{\}]+)\}/g, function (_, p) {
       return (vector || {})[p] || '';
@@ -53,12 +60,13 @@ module.exports = {
   },
 
   getImages: function (folder) {
+    if (!folder) return [];
     return folder.getFiles(isFolderOrImageType) || [];
   },
 
   getAllImages: function gai(folder) {
     var result = folder.getFiles(isFolderOrImageType);
-    return _.reduce(result, function (ret, target) {
+    return _.reduce(result || [], function (ret, target) {
       if (isImageType(target)) {
         ret.push(target);
       } else {
@@ -105,10 +113,10 @@ function isFolderOrImageType(target) {
 }
 
 function dialogFilter() {
-  switch (File.fs) {
-  case 'Macintosh':
+  switch (util.platform) {
+  case 'osx':
     return isFolderOrImageType;
-  case 'Windows':
+  case 'windows':
     // TODO: add file type filter
     return '';
   }

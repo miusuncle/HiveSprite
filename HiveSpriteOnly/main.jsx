@@ -1,6 +1,6 @@
 var _    = require('./lib/underscore');
-var util = require('./hive/util');
-var view = require('./hive/view');
+var util = require('./lib/util');
+var view = require('./config/view');
 var Hive = require('./hive/hive');
 
 module.exports = {

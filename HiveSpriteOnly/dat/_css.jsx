@@ -19,7 +19,7 @@ var CSS = take({
 
   initView: function () {
     this.txtSelectorPrefix.text = '';
-    this.txtClassPrefix.text = 'sprite-';
+    this.txtClassPrefix.text = 'sp-';
     this.txtSelectorSuffix.text = '';
     this.chkIncludeWidthHeight.value = true;
   },
