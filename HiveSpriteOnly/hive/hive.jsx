@@ -1,21 +1,19 @@
-var take      = require('../lib/take');
-var on        = require('../lib/on');
-var _         = require('../lib/underscore');
+var take    = require('../lib/take');
+var on      = require('../lib/on');
+var _       = require('../lib/underscore');
+var rules   = require('../config/rules');
+var Base    = require('./_base');
+var Builder = require('./_builder');
 
-var Validator = require('./_validator');
-var Builder   = require('./_builder');
-
-var Hive = take({
+var Hive = Base.take({
   init: function ($, w) {
-    this.window = w;
-
-    this.validator = new Validator($);
-    this.builder = new Builder($);
+    this.$             = $;
+    this.window        = w;
+    this.validateRules = rules.hivesprite;
+    this.builder       = new Builder($);
 
     this.bindCtrls($);
     this.bindEvents($);
-
-    return this;
   },
 
   bindCtrls: function ($) {
@@ -25,14 +23,14 @@ var Hive = take({
   },
 
   bindEvents: function ($) {
-    var window = this.window;
-    var validator = this.validator;
-    var builder = this.builder;
-    var cmdBuild = this.cmdBuild;
-    var cmdCancel = this.cmdCancel;
+    var self      = this;
+    var window    = self.window;
+    var builder   = self.builder;
+    var cmdBuild  = self.cmdBuild;
+    var cmdCancel = self.cmdCancel;
 
     on(cmdBuild, 'click', function () {
-      if (!validator.isValid()) {
+      if (!self.isValid()) {
         return;
       }
 

@@ -38,5 +38,5 @@ var take = function(protoProps, staticProps) {
 
 module.exports = (function (F) {
   _.extend(F.prototype, require('./vent'));
-  return _.bind(take, F);
+  return _.bind(F.take = take, F);
 })(function () {});

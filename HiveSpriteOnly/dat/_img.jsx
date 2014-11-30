@@ -36,14 +36,14 @@ var IMG = take({
   },
 
   initView: function () {
-    var Uses = this.Uses = { Files: 0, Folder: 1 };
+    var Uses = this.Uses = { 'Files': 0, 'Folder': 1 };
 
-    // initialize dropdownlist `browse use`
+    // initialize dropdownlist `Browse Use`
     _.each(Uses, function (index, text) {
       this.ddlBrowseUse.add('item', text);
     }, this);
 
-    // `browse use` default to `Folder`
+    // `Browse Use` default to `Folder`
     this.ddlBrowseUse.selection = 1;
     this.renderListBox();
   },

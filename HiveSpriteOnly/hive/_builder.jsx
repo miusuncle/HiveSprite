@@ -50,10 +50,12 @@ var Builder = take({
       new Folder(settings.outputFolder).execute();
     }
 
+    var pickWhiteList = ['outputFolder', 'cssFormat', 'includeWidthHeight'];
+
     // provide result info to outside
     var result = _.extend({
       'cssInfo': layersInfo
-    }, _.pick(settings, ['outputFolder', 'includeWidthHeight']));
+    }, _.pick(settings, pickWhiteList));
 
     // util.inspect(result);
     return result;
@@ -132,30 +134,38 @@ var Builder = take({
 
   buildCss: function (settings) {
     // util.inspect(settings);
-    var outputFolder = settings.outputFolder;
-    var includeWidthHeight = settings.includeWidthHeight;
 
-    var tmplCss = this.getCssTemplate(includeWidthHeight);
+    var tmplCss = this.getCssTemplate(
+      settings.cssFormat,
+      settings.includeWidthHeight
+    );
+
     var complier = _.partial(util.vsub, tmplCss);
-
     var contents = _.map(settings.cssInfo, complier).join('\n');
-    // alert(contents);
+    alert(contents);
 
     // save generated CSS to text file
-    util.saveAsTextFile(contents, outputFolder);
+    util.saveAsTextFile(contents, settings.outputFolder);
   },
 
-  getCssTemplate: function (includeWidthHeight) {
-    var ret = '${selector} {\n';
-    ret += '\tbackground-position: ${background-position};\n';
-
-    if (includeWidthHeight) {
-      ret += '\twidth: ${width};\n';
-      ret += '\theight: ${height};\n';
+  getCssTemplate: function (cssFormat, includeWidthHeight) {
+    switch (cssFormat) {
+    case 'Expanded': return this.expandedCssTemplate(includeWidthHeight);
+    case 'Compact' : return this.compactCssTemplate(includeWidthHeight);
     }
+  },
 
-    ret += '}\n';
-    return ret;
+  expandedCssTemplate: function (includeWidthHeight) {
+    var ret = '${selector} {\n';
+    includeWidthHeight && (ret += '\twidth: ${width};\n\theight: ${height};\n');
+    ret += '\tbackground-position: ${background-position};\n';
+    return (ret += '}\n');
+  },
+
+  compactCssTemplate: function (includeWidthHeight) {
+    var ret = '${selector} {';
+    includeWidthHeight && (ret += ' width: ${width}; height: ${height};');
+    return (ret += ' background-position: ${background-position}; }');
   }
 });
 

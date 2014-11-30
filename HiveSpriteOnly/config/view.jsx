@@ -132,6 +132,23 @@ module.exports = """dialog {
           s: StaticText {
             preferredSize: [100, -1],
             justify: 'right',
+            text: 'CSS Format: '
+          },
+
+          ddlCSSFormat: DropDownList {
+            preferredSize: [100, -1],
+            properties: {
+              name: 'ddlCSSFormat'
+            }
+          }
+        },
+
+        g2: Group {
+          orientation: 'row',
+
+          s: StaticText {
+            preferredSize: [100, -1],
+            justify: 'right',
             text: 'Selector Prefix: '
           },
           txtSelectorPrefix: EditText {
@@ -145,7 +162,7 @@ module.exports = """dialog {
           }
         },
 
-        g2: Group {
+        g3: Group {
           orientation: 'row',
 
           s: StaticText {
@@ -164,7 +181,7 @@ module.exports = """dialog {
           }
         },
 
-        g3: Group {
+        g4: Group {
           orientation: 'row',
 
           s: StaticText {

@@ -16,14 +16,14 @@ var SPRITE = take({
   },
 
   initView: function () {
-    var Directions = this.Directions = { Horizontal: 0, Vertical: 1 };
+    var Directions = this.Directions = { 'Horizontal': 0, 'Vertical': 1 };
 
-    // initialize dropdownlist `build direction`
+    // initialize dropdownlist `Build Direction`
     _.each(Directions, function (index, text) {
       this.ddlBuildDirection.add('item', text);
     }, this);
 
-    // `build direction` default to `Vertical`
+    // `Build Direction` default to `Vertical`
     this.ddlBuildDirection.selection = 1;
     this.txtOffsetDistance.text = '0';
   },

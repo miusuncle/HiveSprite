@@ -10,6 +10,7 @@ var CSS = take({
 
   getData: function () {
     return {
+      cssFormat         : this.ddlCSSFormat.selection.text,
       selectorPrefix    : this.txtSelectorPrefix.text,
       classPrefix       : this.txtClassPrefix.text,
       selectorSuffix    : this.txtSelectorSuffix.text,
@@ -18,6 +19,16 @@ var CSS = take({
   },
 
   initView: function () {
+    var CSSFormat = this.CSSFormat = { 'Expanded': 0, 'Compact': 1 };
+
+    // initialize dropdownlist `CSS Format`
+    _.each(CSSFormat, function (index, text) {
+      this.ddlCSSFormat.add('item', text);
+    }, this);
+
+    // `CSS Format` default to `Expanded`
+    this.ddlCSSFormat.selection = 0;
+
     this.txtSelectorPrefix.text = '';
     this.txtClassPrefix.text = 'sp-';
     this.txtSelectorSuffix.text = '';
@@ -26,6 +37,7 @@ var CSS = take({
 
   bindCtrls: function ($) {
     _.each([
+      'ddlCSSFormat',
       'txtSelectorPrefix',
       'txtClassPrefix',
       'txtSelectorSuffix',

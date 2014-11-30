@@ -15,7 +15,7 @@ var newDocument = _.wrap(newDocument, _.bind(function (original) {
   return ret;
 }, app.preferences));
 
-module.exports = {
+var util = module.exports = {
   isFile             : isFile,
   isFolder           : isFolder,
   isImageType        : isImageType,
@@ -35,6 +35,10 @@ module.exports = {
       'Macintosh': 'osx',
       'Windows': 'windows'
     })[File.fs];
+  }(),
+
+  tempFolder: function () {
+    return Folder.temp.fsName;
   }(),
 
   vsub: function (tmpl, vector) {

@@ -20,6 +20,7 @@ var OUT = take({
   },
 
   initView: function () {
+    this.txtOutputFolder.text = util.tempFolder;
     util.disable(this.txtOutputFolder);
     this.chkCloseGeneratedDocument.value = true;
     this.chkOpenOutputFolder.value = true;
