@@ -229,7 +229,7 @@ var SOURCE = take({
 
         pnlImagePreview.visible = true;
       } else {
-        pnlImagePreview.visible = true;
+        pnlImagePreview.visible = false;
       }
     }
   },

@@ -43,8 +43,12 @@ var util = module.exports = {
 
   vsub: function (tmpl, vector) {
     return ('' + tmpl).replace(/\$\{([^\{\}]+)\}/g, function (_, p) {
-      return (vector || {})[p] || '';
+      return '' + (vector || {})[p];
     });
+  },
+
+  isObject: function (target) {
+    return Object.prototype.toString.call(target) === '[object Object]';
   },
 
   $: function (base, name) {

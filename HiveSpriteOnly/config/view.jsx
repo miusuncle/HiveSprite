@@ -234,11 +234,11 @@ module.exports = """dialog {
 
         g1: Group {
           orientation: 'row',
-          alignChildren: 'fill',
 
           txtOutputFolder: EditText {
             text: '',
             alignment: 'fill',
+            preferredSize: [524, -1],
             properties: {
               name: 'txtOutputFolder'
             }

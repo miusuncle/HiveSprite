@@ -142,7 +142,7 @@ var Builder = take({
 
     var complier = _.partial(util.vsub, tmplCss);
     var contents = _.map(settings.cssInfo, complier).join('\n');
-    alert(contents);
+    // alert(contents);
 
     // save generated CSS to text file
     util.saveAsTextFile(contents, settings.outputFolder);
