@@ -7,6 +7,6 @@
 */
 
 !(function () {
-  #include 'HiveSpriteOnly/dot/require.jsx'
+  #include 'HiveSpriteOnly/core/require.jsx'
   require('./HiveSpriteOnly/main').startup();
 }).call(this);

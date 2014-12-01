@@ -1,11 +1,11 @@
 var take = require('../lib/take');
 var util = require('../lib/util');
 var _    = require('../lib/underscore');
-var dat  = require('../dat/dat');
+var pack = require('../widgets/pack');
 
 var Builder = take({
   constructor: function ($) {
-    this.dat = dat($);
+    this.pack = pack($);
   },
 
   build: function () {
@@ -16,7 +16,7 @@ var Builder = take({
   },
 
   buildSprite: function () {
-    var settings = this.dat.getData();
+    var settings = this.pack.getData();
     // util.inspect(settings);
 
     // generate a fresh default document
