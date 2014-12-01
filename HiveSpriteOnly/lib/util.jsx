@@ -44,6 +44,10 @@ var util = module.exports = {
     return Folder.temp.fsName;
   }(),
 
+  desktopFolder: function () {
+    return Folder.desktop.fsName;
+  }(),
+
   vsub: function (tmpl, vector) {
     return ('' + tmpl).replace(/\$\{([^\{\}]+)\}/g, function (_, p) {
       return '' + (vector || {})[p];
