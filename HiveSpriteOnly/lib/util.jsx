@@ -8,12 +8,14 @@ var prefs = (function () {
   };
 }).call(app.preferences);
 
-var newDocument = _.wrap(newDocument, _.bind(function (original) {
-  this.rulerUnits = Units.PIXELS;
-  var ret = original.apply(null, _.rest(arguments));
-  this.rulerUnits = prefs.originalRulerUnits;
-  return ret;
-}, app.preferences));
+function defaultPixels(func) {
+  return function () {
+    app.preferences.rulerUnits = Units.PIXELS;
+    var ret = func.apply(null, arguments);
+    app.preferences.rulerUnits = prefs.originalRulerUnits;
+    return ret;
+  };
+}
 
 var util = module.exports = {
   isFile             : isFile,
@@ -25,6 +27,7 @@ var util = module.exports = {
   saveAsPNG          : saveAsPNG,
   exportAsPNG        : exportAsPNG,
   saveAsTextFile     : saveAsTextFile,
+  defaultPixels      : defaultPixels,
 
   inspect: function (obj) {
     alert(JSON.stringify(obj, null, 2));

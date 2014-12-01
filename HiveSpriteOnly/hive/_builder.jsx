@@ -11,7 +11,7 @@ var Builder = take({
   build: function () {
     _.compose(
       _.bind(this.buildCss, this),
-      _.bind(this.buildSprite, this)
+      util.defaultPixels(_.bind(this.buildSprite, this))
     )();
   },
 
