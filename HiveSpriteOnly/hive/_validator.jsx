@@ -21,12 +21,7 @@ var VR = module.exports = take({
     }, [], this).flatten().value();
 
     // util.inspect(result);
-    if (_.isEmpty(result)) {
-      return true
-    }
-
-    alert(result[0]);
-    return false;
+    return _.isEmpty(result) || !!alert(result[0]);
   },
 
   check: function (ctrl, rules) {
@@ -76,7 +71,7 @@ VR.addCheckers({
       return ctrl.items.length !== 0;
     case 'edittext':
       return ctrl.text.length !== 0;
-    // TODO: add check for other control type
+    // TODO: add checking for other control types
     // ...
     }
 
