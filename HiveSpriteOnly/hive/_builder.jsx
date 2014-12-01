@@ -62,7 +62,6 @@ var Builder = take({
   },
 
   populateImagesToLayers: function (settings, doc) {
-    var sourceImages = settings.sourceImages;
     var imagePaths = _(settings.sourceImages).pluck('path');
 
     // set doc as active document for safety
@@ -116,11 +115,11 @@ var Builder = take({
     var selectorSuffix = settings.selectorSuffix;
 
     _.reduce(layersInfo, function (memoOffset, item, index) {
-      memoOffset = involver(memoOffset, item, index);
+      memoOffset    = involver(memoOffset, item, index);
 
       item.selector = selectorPrefix + '.' + classPrefix + item.name + selectorSuffix;
-      item.width = item.width + 'px';
-      item.height = item.height + 'px';
+      item.width    = item.width + 'px';
+      item.height   = item.height + 'px';
 
       delete item.layer;
       delete item.name;

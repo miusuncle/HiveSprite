@@ -125,8 +125,7 @@ function dialogFilter() {
   case 'osx':
     return isFolderOrImageType;
   case 'windows':
-    // TODO: add file type filter
-    return '';
+    return 'Image Files:*.JPG;*.JPEG;*.PNG;*.GIF';
   }
 }
 
@@ -215,7 +214,7 @@ function saveAsTextFile(text, where) {
   var file = new File(destination);
 
   file.encoding = 'UTF8';
-  file.lineFeed = 'Unix';
+  file.lineFeed = File.fs;
 
   file.open('w');
   file.write(text);

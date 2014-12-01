@@ -221,10 +221,9 @@ var SOURCE = take({
         var sorted   = _(filtered).sortBy('index');
 
         _.each(sorted, function (item, index, image) {
-          image               = imgControls[index];
-          image.preferredSize = [90, 90];
-          image.image         = self.dataList[item.index].path;
-          image.visible       = true;
+          image         = imgControls[index];
+          image.image   = self.dataList[item.index].path;
+          image.visible = true;
         });
 
         pnlImagePreview.visible = true;

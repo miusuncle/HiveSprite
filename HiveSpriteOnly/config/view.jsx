@@ -313,7 +313,6 @@ module.exports = """dialog {
 
       pnlImagePreview: Panel {
         text: 'Preview',
-        preferredSize: [-1, 605],
         orientation: 'column',
         margins: [5, 20, 5, 5],
         spacing: 6,
@@ -321,12 +320,12 @@ module.exports = """dialog {
           name: 'pnlImagePreview'
         },
 
-        img0: Image { preferredSize: [90, 90] },
-        img1: Image { preferredSize: [90, 90] },
-        img2: Image { preferredSize: [90, 90] },
-        img3: Image { preferredSize: [90, 90] },
-        img4: Image { preferredSize: [90, 90] },
-        img5: Image { preferredSize: [90, 90] }
+        img0: Image { preferredSize: [90, 86] },
+        img1: Image { preferredSize: [90, 86] },
+        img2: Image { preferredSize: [90, 86] },
+        img3: Image { preferredSize: [90, 86] },
+        img4: Image { preferredSize: [90, 86] },
+        img5: Image { preferredSize: [90, 86] }
       }
     }
   }
