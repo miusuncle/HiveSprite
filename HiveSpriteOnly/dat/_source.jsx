@@ -161,7 +161,7 @@ var SOURCE = take({
     });
 
     on(ddlBrowseUse, 'change', browseUseChanged);
-    on(lstSourceImages, 'click', updateListBox);
+    on(lstSourceImages, 'change', updateListBox);
     on(lstSourceImages, 'change', updateImagePreview);
     on(self, { 'listbox:update': updateListBox });
     on(self, { 'listbox:update': updateImagePreview });
