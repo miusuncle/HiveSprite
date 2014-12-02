@@ -189,7 +189,7 @@ module.exports = """dialog {
           orientation: 'row',
 
           s: StaticText {
-            preferredSize: [102, -1],
+            preferredSize: [124, -1],
             justify: 'right',
             text: 'Building Method: '
           },
@@ -209,13 +209,13 @@ module.exports = """dialog {
             },
 
             s: StaticText {
-              preferredSize: [125, -1],
+              preferredSize: [120, -1],
               justify: 'right',
               text: 'Arrange By: '
             },
 
             ddlArrangeBy: DropDownList {
-              preferredSize: [80, -1],
+              preferredSize: [90, -1],
               properties: {
                 name: 'ddlArrangeBy'
               }
@@ -225,7 +225,7 @@ module.exports = """dialog {
               orientation: 'stack',
 
               lblColsPerRow: StaticText {
-                preferredSize: [120, -1],
+                preferredSize: [150, -1],
                 justify: 'right',
                 text: 'Columns per Row: ',
                 visible: false,
@@ -235,7 +235,7 @@ module.exports = """dialog {
               },
 
               lblRowsPerCol: StaticText {
-                preferredSize: [120, -1],
+                preferredSize: [160, -1],
                 justify: 'right',
                 text: 'Rows per Column: ',
                 visible: false,
@@ -266,7 +266,7 @@ module.exports = """dialog {
             },
 
             s: StaticText {
-              preferredSize: [102, -1],
+              preferredSize: [124, -1],
               justify: 'right',
               text: 'Offset Spacing: '
             },
@@ -291,7 +291,7 @@ module.exports = """dialog {
 
             g1: Group {
               s: StaticText {
-                preferredSize: [102, -1],
+                preferredSize: [124, -1],
                 justify: 'right',
                 text: 'Horizontal Spacing: '
               },
@@ -309,7 +309,7 @@ module.exports = """dialog {
 
             g2: Group {
               s: StaticText {
-                preferredSize: [102, -1],
+                preferredSize: [124, -1],
                 justify: 'right',
                 text: 'Vertical Spacing: '
               },
@@ -341,7 +341,7 @@ module.exports = """dialog {
           orientation: 'row',
 
           s: StaticText {
-            preferredSize: [102, -1],
+            preferredSize: [124, -1],
             justify: 'right',
             text: 'CSS Format: '
           },
@@ -366,7 +366,7 @@ module.exports = """dialog {
           orientation: 'row',
 
           s: StaticText {
-            preferredSize: [102, -1],
+            preferredSize: [124, -1],
             justify: 'right',
             text: 'Selector Prefix: '
           },
@@ -386,7 +386,7 @@ module.exports = """dialog {
           orientation: 'row',
 
           s: StaticText {
-            preferredSize: [102, -1],
+            preferredSize: [124, -1],
             justify: 'right',
             text: 'Class Prefix: '
           },
@@ -406,7 +406,7 @@ module.exports = """dialog {
           orientation: 'row',
 
           s: StaticText {
-            preferredSize: [102, -1],
+            preferredSize: [124, -1],
             justify: 'right',
             text: 'Selector Suffix: '
           },

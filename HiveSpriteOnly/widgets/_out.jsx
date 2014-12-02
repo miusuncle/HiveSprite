@@ -98,7 +98,7 @@ var OUT = take({
       if (!exportImage && closeDocument) {
         chkCloseGeneratedDocument.value = !closeDocument;
 
-        var message = 'You can only close generated document ';
+        var message = 'You can only have Close Generated Document checked ';
         message += 'if you choose to export sprite image.';
         alert(message);
       }
@@ -112,8 +112,8 @@ var OUT = take({
       if (openFolder && !exportImage && !exportCSS) {
         chkOpenOutputFolder.value = !openFolder;
 
-        var message = 'It\'s only make sense to open output folder ';
-        message += 'if at least exporte sprite image or CSS file.';
+        var message = 'It\'s only make sense to Open Output Folder ';
+        message += 'if at least export sprite image or CSS file enabled.';
         alert(message);
       }
     });
