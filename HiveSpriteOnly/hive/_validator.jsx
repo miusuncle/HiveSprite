@@ -26,44 +26,35 @@ var VR = module.exports = take({
 
   check: function (ctrl, rules) {
     return _.reduce(rules, function (ret, config, checkerName) {
-      var params = config[0];
+      var message = config[0];
+      var params  = config[1];
+      var exempt  = config.exempt;
+
+      if (_.isFunction(exempt)) {
+        exempt = exempt.call(ctrl, ctrl, this.$);
+      }
+
+      // at some circumstance, we do want to escape checking
+      if (exempt) {
+        return ret;
+      }
 
       if (_.isFunction(params)) {
-        params = params.call(ctrl);
+        params = params.call(ctrl, ctrl, this.$);
+      }
+
+      if (_.isFunction(message)) {
+        message = message.call(ctrl, ctrl, this.$);
       }
 
       if (!VR.getChecker(checkerName)(ctrl, params)) {
-        util.isObject(params) || (params = [].concat(params));
-        ret.push(util.vsub(config[1], params));
+        util.isPlainObject(params) || (params = [].concat(params || []));
+        ret.push(util.vsub(message, params));
       }
 
       return ret;
     }, [], this);
-  },
-
-  optional: function (ctrl) {
-    return
-  },
-
-  depend: function (param, ctrl) {
-    var dependTypes = this.dependTypes;
-    var paramType = typeof param;
-
-    if (!_.has(dependTypes, paramType)) {
-      return true;
-    }
-
-    return dependTypes[paramType](param, ctrl);
-  },
-
-  dependTypes: function () {
-    return {
-      'boolean': _.identity,
-      'function': function (param, element) {
-        return param.call(null, element);
-      }
-    };
-  }()
+  }
 }, {
   _checkers: {},
 
@@ -83,7 +74,7 @@ var VR = module.exports = take({
   },
 
   addCheckers: function (checkers) {
-    // do not override existing checker
+    // do not override existing checkers
     _.defaults(this._checkers, checkers);
   }
 });
@@ -107,14 +98,11 @@ VR.addCheckers({
     return /^[a-z]/i.test(ctrl.text);
   },
 
-  positivenumber: function (ctrl) {
+  positivewholenumber: function (ctrl) {
     return /^\d+$/.test(ctrl.text);
   },
 
   range: function (ctrl, numrange) {
-    if (!this.positivenumber(ctrl)) {
-      return false;
-    }
     var value = +ctrl.text;
     return Math.max(numrange[0], Math.min(value, numrange[1])) === value;
   },

@@ -1,8 +1,8 @@
-var constants = require('../config/constants');
-var take      = require('../lib/take');
-var on        = require('../lib/on');
-var _         = require('../lib/underscore');
-var util      = require('../lib/util');
+var constants   = require('../config/constants');
+var take        = require('../lib/take');
+var on          = require('../lib/on');
+var _           = require('../lib/underscore');
+var util        = require('../lib/util');
 
 var BrowseUsing = constants.BrowseUsing;
 
@@ -131,8 +131,8 @@ var SOURCE = take({
     });
 
     on(cmdMoveUp, 'click', function () {
-      var item = lstSourceImages.selection[0];
-      var idx = item.index - 1;
+      var item     = lstSourceImages.selection[0];
+      var idx      = item.index - 1;
       var dataList = self.dataList;
 
       dataList.splice.apply(
@@ -149,8 +149,8 @@ var SOURCE = take({
     });
 
     on(cmdMoveDown, 'click', function () {
-      var item = lstSourceImages.selection[0];
-      var idx = item.index;
+      var item     = lstSourceImages.selection[0];
+      var idx      = item.index;
       var dataList = self.dataList;
 
       dataList.splice.apply(
@@ -191,8 +191,8 @@ var SOURCE = take({
 
     function updateListBox() {
       var selection = lstSourceImages.selection;
-      var items = lstSourceImages.items;
-      var length = items.length;
+      var items     = lstSourceImages.items;
+      var length    = items.length;
 
       if (!length) {
         util.disable([cmdRemoveAll, cmdRemove, cmdMoveUp, cmdMoveDown]);

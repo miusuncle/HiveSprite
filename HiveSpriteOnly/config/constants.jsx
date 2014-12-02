@@ -1,22 +1,18 @@
-module.exports = {
-  BrowseUsing: {
-    'FILES': 0,
-    'FOLDER': 1
-  },
+var _    = require('../lib/underscore');
+var util = require('../lib/util');
 
-  BuildMethods: {
-    'HORIZONTAL': 0,
-    'VERTICAL': 1,
-    'TILED': 2
-  },
-
-  ArrangeBy: {
-    'ROWS': 0,
-    'COLUMNS': 1
-  },
-
-  CSSFormat: {
-    'EXPANDED': 0,
-    'COMPACT': 1
-  }
+var CONSTANTS = {
+  BrowseUsing : ['FILES', 'FOLDER'],
+  BuildMethods: ['HORIZONTAL', 'VERTICAL', 'TILED'],
+  ArrangeBy   : ['ROWS', 'COLUMNS'],
+  CSSFormats  : ['EXPANDED', 'COMPACT']
 };
+
+module.exports = _.reduce(CONSTANTS, function (ret, values, key) {
+  return util.inject(ret, key, _.reduce(values, function (vo, val, idx) {
+    return util.inject(vo, val, idx);
+  }, {}));
+}, {});
+
+// util.inspect(module.exports);
+

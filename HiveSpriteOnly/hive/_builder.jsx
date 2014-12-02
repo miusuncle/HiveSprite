@@ -1,7 +1,11 @@
-var take = require('../lib/take');
-var util = require('../lib/util');
-var _    = require('../lib/underscore');
-var pack = require('../widgets/pack');
+var constants    = require('../config/constants');
+var take         = require('../lib/take');
+var util         = require('../lib/util');
+var _            = require('../lib/underscore');
+var pack         = require('../widgets/pack');
+
+var BuildMethods = constants.BuildMethods;
+var CSSFormats   = constants.CSSFormats;
 
 var Builder = take({
   constructor: function ($) {
@@ -25,11 +29,13 @@ var Builder = take({
     var layersInfo = this.populateImagesToLayers(settings, doc);
     // util.inspect(layersInfo);
 
-    var buildFunc = ({
-      'HORIZONTAL': _.bind(this.buildHorizontalSprite, this),
-      'VERTICAL'  : _.bind(this.buildVerticalSprite, this),
-      'TILED'      : _.bind(this.buildTiledSprite, this)
-    })[settings.buildMethod];
+    var buildFunc = (function () {
+      switch (settings.buildMethod) {
+      case BuildMethods.HORIZONTAL: return _.bind(this.buildHorizontalSprite, this);
+      case BuildMethods.VERTICAL  : return _.bind(this.buildVerticalSprite, this);
+      case BuildMethods.TILED     : return _.bind(this.buildTiledSprite, this);
+      }
+    }).call(this);
 
     layersInfo = buildFunc(settings, layersInfo);
     // util.inspect(layersInfo);
@@ -165,8 +171,8 @@ var Builder = take({
 
   getCssTemplate: function (cssFormat, includeWidthHeight) {
     switch (cssFormat) {
-    case 'Expanded': return this.expandedCssTemplate(includeWidthHeight);
-    case 'Compact' : return this.compactCssTemplate(includeWidthHeight);
+    case CSSFormats.EXPANDED: return this.expandedCssTemplate(includeWidthHeight);
+    case CSSFormats.COMPACT : return this.compactCssTemplate(includeWidthHeight);
     }
   },
 

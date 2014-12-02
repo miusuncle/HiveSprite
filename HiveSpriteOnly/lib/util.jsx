@@ -33,6 +33,11 @@ var util = module.exports = {
     alert(JSON.stringify(obj, null, 2));
   },
 
+  inject: function (obj, name, value) {
+    obj[name] = value;
+    return obj;
+  },
+
   platform: function () {
     return ({
       'Macintosh': 'osx',
@@ -49,13 +54,12 @@ var util = module.exports = {
   }(),
 
   vsub: function (tmpl, vector) {
-    vector = _.map(vector, String);
-    return ('' + tmpl).replace(/\$\{([^\{\}]+)\}/g, function (_, p) {
-      return (vector || {})[p] || '';
+    return ('' + tmpl).replace(/\$\{([^\{\}]+)\}/g, function (k, p) {
+      return _.has(vector, p) ? _.result(vector, p) : k;
     });
   },
 
-  isObject: function (target) {
+  isPlainObject: function (target) {
     return Object.prototype.toString.call(target) === '[object Object]';
   },
 

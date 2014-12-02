@@ -1,9 +1,9 @@
-var constants = require('../config/constants');
-var take      = require('../lib/take');
-var _         = require('../lib/underscore');
-var util      = require('../lib/util');
+var constants  = require('../config/constants');
+var take       = require('../lib/take');
+var _          = require('../lib/underscore');
+var util       = require('../lib/util');
 
-var CSSFormat = constants.CSSFormat;
+var CSSFormats = constants.CSSFormats;
 
 var CSS = take({
   init: function ($) {
@@ -14,7 +14,7 @@ var CSS = take({
 
   getData: function () {
     return {
-      cssFormat         : this.ddlCSSFormat.selection.text,
+      cssFormat         : +this.ddlCSSFormat.selection,
       selectorPrefix    : this.txtSelectorPrefix.text,
       classPrefix       : this.txtClassPrefix.text,
       selectorSuffix    : this.txtSelectorSuffix.text,
@@ -24,7 +24,7 @@ var CSS = take({
 
   initView: function () {
     // initialize dropdownlist `CSS Format`
-    _.each(CSSFormat, function (index, text) {
+    _.each(CSSFormats, function (index, text) {
       this.ddlCSSFormat.add('item', util.titleCase(text));
     }, this);
 

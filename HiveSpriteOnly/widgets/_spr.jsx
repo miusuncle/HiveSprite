@@ -17,10 +17,10 @@ var SPRITE = take({
 
   getData: function () {
     return {
-      buildMethod      : this.ddlBuildMethod.selection.text.toUpperCase(),
+      buildMethod      : +this.ddlBuildMethod.selection,
       offsetSpacing    : +this.txtOffsetSpacing.text,
 
-      arrangeBy        : this.ddlArrangeBy.selection.text.toUpperCase(),
+      arrangeBy        : +this.ddlArrangeBy.selection,
       horizontalSpacing: +this.txtHorizontalSpacing.text,
       verticalSpacing  : +this.txtVerticalSpacing.text,
       rowNums          : +this.txtRowNums.text
@@ -43,10 +43,10 @@ var SPRITE = take({
     // `Arrangement` default to `Rows`
     this.ddlArrangeBy.selection = 0;
 
-    this.txtOffsetSpacing.text   = '1';
-    this.txtHorizontalSpacing.text    = '1';
-    this.txtVerticalSpacing.text = '1';
-    this.txtRowNums.text         = '1';
+    this.txtOffsetSpacing.text     = '1';
+    this.txtHorizontalSpacing.text = '1';
+    this.txtVerticalSpacing.text   = '1';
+    this.txtRowNums.text           = '1';
   },
 
   bindCtrls: function ($) {
@@ -73,7 +73,7 @@ var SPRITE = take({
   bindEvents: function () {
     var self           = this;
     var ddlBuildMethod = self.ddlBuildMethod;
-    var grpArrangement   = self.grpArrangement;
+    var grpArrangement = self.grpArrangement;
     var ddlArrangeBy   = self.ddlArrangeBy;
     var lblColsPerRow  = self.lblColsPerRow;
     var lblRowsPerCol  = self.lblRowsPerCol;

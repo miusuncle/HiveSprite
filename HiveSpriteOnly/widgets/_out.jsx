@@ -113,7 +113,7 @@ var OUT = take({
         chkOpenOutputFolder.value = !openFolder;
 
         var message = 'It\'s only make sense to Open Output Folder ';
-        message += 'if at least export sprite image or CSS file enabled.';
+        message += 'if at least Export Sprite Image or Export CSS File enabled.';
         alert(message);
       }
     });
