@@ -2,7 +2,7 @@ var constants    = require('../config/constants');
 var take         = require('../lib/take');
 var util         = require('../lib/util');
 var _            = require('../lib/underscore');
-var pack         = require('../widgets/pack');
+var pack         = require('../divs/pack');
 
 var BuildMethods = constants.BuildMethods;
 var CSSFormats   = constants.CSSFormats;
