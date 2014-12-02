@@ -1,16 +1,16 @@
-var _         = require('../lib/underscore');
-var datSource = require('./_source');
-var datCss    = require('./_css');
-var datSprite = require('./_sprite');
-var datOut    = require('./_out');
+var _     = require('../lib/underscore');
+var pkSrc = require('./_src');
+var pkOut = require('./_out');
+var pkCss = require('./_css');
+var pkSpr = require('./_spr');
 
 module.exports = function ($) {
-  var dats = [datSource($), datSprite($), datCss($), datOut($)];
+  var pks = [pkSrc($), pkOut($), pkSpr($), pkCss($)];
 
   return {
     getData: function () {
-      return _.reduce(dats, function (ret, dat) {
-        return _.extend(ret, dat.getData());
+      return _.reduce(pks, function (ret, pk) {
+        return _.extend(ret, pk.getData());
       }, {});
     }
   };

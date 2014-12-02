@@ -25,12 +25,13 @@ var Builder = take({
     var layersInfo = this.populateImagesToLayers(settings, doc);
     // util.inspect(layersInfo);
 
-    var buildMethod = ({
-      'Horizontal': _.bind(this.buildHorizontalSprite, this),
-      'Vertical'  : _.bind(this.buildVerticalSprite, this)
-    })[settings.buildDirection];
+    var buildFunc = ({
+      'HORIZONTAL': _.bind(this.buildHorizontalSprite, this),
+      'VERTICAL'  : _.bind(this.buildVerticalSprite, this),
+      'GRID'      : _.bind(this.buildGridSprite, this)
+    })[settings.buildMethod];
 
-    layersInfo = buildMethod(settings, layersInfo);
+    layersInfo = buildFunc(settings, layersInfo);
     // util.inspect(layersInfo);
 
     // tidy up document
@@ -106,6 +107,10 @@ var Builder = take({
       item.layer.translate(0, index === 0 ? 0 : memoOffset);
       return (memoOffset += item.height);
     });
+  },
+
+  buildGridSprite: function (settings, layersInfo) {
+
   },
 
   buildingSprite: function (settings, layersInfo, involver) {

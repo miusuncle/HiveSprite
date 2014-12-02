@@ -49,8 +49,9 @@ var util = module.exports = {
   }(),
 
   vsub: function (tmpl, vector) {
+    vector = _.map(vector, String);
     return ('' + tmpl).replace(/\$\{([^\{\}]+)\}/g, function (_, p) {
-      return '' + (vector || {})[p];
+      return (vector || {})[p] || '';
     });
   },
 
@@ -60,6 +61,10 @@ var util = module.exports = {
 
   $: function (base, name) {
     return base.findElement(name);
+  },
+
+  titleCase: function (s) {
+    return s[0].toUpperCase() + s.slice(1).toLowerCase();
   },
 
   disable: function (controls) {

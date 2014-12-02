@@ -1,7 +1,10 @@
-var take = require('../lib/take');
-var on   = require('../lib/on');
-var _    = require('../lib/underscore');
-var util = require('../lib/util');
+var constants = require('../config/constants');
+var take      = require('../lib/take');
+var on        = require('../lib/on');
+var _         = require('../lib/underscore');
+var util      = require('../lib/util');
+
+var BrowseUsing = constants.BrowseUsing;
 
 var SOURCE = take({
   init: function ($) {
@@ -23,7 +26,7 @@ var SOURCE = take({
 
   bindCtrls: function ($) {
     _.each([
-      'ddlBrowseUse',
+      'ddlBrowseUsing',
       'chkIncludeSubFolders',
       'lstSourceImages',
       'cmdBrowse',
@@ -38,15 +41,13 @@ var SOURCE = take({
   },
 
   initView: function () {
-    var Uses = this.Uses = { 'Files': 0, 'Folder': 1 };
-
     // initialize dropdownlist `Browse Use`
-    _.each(Uses, function (index, text) {
-      this.ddlBrowseUse.add('item', text);
+    _.each(BrowseUsing, function (index, text) {
+      this.ddlBrowseUsing.add('item', util.titleCase(text));
     }, this);
 
     // `Browse Use` default to `Folder`
-    this.ddlBrowseUse.selection = 1;
+    this.ddlBrowseUsing.selection = 1;
 
     // `Include SubFolders` default to be checked
     this.chkIncludeSubFolders.value = true;
@@ -65,7 +66,7 @@ var SOURCE = take({
 
   bindEvents: function () {
     var self                 = this;
-    var ddlBrowseUse         = self.ddlBrowseUse;
+    var ddlBrowseUsing       = self.ddlBrowseUsing;
     var chkIncludeSubFolders = self.chkIncludeSubFolders;
     var lstSourceImages      = self.lstSourceImages;
     var cmdBrowse            = self.cmdBrowse;
@@ -78,11 +79,11 @@ var SOURCE = take({
     on(cmdBrowse, 'click', function () {
       var images;
 
-      switch (+ddlBrowseUse.selection) {
-      case self.Uses.Files:
+      switch (+ddlBrowseUsing.selection) {
+      case BrowseUsing.FILES:
         images = File.openDialog(undefined, util.dialogFilter(), true);
         break;
-      case self.Uses.Folder:
+      case BrowseUsing.FOLDER:
         var folder = Folder.selectDialog();
         var recursive = chkIncludeSubFolders.value;
         images = folder && util[recursive ? 'getAllImages' : 'getImages'](folder);
@@ -160,14 +161,14 @@ var SOURCE = take({
       self.trigger('listbox:update');
     });
 
-    on(ddlBrowseUse, 'change', browseUseChanged);
+    on(ddlBrowseUsing, 'change', browseUseChanged);
     on(lstSourceImages, 'change', updateListBox);
     on(lstSourceImages, 'change', updateImagePreview);
     on(self, { 'listbox:update': updateListBox });
     on(self, { 'listbox:update': updateImagePreview });
 
     function browseUseChanged() {
-      var useFolder = (+ddlBrowseUse.selection === self.Uses.Folder);
+      var useFolder = (+ddlBrowseUsing.selection === BrowseUsing.FOLDER);
       chkIncludeSubFolders.visible = useFolder;
     }
 

@@ -1,5 +1,9 @@
-var take = require('../lib/take');
-var _    = require('../lib/underscore');
+var constants = require('../config/constants');
+var take      = require('../lib/take');
+var _         = require('../lib/underscore');
+var util      = require('../lib/util');
+
+var CSSFormat = constants.CSSFormat;
 
 var CSS = take({
   init: function ($) {
@@ -19,11 +23,9 @@ var CSS = take({
   },
 
   initView: function () {
-    var CSSFormat = this.CSSFormat = { 'Expanded': 0, 'Compact': 1 };
-
     // initialize dropdownlist `CSS Format`
     _.each(CSSFormat, function (index, text) {
-      this.ddlCSSFormat.add('item', text);
+      this.ddlCSSFormat.add('item', util.titleCase(text));
     }, this);
 
     // `CSS Format` default to `Expanded`

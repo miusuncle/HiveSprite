@@ -25,18 +25,17 @@ module.exports = """dialog {
           g: Group {
             orientation: 'row',
             alignChildren: 'fill',
-            spacing: 20,
 
-            ddlBrowseUse: DropDownList {
-              title: 'Browse Use: ',
+            ddlBrowseUsing: DropDownList {
+              title: 'Browse Using: ',
               preferredSize: [200, -1],
               properties: {
-                name: 'ddlBrowseUse'
+                name: 'ddlBrowseUsing'
               }
             },
 
             chkIncludeSubFolders: Checkbox {
-              text: 'Include All Subfolders',
+              text: 'Include Images in All Subfolders',
               properties: {
                 name: 'chkIncludeSubFolders'
               }
@@ -44,7 +43,7 @@ module.exports = """dialog {
           },
 
           lstSourceImages: ListBox {
-            preferredSize: [550, 155],
+            preferredSize: [550, 180],
             alignment: 'right',
             properties: {
               name: 'lstSourceImages',
@@ -90,141 +89,6 @@ module.exports = """dialog {
         }
       },
 
-      pnlSpriteOutputOptions: Panel {
-        text: 'Sprite Output Options',
-        orientation: 'column',
-        alignChildren: 'left',
-        margins: 15,
-
-        g1: Group {
-          orientation: 'row',
-
-          s: StaticText {
-            preferredSize: [100, -1],
-            justify: 'right',
-            text: 'Build Direction: '
-          },
-
-          ddlBuildDirection: DropDownList {
-            preferredSize: [120, -1],
-            properties: {
-              name: 'ddlBuildDirection'
-            }
-          }
-        },
-
-        g2: Group {
-          orientation: 'row',
-
-          s: StaticText {
-            preferredSize: [100, -1],
-            justify: 'right',
-            text: 'Offset Distance: '
-          },
-          txtOffsetDistance: EditText {
-            preferredSize: [120, -1],
-            properties: {
-              name: 'txtOffsetDistance'
-            }
-          },
-          s: StaticText {
-            text: 'px (range: 0-50)'
-          }
-        }
-      },
-
-      pnlCSSOutputOptions: Panel {
-        text: 'CSS Output Options',
-        orientation: 'column',
-        alignChildren: 'left',
-        margins: 15,
-
-        g1: Group {
-          orientation: 'row',
-
-          s: StaticText {
-            preferredSize: [100, -1],
-            justify: 'right',
-            text: 'CSS Format: '
-          },
-
-          ddlCSSFormat: DropDownList {
-            preferredSize: [120, -1],
-            properties: {
-              name: 'ddlCSSFormat'
-            }
-          }
-        },
-
-        g2: Group {
-          orientation: 'row',
-
-          s: StaticText {
-            preferredSize: [100, -1],
-            justify: 'right',
-            text: 'Selector Prefix: '
-          },
-          txtSelectorPrefix: EditText {
-            preferredSize: [250, -1],
-            helpTip: 'CSS to insert before the class name.',
-            properties: {
-              name: 'txtSelectorPrefix'
-            }
-          },
-          s: StaticText {
-            text: '(characters: 0-20)'
-          }
-        },
-
-        g3: Group {
-          orientation: 'row',
-
-          s: StaticText {
-            preferredSize: [100, -1],
-            justify: 'right',
-            text: 'Class Prefix: '
-          },
-          txtClassPrefix: EditText {
-            preferredSize: [250, -1],
-            helpTip: 'can\\'t begin with number',
-            properties: {
-              name: 'txtClassPrefix'
-            }
-          },
-          s: StaticText {
-            text: '(characters: 0-20, can\\'t begin with number)'
-          }
-        },
-
-        g4: Group {
-          orientation: 'row',
-
-          s: StaticText {
-            preferredSize: [100, -1],
-            justify: 'right',
-            text: 'Selector Suffix: '
-          },
-          txtSelectorSuffix: EditText {
-            preferredSize: [250, -1],
-            helpTip: 'CSS to insert after the class name.',
-            properties: {
-              name: 'txtSelectorSuffix'
-            }
-          },
-          s: StaticText {
-            text: '(characters: 0-20)'
-          }
-        },
-
-        chkIncludeWidthHeight: Checkbox {
-          text: 'Include Width and Height',
-          helpTip: 'Provides the height and width of each sprite in the CSS.',
-          properties: {
-            name: 'chkIncludeWidthHeight'
-          }
-        }
-      },
-
       pnlOutputFolder: Panel {
         text: 'Output Settings',
         orientation: 'column',
@@ -246,6 +110,8 @@ module.exports = """dialog {
 
           cmdChooseFolder: Button {
             text: 'Choose Folder...',
+            alignment: 'fill',
+            preferredSize: [114, -1],
             properties: {
               name: 'cmdChooseFolder'
             }
@@ -264,24 +130,268 @@ module.exports = """dialog {
             text: 'After Finished Building: '
           },
 
-          chkCloseGeneratedDocument: Checkbox {
-            alignment: 'left',
-            indent: 20,
-            preferredSize: [300, -1],
-            text: 'Close Generated Document',
-            properties: {
-              name: 'chkCloseGeneratedDocument'
+          g1: Group {
+            chkExportSpriteImage: Checkbox {
+              alignment: 'left',
+              preferredSize: [300, -1],
+              text: 'Export Sprite Image to Output Folder',
+              properties: {
+                name: 'chkExportSpriteImage'
+              }
+            },
+
+            chkExportCSSFile: Checkbox {
+              alignment: 'left',
+              preferredSize: [300, -1],
+              text: 'Export CSS File to Output Folder',
+              properties: {
+                name: 'chkExportCSSFile'
+              }
             }
           },
 
-          chkOpenOutputFolder: Checkbox {
-            alignment: 'left',
-            indent: 20,
-            preferredSize: [300, -1],
-            text: 'Open Output Folder',
-            properties: {
-              name: 'chkOpenOutputFolder'
+          g2: Group {
+            chkCloseGeneratedDocument: Checkbox {
+              alignment: 'left',
+              preferredSize: [300, -1],
+              text: 'Close Generated Document',
+              properties: {
+                name: 'chkCloseGeneratedDocument'
+              }
+            },
+
+            chkOpenOutputFolder: Checkbox {
+              alignment: 'left',
+              preferredSize: [300, -1],
+              text: 'Open Output Folder',
+              properties: {
+                name: 'chkOpenOutputFolder'
+              }
             }
+          }
+        }
+      },
+
+      pnlSpriteOutputOptions: Panel {
+        text: 'Sprite Output Options',
+        orientation: 'column',
+        alignChildren: 'left',
+        margins: 15,
+
+        g1: Group {
+          orientation: 'row',
+
+          s: StaticText {
+            preferredSize: [102, -1],
+            justify: 'right',
+            text: 'Build Method: '
+          },
+
+          ddlBuildMethod: DropDownList {
+            preferredSize: [120, -1],
+            properties: {
+              name: 'ddlBuildMethod'
+            }
+          },
+
+          g: Group {
+            orientation: 'row',
+            visible: false,
+            properties: {
+              name: 'grpArrangement'
+            },
+
+            s: StaticText {
+              preferredSize: [125, -1],
+              justify: 'right',
+              text: 'Arrange By: '
+            },
+
+            ddlArrangeBy: DropDownList {
+              preferredSize: [80, -1],
+              properties: {
+                name: 'ddlArrangeBy',
+                items: ['Rows', 'Columns']
+              }
+            },
+
+            s: StaticText {
+              preferredSize: [120, -1],
+              justify: 'right',
+              text: 'Columns per Row: '
+            },
+
+            txtColNums: EditText {
+              preferredSize: [50, -1],
+              helpTip: 'range: 1-30',
+              properties: {
+                name: 'txtColNums'
+              }
+            }
+          }
+        },
+
+        g2: Group {
+          orientation: 'stack',
+          alignChildren: 'left',
+
+          g1: Group {
+            orientation: 'row',
+            properties: {
+              name: 'grpMonoSpacing'
+            },
+
+            s: StaticText {
+              preferredSize: [102, -1],
+              justify: 'right',
+              text: 'Offset Spacing: '
+            },
+            txtOffsetSpacing: EditText {
+              preferredSize: [120, -1],
+              helpTip: 'range: 0-50',
+              properties: {
+                name: 'txtOffsetSpacing'
+              }
+            },
+            s: StaticText {
+              text: 'px'
+            }
+          },
+
+          g2: Group {
+            orientation: 'row',
+            visible: false,
+            properties: {
+              name: 'grpDualSpacing'
+            },
+
+            g1: Group {
+              s: StaticText {
+                preferredSize: [102, -1],
+                justify: 'right',
+                text: 'Horizontal Spacing: '
+              },
+              txtHorizSpacing: EditText {
+                preferredSize: [120, -1],
+                helpTip: 'range: 0-50',
+                properties: {
+                  name: 'txtHorizSpacing'
+                }
+              },
+              s: StaticText {
+                text: 'px'
+              }
+            },
+
+            g2: Group {
+              s: StaticText {
+                preferredSize: [102, -1],
+                justify: 'right',
+                text: 'Vertical Spacing: '
+              },
+              txtVerticalSpacing: EditText {
+                preferredSize: [120, -1],
+                helpTip: 'range: 0-50',
+                properties: {
+                  name: 'txtVerticalSpacing'
+                }
+              },
+              s: StaticText {
+                text: 'px'
+              }
+            }
+          }
+        }
+      },
+
+      pnlCSSOutputOptions: Panel {
+        text: 'CSS Output Options',
+        orientation: 'column',
+        alignChildren: 'left',
+        margins: 15,
+
+        g1: Group {
+          orientation: 'row',
+
+          s: StaticText {
+            preferredSize: [102, -1],
+            justify: 'right',
+            text: 'CSS Format: '
+          },
+
+          ddlCSSFormat: DropDownList {
+            preferredSize: [120, -1],
+            properties: {
+              name: 'ddlCSSFormat'
+            }
+          },
+
+          chkIncludeWidthHeight: Checkbox {
+            text: 'Include Width and Height',
+            helpTip: 'Provides the width and height of each sprite in the CSS.',
+            properties: {
+              name: 'chkIncludeWidthHeight'
+            }
+          }
+        },
+
+        g2: Group {
+          orientation: 'row',
+
+          s: StaticText {
+            preferredSize: [102, -1],
+            justify: 'right',
+            text: 'Selector Prefix: '
+          },
+          txtSelectorPrefix: EditText {
+            preferredSize: [250, -1],
+            helpTip: 'CSS to insert before the class name.',
+            properties: {
+              name: 'txtSelectorPrefix'
+            }
+          },
+          s: StaticText {
+            text: '(characters: 0-20)'
+          }
+        },
+
+        g3: Group {
+          orientation: 'row',
+
+          s: StaticText {
+            preferredSize: [102, -1],
+            justify: 'right',
+            text: 'Class Prefix: '
+          },
+          txtClassPrefix: EditText {
+            preferredSize: [250, -1],
+            helpTip: 'can\\'t begin with number',
+            properties: {
+              name: 'txtClassPrefix'
+            }
+          },
+          s: StaticText {
+            text: '(characters: 0-20)'
+          }
+        },
+
+        g4: Group {
+          orientation: 'row',
+
+          s: StaticText {
+            preferredSize: [102, -1],
+            justify: 'right',
+            text: 'Selector Suffix: '
+          },
+          txtSelectorSuffix: EditText {
+            preferredSize: [250, -1],
+            helpTip: 'CSS to insert after the class name.',
+            properties: {
+              name: 'txtSelectorSuffix'
+            }
+          },
+          s: StaticText {
+            text: '(characters: 0-20)'
           }
         }
       }
