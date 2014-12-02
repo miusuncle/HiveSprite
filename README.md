@@ -1,10 +1,10 @@
 # Summary
 
-An antique CSS Sprite Generator for modern photoshop version.
+An antique CSS Sprite Generator for modern photoshop.
 
 ## Install
 
-Clone this repository into whatever directory, then copy the cloned repository into `<Photoshop Intallation Directory>/Preset/Scripts/`. Run photoshop(if phtoshop is running, close it and then rerun), you will see a menu item appears as `File | Automate | Hive Sprite...`, and that's it.
+Clone or download this repository into whatever directory, then copy the cloned(or unziped) repository into `<Photoshop Intallation Directory>/Preset/Scripts/`. Run photoshop(if phtoshop has been running, close and then rerun it), you will see one menu item appears as `File | Automate | Hive Sprite...`, and that's it.
 
 ## UI Preview
 

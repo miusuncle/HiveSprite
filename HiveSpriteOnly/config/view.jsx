@@ -39,11 +39,18 @@ module.exports = """dialog {
               properties: {
                 name: 'chkIncludeSubFolders'
               }
+            },
+
+            chkPreviewImages: Checkbox {
+              text: 'Preview Selected Images',
+              properties: {
+                name: 'chkPreviewImages'
+              }
             }
           },
 
           lstSourceImages: ListBox {
-            preferredSize: [550, 180],
+            preferredSize: [570, 180],
             alignment: 'right',
             properties: {
               name: 'lstSourceImages',
@@ -102,7 +109,7 @@ module.exports = """dialog {
           txtOutputFolder: EditText {
             text: '',
             alignment: 'fill',
-            preferredSize: [524, -1],
+            preferredSize: [530, -1],
             properties: {
               name: 'txtOutputFolder'
             }
@@ -111,7 +118,7 @@ module.exports = """dialog {
           cmdChooseFolder: Button {
             text: 'Choose Folder...',
             alignment: 'fill',
-            preferredSize: [114, -1],
+            preferredSize: [120, -1],
             properties: {
               name: 'cmdChooseFolder'
             }
@@ -133,7 +140,7 @@ module.exports = """dialog {
           g1: Group {
             chkExportSpriteImage: Checkbox {
               alignment: 'left',
-              preferredSize: [300, -1],
+              preferredSize: [310, -1],
               text: 'Export Sprite Image to Output Folder',
               properties: {
                 name: 'chkExportSpriteImage'
@@ -142,7 +149,7 @@ module.exports = """dialog {
 
             chkExportCSSFile: Checkbox {
               alignment: 'left',
-              preferredSize: [300, -1],
+              preferredSize: [310, -1],
               text: 'Export CSS File to Output Folder',
               properties: {
                 name: 'chkExportCSSFile'
@@ -153,7 +160,7 @@ module.exports = """dialog {
           g2: Group {
             chkCloseGeneratedDocument: Checkbox {
               alignment: 'left',
-              preferredSize: [300, -1],
+              preferredSize: [310, -1],
               text: 'Close Generated Document',
               properties: {
                 name: 'chkCloseGeneratedDocument'
@@ -162,7 +169,7 @@ module.exports = """dialog {
 
             chkOpenOutputFolder: Checkbox {
               alignment: 'left',
-              preferredSize: [300, -1],
+              preferredSize: [310, -1],
               text: 'Open Output Folder',
               properties: {
                 name: 'chkOpenOutputFolder'
@@ -172,8 +179,8 @@ module.exports = """dialog {
         }
       },
 
-      pnlSpriteOutputOptions: Panel {
-        text: 'Sprite Output Options',
+      pnlSpriteBuildingOptions: Panel {
+        text: 'Sprite Building Options',
         orientation: 'column',
         alignChildren: 'left',
         margins: 15,
@@ -184,7 +191,7 @@ module.exports = """dialog {
           s: StaticText {
             preferredSize: [102, -1],
             justify: 'right',
-            text: 'Build Method: '
+            text: 'Building Method: '
           },
 
           ddlBuildMethod: DropDownList {
@@ -210,22 +217,39 @@ module.exports = """dialog {
             ddlArrangeBy: DropDownList {
               preferredSize: [80, -1],
               properties: {
-                name: 'ddlArrangeBy',
-                items: ['Rows', 'Columns']
+                name: 'ddlArrangeBy'
               }
             },
 
-            s: StaticText {
-              preferredSize: [120, -1],
-              justify: 'right',
-              text: 'Columns per Row: '
+            g: Group {
+              orientation: 'stack',
+
+              lblColsPerRow: StaticText {
+                preferredSize: [120, -1],
+                justify: 'right',
+                text: 'Columns per Row: ',
+                visible: false,
+                properties: {
+                  name: 'lblColsPerRow'
+                }
+              },
+
+              lblRowsPerCol: StaticText {
+                preferredSize: [120, -1],
+                justify: 'right',
+                text: 'Rows per Column: ',
+                visible: false,
+                properties: {
+                  name: 'lblRowsPerCol'
+                }
+              },
             },
 
-            txtColNums: EditText {
+            txtRowNums: EditText {
               preferredSize: [50, -1],
               helpTip: 'range: 1-30',
               properties: {
-                name: 'txtColNums'
+                name: 'txtRowNums'
               }
             }
           }
@@ -238,7 +262,7 @@ module.exports = """dialog {
           g1: Group {
             orientation: 'row',
             properties: {
-              name: 'grpMonoSpacing'
+              name: 'grpSoloSpacing'
             },
 
             s: StaticText {
@@ -271,11 +295,11 @@ module.exports = """dialog {
                 justify: 'right',
                 text: 'Horizontal Spacing: '
               },
-              txtHorizSpacing: EditText {
+              txtHorizontalSpacing: EditText {
                 preferredSize: [120, -1],
                 helpTip: 'range: 0-50',
                 properties: {
-                  name: 'txtHorizSpacing'
+                  name: 'txtHorizontalSpacing'
                 }
               },
               s: StaticText {
@@ -304,11 +328,14 @@ module.exports = """dialog {
         }
       },
 
-      pnlCSSOutputOptions: Panel {
-        text: 'CSS Output Options',
+      pnlCSSExportOptions: Panel {
+        text: 'CSS Export Options',
         orientation: 'column',
         alignChildren: 'left',
         margins: 15,
+        properties: {
+          name: 'pnlCSSExportOptions'
+        },
 
         g1: Group {
           orientation: 'row',

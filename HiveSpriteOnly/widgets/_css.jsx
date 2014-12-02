@@ -31,9 +31,9 @@ var CSS = take({
     // `CSS Format` default to `Expanded`
     this.ddlCSSFormat.selection = 0;
 
-    this.txtSelectorPrefix.text = '';
-    this.txtClassPrefix.text = 'sp-';
-    this.txtSelectorSuffix.text = '';
+    this.txtSelectorPrefix.text      = '';
+    this.txtClassPrefix.text         = 'sp-';
+    this.txtSelectorSuffix.text      = '';
     this.chkIncludeWidthHeight.value = true;
   },
 

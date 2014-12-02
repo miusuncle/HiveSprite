@@ -79,6 +79,24 @@ var util = module.exports = {
     });
   },
 
+  disableRecursive: function _disable(ctrl) {
+    if (ctrl.type !== 'item') {
+      ctrl.enabled = false;
+    }
+
+    if (_.has(ctrl, 'children')) {
+      _.each(_.result(ctrl, 'children'), _disable);
+    }
+  },
+
+  enableRecursive: function _enable(ctrl) {
+    ctrl.enabled = true;
+
+    if (_.has(ctrl, 'children')) {
+      _.each(_.result(ctrl, 'children'), _enable);
+    }
+  },
+
   getImages: function (folder) {
     if (!folder) return [];
     return folder.getFiles(isImageType) || [];

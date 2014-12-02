@@ -28,7 +28,7 @@ var Builder = take({
     var buildFunc = ({
       'HORIZONTAL': _.bind(this.buildHorizontalSprite, this),
       'VERTICAL'  : _.bind(this.buildVerticalSprite, this),
-      'GRID'      : _.bind(this.buildGridSprite, this)
+      'TILED'      : _.bind(this.buildTiledSprite, this)
     })[settings.buildMethod];
 
     layersInfo = buildFunc(settings, layersInfo);
@@ -39,7 +39,9 @@ var Builder = take({
     doc.trim(TrimType.TRANSPARENT);
 
     // export generated document as PNG file
-    util.exportAsPNG(doc, settings.outputFolder);
+    if (settings.exportSpriteImage) {
+      util.exportAsPNG(doc, settings.outputFolder);
+    }
 
     // close document if necessary
     if (settings.closeGeneratedDocument) {
@@ -51,7 +53,12 @@ var Builder = take({
       new Folder(settings.outputFolder).execute();
     }
 
-    var pickWhiteList = ['outputFolder', 'cssFormat', 'includeWidthHeight'];
+    var pickWhiteList = [
+      'exportCSSFile',
+      'outputFolder',
+      'cssFormat',
+      'includeWidthHeight'
+    ];
 
     // provide result info to outside
     var result = _.extend({
@@ -109,12 +116,12 @@ var Builder = take({
     });
   },
 
-  buildGridSprite: function (settings, layersInfo) {
+  buildTiledSprite: function (settings, layersInfo) {
 
   },
 
   buildingSprite: function (settings, layersInfo, involver) {
-    var offsetDistance = settings.offsetDistance;
+    var offsetSpacing  = settings.offsetSpacing;
     var selectorPrefix = settings.selectorPrefix;
     var classPrefix    = settings.classPrefix;
     var selectorSuffix = settings.selectorSuffix;
@@ -129,7 +136,7 @@ var Builder = take({
       delete item.layer;
       delete item.name;
 
-      memoOffset += offsetDistance;
+      memoOffset += offsetSpacing;
       return memoOffset;
     }, 0);
 
@@ -138,6 +145,10 @@ var Builder = take({
 
   buildCss: function (settings) {
     // util.inspect(settings);
+
+    if (!settings.exportCSSFile) {
+      return;
+    }
 
     var tmplCss = this.getCssTemplate(
       settings.cssFormat,

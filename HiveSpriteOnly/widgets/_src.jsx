@@ -34,6 +34,7 @@ var SOURCE = take({
       'cmdRemove',
       'cmdMoveUp',
       'cmdMoveDown',
+      'chkPreviewImages',
       'pnlImagePreview'
     ], function (name) {
       this[name] = $(name);
@@ -51,6 +52,9 @@ var SOURCE = take({
 
     // `Include SubFolders` default to be checked
     this.chkIncludeSubFolders.value = true;
+
+    // `Preview Selected Images` default to be unchecked
+    this.chkPreviewImages.value = false;
 
     this.renderListBox();
     this.pnlImagePreview.visible = false;
@@ -74,6 +78,7 @@ var SOURCE = take({
     var cmdRemove            = self.cmdRemove;
     var cmdMoveUp            = self.cmdMoveUp;
     var cmdMoveDown          = self.cmdMoveDown;
+    var chkPreviewImages     = self.chkPreviewImages;
     var pnlImagePreview      = self.pnlImagePreview;
 
     on(cmdBrowse, 'click', function () {
@@ -162,14 +167,26 @@ var SOURCE = take({
     });
 
     on(ddlBrowseUsing, 'change', browseUseChanged);
-    on(lstSourceImages, 'change', updateListBox);
-    on(lstSourceImages, 'change', updateImagePreview);
+    on(chkPreviewImages, 'click', toggleImagePreview);
+
+    on(lstSourceImages, 'change', function () {
+      self.trigger('listbox:update');
+    });
+
     on(self, { 'listbox:update': updateListBox });
-    on(self, { 'listbox:update': updateImagePreview });
+    on(self, { 'listbox:update': toggleImagePreview });
 
     function browseUseChanged() {
       var useFolder = (+ddlBrowseUsing.selection === BrowseUsing.FOLDER);
-      chkIncludeSubFolders.visible = useFolder;
+      chkIncludeSubFolders.enabled = useFolder;
+    }
+
+    function toggleImagePreview() {
+      if (chkPreviewImages.value) {
+        updateImagePreview();
+      } else {
+        pnlImagePreview.visible = false;
+      }
     }
 
     function updateListBox() {
@@ -213,6 +230,8 @@ var SOURCE = take({
       var imgControls = pnlImagePreview.children;
       var imgCount    = imgControls.length;
 
+      pnlImagePreview.visible = true;
+
       _.each(imgControls, function (img) {
         img.visible = false;
       });
@@ -226,8 +245,6 @@ var SOURCE = take({
           image.image   = self.dataList[item.index].path;
           image.visible = true;
         });
-
-        pnlImagePreview.visible = true;
       } else {
         pnlImagePreview.visible = false;
       }

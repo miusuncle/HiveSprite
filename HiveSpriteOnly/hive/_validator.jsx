@@ -39,7 +39,31 @@ var VR = module.exports = take({
 
       return ret;
     }, [], this);
-  }
+  },
+
+  optional: function (ctrl) {
+    return
+  },
+
+  depend: function (param, ctrl) {
+    var dependTypes = this.dependTypes;
+    var paramType = typeof param;
+
+    if (!_.has(dependTypes, paramType)) {
+      return true;
+    }
+
+    return dependTypes[paramType](param, ctrl);
+  },
+
+  dependTypes: function () {
+    return {
+      'boolean': _.identity,
+      'function': function (param, element) {
+        return param.call(null, element);
+      }
+    };
+  }()
 }, {
   _checkers: {},
 
@@ -71,6 +95,7 @@ VR.addCheckers({
       return ctrl.items.length !== 0;
     case 'edittext':
       return ctrl.text.length !== 0;
+
     // TODO: add checking for other control types
     // ...
     }

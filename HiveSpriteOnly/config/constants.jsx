@@ -11,8 +11,8 @@ module.exports = {
   },
 
   ArrangeBy: {
-    'Rows': 0,
-    'Columns': 1
+    'ROWS': 0,
+    'COLUMNS': 1
   },
 
   CSSFormat: {
