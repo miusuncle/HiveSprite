@@ -12,6 +12,7 @@ var SPRITE = take({
     this.bindCtrls($);
     this.initView();
     this.bindEvents();
+    this.reviveView();
     return this;
   },
 
@@ -81,38 +82,49 @@ var SPRITE = take({
     var grpDualSpacing = self.grpDualSpacing;
 
     on(ddlBuildMethod, 'change', function () {
-      switch (+this.selection) {
-      case BuildMethods.HORIZONTAL:
-      case BuildMethods.VERTICAL:
-        grpArrangement.visible = false;
-        grpDualSpacing.visible = false;
-        grpSoloSpacing.visible = true;
-        break;
-      case BuildMethods.TILED:
-        grpSoloSpacing.visible = false;
-        grpArrangement.visible = true;
-        grpDualSpacing.visible = true;
-        self.trigger('arrangement:change');
-        break;
-      }
+      self.trigger('buildmethod:change');
     });
 
     on(ddlArrangeBy, 'change', function () {
       self.trigger('arrangement:change');
     });
 
-    on(self, 'arrangement:change', function () {
-      switch (+ddlArrangeBy.selection) {
-      case ArrangeBy.ROWS:
-        lblRowsPerCol.visible = false;
-        lblColsPerRow.visible = true;
-        break;
-      case ArrangeBy.COLUMNS:
-        lblColsPerRow.visible = false;
-        lblRowsPerCol.visible = true;
-        break;
+    on(self, {
+      'buildmethod:change': function () {
+        switch (+ddlBuildMethod.selection) {
+        case BuildMethods.HORIZONTAL:
+        case BuildMethods.VERTICAL:
+          grpArrangement.visible = false;
+          grpDualSpacing.visible = false;
+          grpSoloSpacing.visible = true;
+          break;
+        case BuildMethods.TILED:
+          grpSoloSpacing.visible = false;
+          grpArrangement.visible = true;
+          grpDualSpacing.visible = true;
+          self.trigger('arrangement:change');
+          break;
+        }
+      },
+
+      'arrangement:change': function () {
+        switch (+ddlArrangeBy.selection) {
+        case ArrangeBy.ROWS:
+          lblRowsPerCol.visible = false;
+          lblColsPerRow.visible = true;
+          break;
+        case ArrangeBy.COLUMNS:
+          lblColsPerRow.visible = false;
+          lblRowsPerCol.visible = true;
+          break;
+        }
       }
     });
+  },
+
+  reviveView: function () {
+    this.trigger('buildmethod:change');
+    this.trigger('arrangement:change');
   }
 });
 

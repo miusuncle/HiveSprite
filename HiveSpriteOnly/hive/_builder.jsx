@@ -5,6 +5,7 @@ var _            = require('../lib/underscore');
 var pack         = require('../divs/pack');
 
 var BuildMethods = constants.BuildMethods;
+var ArrangeBy    = constants.ArrangeBy;
 var CSSFormats   = constants.CSSFormats;
 
 var Builder = take({
@@ -71,7 +72,7 @@ var Builder = take({
       'cssInfo': layersInfo
     }, _.pick(settings, pickWhiteList));
 
-    // util.inspect(result);
+    util.inspect(result);
     return result;
   },
 
@@ -103,30 +104,26 @@ var Builder = take({
   },
 
   buildHorizontalSprite: function (settings, layersInfo) {
-    return this.buildingSprite(settings, layersInfo, function (memoOffset, item, index) {
+    return this.buildSoloSprite(settings, layersInfo, function (memoOffset, item, index) {
       item['background-position'] = (-memoOffset) + (memoOffset === 0 ? '' : 'px') + ' 0';
 
       // translate each layer from left to right
-      item.layer.translate(index === 0 ? 0 : memoOffset, 0);
+      item.layer.translate(memoOffset, 0);
       return (memoOffset += item.width);
     });
   },
 
   buildVerticalSprite: function (settings, layersInfo) {
-    return this.buildingSprite(settings, layersInfo, function (memoOffset, item, index) {
+    return this.buildSoloSprite(settings, layersInfo, function (memoOffset, item, index) {
       item['background-position'] = '0 ' + (-memoOffset) + (memoOffset === 0 ? '' : 'px');
 
-      // translate each layer from top to bottom
-      item.layer.translate(0, index === 0 ? 0 : memoOffset);
+      // translate layer from top to bottom
+      item.layer.translate(0, memoOffset);
       return (memoOffset += item.height);
     });
   },
 
-  buildTiledSprite: function (settings, layersInfo) {
-
-  },
-
-  buildingSprite: function (settings, layersInfo, involver) {
+  buildSoloSprite: function (settings, layersInfo, involver) {
     var offsetSpacing  = settings.offsetSpacing;
     var selectorPrefix = settings.selectorPrefix;
     var classPrefix    = settings.classPrefix;
@@ -142,9 +139,65 @@ var Builder = take({
       delete item.layer;
       delete item.name;
 
-      memoOffset += offsetSpacing;
-      return memoOffset;
+      return (memoOffset += offsetSpacing);
     }, 0);
+
+    return layersInfo;
+  },
+
+  buildTiledSprite: function (settings, layersInfo) {
+    var offsetSpacing     = settings.offsetSpacing;
+    var selectorPrefix    = settings.selectorPrefix;
+    var classPrefix       = settings.classPrefix;
+    var selectorSuffix    = settings.selectorSuffix;
+    var horizontalSpacing = settings.horizontalSpacing;
+    var verticalSpacing   = settings.verticalSpacing;
+    var rowNums           = settings.rowNums;
+
+    var maxWidth  = _.chain(layersInfo).pluck('width').max().value();
+    var maxHeight = _.chain(layersInfo).pluck('height').max().value();
+    // util.inspect({ max_width: maxWidth, max_height: maxHeight });
+
+    _.reduce(layersInfo, function (offset, item, index) {
+      var x = offset.x;
+      var y = offset.y;
+
+      item['background-position'] = [
+        -x + (x === 0 ? '' : 'px'),
+        -y + (y === 0 ? '' : 'px')
+      ].join(' ');
+
+      // position layer according to offset
+      item.layer.translate(x, y);
+
+      item.selector = selectorPrefix + '.' + classPrefix + item.name + selectorSuffix;
+      item.width    = item.width + 'px';
+      item.height   = item.height + 'px';
+
+      delete item.layer;
+      delete item.name;
+
+      switch (settings.arrangeBy) {
+      case ArrangeBy.ROWS:
+        if (index % rowNums === rowNums - 1) {
+          offset.y += (maxHeight + verticalSpacing);
+          offset.x = 0;
+        } else {
+          offset.x += (maxWidth + horizontalSpacing);
+        }
+        break;
+      case ArrangeBy.COLUMNS:
+        if (index % rowNums === rowNums - 1) {
+          offset.x += (maxWidth + horizontalSpacing);
+          offset.y = 0;
+        } else {
+          offset.y += (maxHeight + verticalSpacing);
+        }
+        break;
+      }
+
+      return offset;
+    }, { x: 0, y: 0 });
 
     return layersInfo;
   },
