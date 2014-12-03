@@ -50,7 +50,7 @@ module.exports = """dialog {
           },
 
           lstSourceImages: ListBox {
-            preferredSize: [570, 180],
+            preferredSize: [620, 180],
             alignment: 'right',
             properties: {
               name: 'lstSourceImages',
@@ -109,7 +109,7 @@ module.exports = """dialog {
           txtOutputFolder: EditText {
             text: '',
             alignment: 'fill',
-            preferredSize: [530, -1],
+            preferredSize: [580, -1],
             properties: {
               name: 'txtOutputFolder'
             }

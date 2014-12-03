@@ -15,4 +15,3 @@ module.exports = _.reduce(CONSTANTS, function (ret, values, key) {
 }, {});
 
 // util.inspect(module.exports);
-
