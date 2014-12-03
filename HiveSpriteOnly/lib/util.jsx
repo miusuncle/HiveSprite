@@ -135,6 +135,23 @@ var util = module.exports = {
     myOpenDescriptor.putList(keyfileList, myFileList);
 
     app.executeAction(keyAddLayerFromFile, myOpenDescriptor, DialogModes.NO);
+  },
+
+  viewDocumentInActualSize: function () {
+    // this method must work with current active document
+    // so we check it first
+    try { app.activeDocument; } catch (e) { return; }
+
+    var idslct = charIDToTypeID('slct');
+    var desc7  = new ActionDescriptor();
+    var idnull = charIDToTypeID('null');
+    var ref4   = new ActionReference();
+    var idMn   = charIDToTypeID('Mn  ');
+    var idMnIt = charIDToTypeID('MnIt');
+    var idActP = charIDToTypeID('ActP');
+    ref4.putEnumerated(idMn, idMnIt, idActP);
+    desc7.putReference(idnull, ref4);
+    executeAction(idslct, desc7, DialogModes.NO);
   }
 };
 

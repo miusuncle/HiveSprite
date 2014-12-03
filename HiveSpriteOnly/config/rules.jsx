@@ -18,25 +18,25 @@ var rules = module.exports = {
     'txtRowNums': {
       required: [rowNumsFormatter('${target} can not be empty.')],
       positivewholenumber: [rowNumsFormatter('${target} should accept a positive whole number value.')],
-      range: [rowNumsFormatter('${target} need a number value between ${0} and ${1}.'), [1, 30]]
+      range: [rowNumsFormatter('${target} need a number value between ${0} and ${1}.'), [1, 50]]
     },
 
     'txtHorizontalSpacing': {
       required: ['Horizontal Spacing can not be empty.'],
       positivewholenumber: ['Horizontal Spacing should accept a positive whole number value.'],
-      range: ['Horizontal Spacing need a number value between ${0} and ${1}.', [0, 50]]
+      range: ['Horizontal Spacing need a number value between ${0} and ${1}.', [0, 200]]
     },
 
     'txtVerticalSpacing': {
       required: ['Vertical Spacing can not be empty.'],
       positivewholenumber: ['Vertical Spacing should accept a positive whole number value.'],
-      range: ['Vertical Spacing need a number value between ${0} and ${1}.', [0, 50]]
+      range: ['Vertical Spacing need a number value between ${0} and ${1}.', [0, 200]]
     },
 
     'txtOffsetSpacing': {
       required: ['Offset Spacing can not be empty.'],
       positivewholenumber: ['Offset Spacing should accept a positive whole number value.'],
-      range: ['Offset Spacing need a number value between ${0} and ${1}.', [0, 50]]
+      range: ['Offset Spacing need a number value between ${0} and ${1}.', [0, 200]]
     },
 
     'txtSelectorPrefix': {

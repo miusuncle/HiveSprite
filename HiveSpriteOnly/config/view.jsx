@@ -247,7 +247,7 @@ module.exports = """dialog {
 
             txtRowNums: EditText {
               preferredSize: [50, -1],
-              helpTip: 'range: 1-30',
+              helpTip: 'range: 1-50',
               properties: {
                 name: 'txtRowNums'
               }
@@ -272,7 +272,7 @@ module.exports = """dialog {
             },
             txtOffsetSpacing: EditText {
               preferredSize: [120, -1],
-              helpTip: 'range: 0-50',
+              helpTip: 'range: 0-200',
               properties: {
                 name: 'txtOffsetSpacing'
               }
@@ -297,7 +297,7 @@ module.exports = """dialog {
               },
               txtHorizontalSpacing: EditText {
                 preferredSize: [120, -1],
-                helpTip: 'range: 0-50',
+                helpTip: 'range: 0-200',
                 properties: {
                   name: 'txtHorizontalSpacing'
                 }
@@ -315,7 +315,7 @@ module.exports = """dialog {
               },
               txtVerticalSpacing: EditText {
                 preferredSize: [120, -1],
-                helpTip: 'range: 0-50',
+                helpTip: 'range: 0-200',
                 properties: {
                   name: 'txtVerticalSpacing'
                 }

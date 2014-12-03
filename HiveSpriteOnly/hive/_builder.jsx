@@ -44,6 +44,7 @@ var Builder = take({
     // tidy up document
     doc.revealAll();
     doc.trim(TrimType.TRANSPARENT);
+    util.viewDocumentInActualSize();
 
     // export generated document as PNG file
     if (settings.exportSpriteImage) {
@@ -72,7 +73,7 @@ var Builder = take({
       'cssInfo': layersInfo
     }, _.pick(settings, pickWhiteList));
 
-    util.inspect(result);
+    // util.inspect(result);
     return result;
   },
 
