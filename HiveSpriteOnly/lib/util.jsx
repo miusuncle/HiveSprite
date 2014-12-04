@@ -149,6 +149,7 @@ var util = module.exports = {
     var idMn   = charIDToTypeID('Mn  ');
     var idMnIt = charIDToTypeID('MnIt');
     var idActP = charIDToTypeID('ActP');
+
     ref4.putEnumerated(idMn, idMnIt, idActP);
     desc7.putReference(idnull, ref4);
     executeAction(idslct, desc7, DialogModes.NO);

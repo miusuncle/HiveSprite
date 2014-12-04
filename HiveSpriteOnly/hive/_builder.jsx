@@ -215,8 +215,8 @@ var Builder = take({
       settings.includeWidthHeight
     );
 
-    var complier = _.partial(util.vsub, tmplCss);
-    var contents = _.map(settings.cssInfo, complier).join('\n');
+    var compiled = _.partial(util.vsub, tmplCss);
+    var contents = _.map(settings.cssInfo, compiled).join('\n');
     // alert(contents);
 
     // save generated CSS to text file
