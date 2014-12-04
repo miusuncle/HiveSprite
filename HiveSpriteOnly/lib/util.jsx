@@ -142,17 +142,18 @@ var util = module.exports = {
     // so we check it first
     try { app.activeDocument; } catch (e) { return; }
 
-    var idslct = charIDToTypeID('slct');
+    var idslct = app.charIDToTypeID('slct');
     var desc7  = new ActionDescriptor();
-    var idnull = charIDToTypeID('null');
+    var idnull = app.charIDToTypeID('null');
     var ref4   = new ActionReference();
-    var idMn   = charIDToTypeID('Mn  ');
-    var idMnIt = charIDToTypeID('MnIt');
-    var idActP = charIDToTypeID('ActP');
+    var idMn   = app.charIDToTypeID('Mn  ');
+    var idMnIt = app.charIDToTypeID('MnIt');
+    var idActP = app.charIDToTypeID('ActP');
 
     ref4.putEnumerated(idMn, idMnIt, idActP);
     desc7.putReference(idnull, ref4);
-    executeAction(idslct, desc7, DialogModes.NO);
+
+    app.executeAction(idslct, desc7, DialogModes.NO);
   }
 };
 
@@ -210,7 +211,7 @@ function newDocument(options) {
 function saveAsPNG(doc, where) {
   var filename = [
     'HiveSprite',
-    moment().format("YYYY-MM-DD"),
+    moment().format('YYYY-MM-DD'),
     (+String(Math.random()).slice(2)).toString(16)
   ].join('-');
 
