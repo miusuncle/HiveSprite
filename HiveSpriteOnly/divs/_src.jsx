@@ -1,9 +1,13 @@
+var nls         = require('../config/i18n');
 var constants   = require('../config/constants');
 var take        = require('../lib/take');
 var on          = require('../lib/on');
 var _           = require('../lib/underscore');
 var util        = require('../lib/util');
 
+var CHC         = nls.CHC;
+var DLG         = nls.DLG;
+var UI          = nls.UI;
 var BrowseUsing = constants.BrowseUsing;
 
 var SOURCE = take({
@@ -11,6 +15,7 @@ var SOURCE = take({
     this.dataList = [];
 
     this.bindCtrls($);
+    this.localizeUI();
     this.initView();
     this.bindEvents();
     this.reviveView();
@@ -26,25 +31,41 @@ var SOURCE = take({
 
   bindCtrls: function ($) {
     _.each([
+      'pnlSourceImages',
       'ddlBrowseUsing',
       'chkIncludeSubFolders',
+      'chkPreviewImages',
       'lstSourceImages',
+
       'cmdBrowse',
       'cmdRemoveAll',
       'cmdRemove',
       'cmdMoveUp',
       'cmdMoveDown',
-      'chkPreviewImages',
+
       'pnlImagePreview'
     ], function (name) {
       this[name] = $(name);
     }, this);
   },
 
+  localizeUI: function () {
+    this.pnlSourceImages.text      = util.localize(UI.SOURCE_IMAGES);
+    this.ddlBrowseUsing.title      = util.localize(UI.BROWSE_USING);
+    this.chkIncludeSubFolders.text = util.localize(UI.INCLUDE_SUBFOLDERS);
+    this.cmdBrowse.text            = util.localize(UI.BROWSE);
+    this.cmdRemoveAll.text         = util.localize(UI.REMOVE_ALL);
+    this.cmdRemove.text            = util.localize(UI.REMOVE);
+    this.cmdMoveUp.text            = util.localize(UI.MOVE_UP);
+    this.cmdMoveDown.text          = util.localize(UI.MOVE_DOWN);
+    this.chkPreviewImages.text     = util.localize(UI.PREVIEW_IMAGES);
+    this.pnlImagePreview.text      = util.localize(UI.PREVIEW);
+  },
+
   initView: function () {
     // initialize dropdownlist `Browse Use`
     _.each(BrowseUsing, function (index, text) {
-      this.ddlBrowseUsing.add('item', util.titleCase(text));
+      this.ddlBrowseUsing.add('item', util.localize(CHC[text]));
     }, this);
 
     // `Browse Use` default to `Folder`
@@ -86,10 +107,10 @@ var SOURCE = take({
 
       switch (+ddlBrowseUsing.selection) {
       case BrowseUsing.FILES:
-        images = File.openDialog(undefined, util.dialogFilter(), true);
+        images = File.openDialog(util.localize(DLG.SELECT_IMAGES), util.dialogFilter(), true);
         break;
       case BrowseUsing.FOLDER:
-        var folder = Folder.selectDialog();
+        var folder = Folder.selectDialog(util.localize(DLG.TARGET_FOLDER));
         var recursive = chkIncludeSubFolders.value;
         images = folder && util[recursive ? 'getAllImages' : 'getImages'](folder);
         break;

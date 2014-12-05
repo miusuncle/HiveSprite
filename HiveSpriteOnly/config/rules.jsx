@@ -1,55 +1,56 @@
+var constants = require('../config/constants');
+var MSG       = require('../config/i18n').MSG;
 var util      = require('../lib/util');
 var _         = require('../lib/underscore');
-var constants = require('../config/constants');
 
 var ArrangeBy = constants.ArrangeBy;
 
 var rules = module.exports = {
   'hivesprite': {
     'lstSourceImages': {
-      required: ['Source images can not be empty.']
+      required: [util.localize(MSG.SOURCE_IMAGES_REQUIRED)]
     },
 
     'txtOutputFolder': {
-      required: ['Output folder can not be empty.'],
-      folderpath: ['Please specify a valid output folder.']
+      required: [util.localize(MSG.OUTPUT_FOLDER_REQUIRED)],
+      folderpath: [util.localize(MSG.OUTPUT_FOLDER_INVALID)]
     },
 
     'txtRowNums': {
-      required: [rowNumsFormatter('${target} can not be empty.')],
-      positivewholenumber: [rowNumsFormatter('${target} should accept a positive whole number value.')],
-      range: [rowNumsFormatter('${target} need a number value between ${0} and ${1}.'), [1, 50]]
+      required: [rowNumsFormatter(util.localize(MSG.ROW_NUMS_REQUIRED))],
+      positivewholenumber: [rowNumsFormatter(util.localize(MSG.ROW_NUMS_POS_NUM))],
+      range: [rowNumsFormatter(util.localize(MSG.ROW_NUMS_RANGE)), [1, 50]]
     },
 
     'txtHorizontalSpacing': {
-      required: ['Horizontal Spacing can not be empty.'],
-      positivewholenumber: ['Horizontal Spacing should accept a positive whole number value.'],
-      range: ['Horizontal Spacing need a number value between ${0} and ${1}.', [0, 200]]
+      required: [util.localize(MSG.HORIZ_SPACING_REQUIRED)],
+      positivewholenumber: [util.localize(MSG.HORIZ_SPACING_POS_NUM)],
+      range: [util.localize(MSG.HORIZ_SPACING_RANGE), [0, 200]]
     },
 
     'txtVerticalSpacing': {
-      required: ['Vertical Spacing can not be empty.'],
-      positivewholenumber: ['Vertical Spacing should accept a positive whole number value.'],
-      range: ['Vertical Spacing need a number value between ${0} and ${1}.', [0, 200]]
+      required: [util.localize(MSG.VERTICAL_SPACING_REQUIRED)],
+      positivewholenumber: [util.localize(MSG.VERTICAL_SPACING_POS_NUM)],
+      range: [util.localize(MSG.VERTICAL_SPACING_RANGE), [0, 200]]
     },
 
     'txtOffsetSpacing': {
-      required: ['Offset Spacing can not be empty.'],
-      positivewholenumber: ['Offset Spacing should accept a positive whole number value.'],
-      range: ['Offset Spacing need a number value between ${0} and ${1}.', [0, 200]]
+      required: [util.localize(MSG.OFFSET_SPACING_REQUIRED)],
+      positivewholenumber: [util.localize(MSG.OFFSET_SPACING_POS_NUM)],
+      range: [util.localize(MSG.OFFSET_SPACING_RANGE), [0, 200]]
     },
 
     'txtSelectorPrefix': {
-      maxlength: ['Selector prefix input SHALL not more than ${0} charaters.', 20]
+      maxlength: [util.localize(MSG.SELECTOR_PREFIX_MAX_LENGTH), 20]
     },
 
     'txtClassPrefix': {
-      startwithletter: ['Class prefix SHALL start with a letter.'],
-      maxlength: ['Class prefix input SHALL not more than ${0} charaters.', 20]
+      startwithletter: [util.localize(MSG.CLASS_PREFIX_LETTER_FIRST)],
+      maxlength: [util.localize(MSG.CLASS_PREFIX_MAX_LENGTH), 20]
     },
 
     'txtSelectorSuffix': {
-      maxlength: ['Selector suffix input SHALL not more than ${0} charaters.', 20]
+      maxlength: [util.localize(MSG.SELECTOR_SUFFIX_MAX_LENGTH), 20]
     }
   }
 };
@@ -73,10 +74,10 @@ function rowNumsFormatter(message) {
 
     switch (+ddlArrangeBy.selection) {
     case ArrangeBy.ROWS:
-      label = 'Columns per Row';
+      label = util.localize(MSG.COLUMNS_PER_ROW);
       break;
     case ArrangeBy.COLUMNS:
-      label = 'Rows per Column';
+      label = util.localize(MSG.ROWS_PER_COLUMN);
       break;
     }
 

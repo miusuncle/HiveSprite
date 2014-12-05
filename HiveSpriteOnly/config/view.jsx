@@ -17,6 +17,9 @@ module.exports = """dialog {
         orientation: 'row',
         alignChildren: 'top',
         margins: 15,
+        properties: {
+          name: 'pnlSourceImages'
+        },
 
         g: Group {
           orientation: 'column',
@@ -65,30 +68,35 @@ module.exports = """dialog {
 
           cmdBrowse: Button {
             text: 'Browse...',
+            preferredSize: [110, -1],
             properties: {
               name: 'cmdBrowse'
             }
           },
           cmdRemoveAll: Button {
             text: 'Remove All',
+            preferredSize: [110, -1],
             properties: {
               name: 'cmdRemoveAll'
             }
           },
           cmdRemove: Button {
             text: 'Remove',
+            preferredSize: [110, -1],
             properties: {
               name: 'cmdRemove'
             }
           },
           cmdMoveUp: Button {
             text: 'Move Up',
+            preferredSize: [110, -1],
             properties: {
               name: 'cmdMoveUp'
             }
           },
           cmdMoveDown: Button {
             text: 'Move Down',
+            preferredSize: [110, -1],
             properties: {
               name: 'cmdMoveDown'
             }
@@ -96,12 +104,15 @@ module.exports = """dialog {
         }
       },
 
-      pnlOutputFolder: Panel {
+      pnlOutputSettings: Panel {
         text: 'Output Settings',
         orientation: 'column',
         alignChildren: 'fill',
         margins: 15,
         spacing: 10,
+        properties: {
+          name: 'pnlOutputSettings'
+        },
 
         g1: Group {
           orientation: 'row',
@@ -134,7 +145,10 @@ module.exports = """dialog {
           alignChildren: 'fill',
 
           s: StaticText {
-            text: 'After Finished Building: '
+            text: 'After Finished Building: ',
+            properties: {
+              name: 'lblAfterBuild'
+            }
           },
 
           g1: Group {
@@ -184,6 +198,9 @@ module.exports = """dialog {
         orientation: 'column',
         alignChildren: 'left',
         margins: 15,
+        properties: {
+          name: 'pnlSpriteBuildingOptions'
+        },
 
         g1: Group {
           orientation: 'row',
@@ -191,7 +208,10 @@ module.exports = """dialog {
           s: StaticText {
             preferredSize: [124, -1],
             justify: 'right',
-            text: 'Building Method: '
+            text: 'Building Method: ',
+            properties: {
+              name: 'lblBuildMethod'
+            }
           },
 
           ddlBuildMethod: DropDownList {
@@ -211,7 +231,10 @@ module.exports = """dialog {
             s: StaticText {
               preferredSize: [120, -1],
               justify: 'right',
-              text: 'Arrange By: '
+              text: 'Arrange By: ',
+              properties: {
+                name: 'lblArrangeBy'
+              }
             },
 
             ddlArrangeBy: DropDownList {
@@ -225,7 +248,7 @@ module.exports = """dialog {
               orientation: 'stack',
 
               lblColsPerRow: StaticText {
-                preferredSize: [150, -1],
+                preferredSize: [160, -1],
                 justify: 'right',
                 text: 'Columns per Row: ',
                 visible: false,
@@ -268,7 +291,10 @@ module.exports = """dialog {
             s: StaticText {
               preferredSize: [124, -1],
               justify: 'right',
-              text: 'Offset Spacing: '
+              text: 'Offset Spacing: ',
+              properties: {
+                name: 'lblOffsetSpacing'
+              }
             },
             txtOffsetSpacing: EditText {
               preferredSize: [120, -1],
@@ -278,7 +304,10 @@ module.exports = """dialog {
               }
             },
             s: StaticText {
-              text: 'px'
+              text: 'px',
+              properties: {
+                name: 'lblOffsetSpacingUnit'
+              }
             }
           },
 
@@ -293,7 +322,10 @@ module.exports = """dialog {
               s: StaticText {
                 preferredSize: [124, -1],
                 justify: 'right',
-                text: 'Horizontal Spacing: '
+                text: 'Horizontal Spacing: ',
+                properties: {
+                  name: 'lblHorizontalSpacing'
+                }
               },
               txtHorizontalSpacing: EditText {
                 preferredSize: [120, -1],
@@ -303,7 +335,10 @@ module.exports = """dialog {
                 }
               },
               s: StaticText {
-                text: 'px'
+                text: 'px',
+                properties: {
+                  name: 'lblHorizontalSpacingUnit'
+                }
               }
             },
 
@@ -311,7 +346,10 @@ module.exports = """dialog {
               s: StaticText {
                 preferredSize: [124, -1],
                 justify: 'right',
-                text: 'Vertical Spacing: '
+                text: 'Vertical Spacing: ',
+                properties: {
+                  name: 'lblVerticalSpacing'
+                }
               },
               txtVerticalSpacing: EditText {
                 preferredSize: [120, -1],
@@ -321,7 +359,10 @@ module.exports = """dialog {
                 }
               },
               s: StaticText {
-                text: 'px'
+                text: 'px',
+                properties: {
+                  name: 'lblVerticalSpacingUnit'
+                }
               }
             }
           }
@@ -343,7 +384,10 @@ module.exports = """dialog {
           s: StaticText {
             preferredSize: [124, -1],
             justify: 'right',
-            text: 'CSS Format: '
+            text: 'CSS Format: ',
+            properties: {
+              name: 'lblCSSFormat'
+            }
           },
 
           ddlCSSFormat: DropDownList {
@@ -355,6 +399,7 @@ module.exports = """dialog {
 
           chkIncludeWidthHeight: Checkbox {
             text: 'Include Width and Height',
+            preferredSize: [200, -1],
             helpTip: 'Provides the width and height of each sprite in the CSS.',
             properties: {
               name: 'chkIncludeWidthHeight'
@@ -368,7 +413,10 @@ module.exports = """dialog {
           s: StaticText {
             preferredSize: [124, -1],
             justify: 'right',
-            text: 'Selector Prefix: '
+            text: 'Selector Prefix: ',
+            properties: {
+              name: 'lblSelectorPrefix'
+            }
           },
           txtSelectorPrefix: EditText {
             preferredSize: [250, -1],
@@ -378,7 +426,10 @@ module.exports = """dialog {
             }
           },
           s: StaticText {
-            text: '(characters: 0-20)'
+            text: '(characters: 0-20)',
+            properties: {
+              name: 'lblSelectorPrefixHint'
+            }
           }
         },
 
@@ -388,7 +439,10 @@ module.exports = """dialog {
           s: StaticText {
             preferredSize: [124, -1],
             justify: 'right',
-            text: 'Class Prefix: '
+            text: 'Class Prefix: ',
+            properties: {
+              name: 'lblClassPrefix'
+            }
           },
           txtClassPrefix: EditText {
             preferredSize: [250, -1],
@@ -398,7 +452,10 @@ module.exports = """dialog {
             }
           },
           s: StaticText {
-            text: '(characters: 0-20)'
+            text: '(characters: 0-20)',
+            properties: {
+              name: 'lblClassPrefixHint'
+            }
           }
         },
 
@@ -408,7 +465,10 @@ module.exports = """dialog {
           s: StaticText {
             preferredSize: [124, -1],
             justify: 'right',
-            text: 'Selector Suffix: '
+            text: 'Selector Suffix: ',
+            properties: {
+              name: 'lblSelectorSuffix',
+            }
           },
           txtSelectorSuffix: EditText {
             preferredSize: [250, -1],
@@ -418,7 +478,10 @@ module.exports = """dialog {
             }
           },
           s: StaticText {
-            text: '(characters: 0-20)'
+            text: '(characters: 0-20)',
+            properties: {
+              name: 'lblSelectorSuffixHint'
+            }
           }
         }
       }
@@ -433,7 +496,7 @@ module.exports = """dialog {
         orientation: 'column',
         cmdBuild: Button {
           text: 'Build',
-          preferredSize: [100, -1],
+          preferredSize: [110, -1],
           properties: {
             name: 'cmdBuild'
           }
@@ -441,7 +504,7 @@ module.exports = """dialog {
 
         cmdCancel: Button {
           text: 'Cancel',
-          preferredSize: [100, -1],
+          preferredSize: [110, -1],
           properties: {
             name: 'cmdCancel'
           }
@@ -457,12 +520,12 @@ module.exports = """dialog {
           name: 'pnlImagePreview'
         },
 
-        img0: Image { preferredSize: [90, 86] },
-        img1: Image { preferredSize: [90, 86] },
-        img2: Image { preferredSize: [90, 86] },
-        img3: Image { preferredSize: [90, 86] },
-        img4: Image { preferredSize: [90, 86] },
-        img5: Image { preferredSize: [90, 86] }
+        img0: Image { preferredSize: [100, 86] },
+        img1: Image { preferredSize: [100, 86] },
+        img2: Image { preferredSize: [100, 86] },
+        img3: Image { preferredSize: [100, 86] },
+        img4: Image { preferredSize: [100, 86] },
+        img5: Image { preferredSize: [100, 86] }
       }
     }
   }

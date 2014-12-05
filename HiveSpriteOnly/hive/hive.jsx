@@ -1,7 +1,9 @@
+var UI      = require('../config/i18n').UI;
+var rules   = require('../config/rules');
 var take    = require('../lib/take');
 var on      = require('../lib/on');
 var _       = require('../lib/underscore');
-var rules   = require('../config/rules');
+var util    = require('../lib/util');
 var Base    = require('./_base');
 var Builder = require('./_builder');
 
@@ -13,6 +15,7 @@ var Hive = Base.take({
     this.builder       = new Builder($);
 
     this.bindCtrls($);
+    this.localizeUI();
     this.bindEvents($);
   },
 
@@ -20,6 +23,11 @@ var Hive = Base.take({
     _.each(['cmdBuild', 'cmdCancel'], function (name) {
       this[name] = $(name);
     }, this);
+  },
+
+  localizeUI: function () {
+    this.cmdBuild.text = util.localize(UI.BUILD);
+    this.cmdCancel.text = util.localize(UI.CANCEL);
   },
 
   bindEvents: function ($) {

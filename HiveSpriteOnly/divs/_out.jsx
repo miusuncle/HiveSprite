@@ -1,11 +1,16 @@
+var nls  = require('../config/i18n');
 var take = require('../lib/take');
 var on   = require('../lib/on');
 var _    = require('../lib/underscore');
 var util = require('../lib/util');
 
+var UI   = nls.UI;
+var ERR  = nls.ERR;
+
 var OUT = take({
   init: function ($) {
     this.bindCtrls($);
+    this.localizeUI();
     this.initView();
     this.bindEvents();
     return this;
@@ -21,6 +26,34 @@ var OUT = take({
     };
   },
 
+  bindCtrls: function ($) {
+    _.each([
+      'pnlOutputSettings',
+      'txtOutputFolder',
+      'cmdChooseFolder',
+
+      'lblAfterBuild',
+      'chkExportSpriteImage',
+      'chkExportCSSFile',
+      'chkCloseGeneratedDocument',
+      'chkOpenOutputFolder',
+
+      'pnlCSSExportOptions'
+    ], function (name) {
+      this[name] = $(name);
+    }, this);
+  },
+
+  localizeUI: function () {
+    this.pnlOutputSettings.text         = util.localize(UI.OUTPUT_SETTINGS);
+    this.cmdChooseFolder.text           = util.localize(UI.CHOOSE_FOLDER);
+    this.lblAfterBuild.text             = util.localize(UI.AFTER_BUILD);
+    this.chkExportSpriteImage.text      = util.localize(UI.EXPORT_SPRITE_IMAGE);
+    this.chkExportCSSFile.text          = util.localize(UI.EXPORT_CSS_FILE);
+    this.chkCloseGeneratedDocument.text = util.localize(UI.CLOSE_GEN_DOC);
+    this.chkOpenOutputFolder.text       = util.localize(UI.OPEN_OUTPUT_FOLDER);
+  },
+
   initView: function () {
     this.txtOutputFolder.text = util.desktopFolder;
     util.disable(this.txtOutputFolder);
@@ -29,20 +62,6 @@ var OUT = take({
     this.chkExportCSSFile.value          = true;
     this.chkCloseGeneratedDocument.value = true;
     this.chkOpenOutputFolder.value       = true;
-  },
-
-  bindCtrls: function ($) {
-    _.each([
-      'cmdChooseFolder',
-      'txtOutputFolder',
-      'chkExportSpriteImage',
-      'chkExportCSSFile',
-      'chkCloseGeneratedDocument',
-      'chkOpenOutputFolder',
-      'pnlCSSExportOptions'
-    ], function (name) {
-      this[name] = $(name);
-    }, this);
   },
 
   bindEvents: function () {
@@ -97,10 +116,7 @@ var OUT = take({
 
       if (!exportImage && closeDocument) {
         chkCloseGeneratedDocument.value = !closeDocument;
-
-        var message = 'You can only have Close Generated Document checked ';
-        message += 'if you choose to export sprite image.';
-        alert(message);
+        alert(util.localize(ERR.UNCHK_CLOSE_DOC));
       }
     });
 
@@ -111,10 +127,7 @@ var OUT = take({
 
       if (openFolder && !exportImage && !exportCSS) {
         chkOpenOutputFolder.value = !openFolder;
-
-        var message = 'It\'s only make sense to Open Output Folder ';
-        message += 'if at least Export Sprite Image or Export CSS File enabled.';
-        alert(message);
+        alert(util.localize(ERR.UNCHK_OPEN_OUT_DIR));
       }
     });
   }

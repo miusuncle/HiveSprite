@@ -8,5 +8,9 @@
 
 !(function () {
   #include 'HiveSpriteOnly/core/require.jsx'
+
+  // use Chinese as default UI language by force
+  // $.locale = 'zh';
+
   require('./HiveSpriteOnly/main').startup();
 }).call(this);

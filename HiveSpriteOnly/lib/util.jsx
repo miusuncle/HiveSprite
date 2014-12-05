@@ -18,6 +18,8 @@ function defaultPixels(func) {
 }
 
 var util = module.exports = {
+  locale             : $.locale.split('_').shift(),
+  localize           : _.partial($.global.localize),
   isFile             : isFile,
   isFolder           : isFolder,
   isImageType        : isImageType,

@@ -1,15 +1,19 @@
+var nls          = require('../config/i18n');
 var constants    = require('../config/constants');
 var take         = require('../lib/take');
 var on           = require('../lib/on');
 var _            = require('../lib/underscore');
 var util         = require('../lib/util');
 
+var CHC          = nls.CHC;
+var UI           = nls.UI;
 var BuildMethods = constants.BuildMethods;
 var ArrangeBy    = constants.ArrangeBy;
 
 var SPRITE = take({
   init: function ($) {
     this.bindCtrls($);
+    this.localizeUI();
     this.initView();
     this.bindEvents();
     this.reviveView();
@@ -28,14 +32,70 @@ var SPRITE = take({
     };
   },
 
+  bindCtrls: function ($) {
+    _.each([
+      'pnlSpriteBuildingOptions',
+      'lblBuildMethod',
+      'ddlBuildMethod',
+
+      'grpArrangement',
+      'lblArrangeBy',
+      'ddlArrangeBy',
+      'lblColsPerRow',
+      'lblRowsPerCol',
+      'txtRowNums',
+
+      'grpSoloSpacing',
+      'lblOffsetSpacing',
+      'txtOffsetSpacing',
+      'lblOffsetSpacingUnit',
+
+      'grpDualSpacing',
+      'lblHorizontalSpacing',
+      'txtHorizontalSpacing',
+      'lblHorizontalSpacingUnit',
+
+      'lblVerticalSpacing',
+      'txtVerticalSpacing',
+      'lblVerticalSpacingUnit'
+    ], function (name) {
+      this[name] = $(name);
+    }, this);
+  },
+
+  localizeUI: function () {
+    this.pnlSpriteBuildingOptions.text = util.localize(UI.SPRITE_BUILD_OPTIONS);
+    this.lblBuildMethod.text           = util.localize(UI.BUILD_METHOD);
+    this.lblArrangeBy.text             = util.localize(UI.ARRANGE_BY);
+    this.lblColsPerRow.text            = util.localize(UI.COLUMNS_PER_ROW);
+    this.lblRowsPerCol.text            = util.localize(UI.ROWS_PER_COLUMN);
+    this.txtRowNums.helpTip            = util.localize(UI.INPUT_RANGE_1_50);
+
+    this.lblOffsetSpacing.text         = util.localize(UI.OFFSET_SPACING);
+    this.txtOffsetSpacing.helpTip      = util.localize(UI.INPUT_RANGE_0_200);
+    this.lblOffsetSpacingUnit.text     = util.localize(UI.PIXELS);
+
+    this.lblHorizontalSpacing.text     = util.localize(UI.HORIZ_SPACING);
+    this.txtHorizontalSpacing.helpTip  = util.localize(UI.INPUT_RANGE_0_200);
+    this.lblHorizontalSpacingUnit.text = util.localize(UI.PIXELS);
+
+    this.lblVerticalSpacing.text       = util.localize(UI.VERTICAL_SPACING);
+    this.txtVerticalSpacing.helpTip    = util.localize(UI.INPUT_RANGE_0_200);
+    this.lblVerticalSpacingUnit.text   = util.localize(UI.PIXELS);
+
+    if (util.locale === 'zh') {
+      this.lblVerticalSpacing.preferredSize = [84, -1];
+    }
+  },
+
   initView: function () {
     // initialize dropdownlist `Build Method`
     _.each(BuildMethods, function (index, text) {
-      this.ddlBuildMethod.add('item', util.titleCase(text));
+      this.ddlBuildMethod.add('item', util.localize(CHC[text]));
     }, this);
 
     _.each(ArrangeBy, function (index, text) {
-      this.ddlArrangeBy.add('item', util.titleCase(text));
+      this.ddlArrangeBy.add('item', util.localize(CHC[text]));
     }, this);
 
     // `Build Method` default to `Vertical`
@@ -48,27 +108,6 @@ var SPRITE = take({
     this.txtHorizontalSpacing.text = '1';
     this.txtVerticalSpacing.text   = '1';
     this.txtRowNums.text           = '1';
-  },
-
-  bindCtrls: function ($) {
-    _.each([
-      'ddlBuildMethod',
-
-      'grpArrangement',
-      'ddlArrangeBy',
-      'lblColsPerRow',
-      'lblRowsPerCol',
-      'txtRowNums',
-
-      'grpSoloSpacing',
-      'txtOffsetSpacing',
-
-      'grpDualSpacing',
-      'txtHorizontalSpacing',
-      'txtVerticalSpacing'
-    ], function (name) {
-      this[name] = $(name);
-    }, this);
   },
 
   bindEvents: function () {
