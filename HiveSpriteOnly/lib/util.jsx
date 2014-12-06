@@ -2,6 +2,8 @@ var _      = require('../lib/underscore');
 var JSON   = require('../lib/json2');
 var moment = require('../lib/moment');
 
+var global = $.global;
+
 var prefs = (function () {
   return {
     originalRulerUnits: this.rulerUnits
@@ -19,11 +21,11 @@ function defaultPixels(func) {
 
 var util = module.exports = {
   locale             : $.locale.split('_').shift(),
-  localize           : _.bind($.global.localize, $.global),
+  localize           : _.bind(global.localize, global),
 
-  alert              : _.bind($.global.alert, $.global),
-  confirm            : _.bind($.global.confirm, $.global),
-  prompt             : _.bind($.global.prompt, $.global),
+  alert              : _.bind(global.alert, global),
+  confirm            : _.bind(global.confirm, global),
+  prompt             : _.bind(global.prompt, global),
 
   isFile             : isFile,
   isFolder           : isFolder,
@@ -180,7 +182,7 @@ var util = module.exports = {
     ref1.putEnumerated(idMn, idMnIt, idFtOn);
     desc3.putReference(idnull, ref1);
 
-    executeAction(idslct, desc3, DialogModes.NO);
+    app.executeAction(idslct, desc3, DialogModes.NO);
   },
 
   viewDocumentInActualSize: function () {
