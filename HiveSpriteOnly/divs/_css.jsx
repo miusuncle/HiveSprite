@@ -1,5 +1,5 @@
 var nls        = require('../config/i18n');
-var constants  = require('../config/constants');
+var choices    = require('../config/choices');
 var defaults   = require('../config/defaults');
 var take       = require('../lib/take');
 var _          = require('../lib/underscore');
@@ -7,7 +7,7 @@ var util       = require('../lib/util');
 
 var CHC        = nls.CHC;
 var UI         = nls.UI;
-var CSSFormats = constants.CSSFormats;
+var CSSFormats = choices.CSSFormats;
 
 var CSS = take({
   init: function ($) {

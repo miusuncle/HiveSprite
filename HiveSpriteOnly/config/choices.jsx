@@ -3,7 +3,7 @@ var util = require('../lib/util');
 
 var CONSTANTS = {
   BrowseUsing : ['FILES', 'FOLDER'],
-  BuildMethods: ['HORIZONTAL', 'VERTICAL', 'TILED'],
+  BuildMethods: ['HORIZONTAL', 'VERTICAL', 'TILED', 'GROUPED'],
   ArrangeBy   : ['ROWS', 'COLUMNS'],
   CSSFormats  : ['COMPACT', 'EXPANDED']
 };

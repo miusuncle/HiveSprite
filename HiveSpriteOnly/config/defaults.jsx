@@ -1,15 +1,20 @@
-var constants    = require('./constants');
+var _            = require('../lib/underscore');
+var util         = require('../lib/util');
+var choices      = require('./choices');
 
-var BrowseUsing  = constants.BrowseUsing;
-var BuildMethods = constants.BuildMethods;
-var ArrangeBy    = constants.ArrangeBy;
-var CSSFormats   = constants.CSSFormats;
+var BrowseUsing  = choices.BrowseUsing;
+var BuildMethods = choices.BuildMethods;
+var ArrangeBy    = choices.ArrangeBy;
+var CSSFormats   = choices.CSSFormats;
 
-module.exports = {
+var defaults = {
+  'abortOnUnknownImages'  : true,
+
   'browseUsing'           : BrowseUsing.FILES,
   'includeSubfolders'     : false,
   'previewImages'         : false,
 
+  'desktopFolder'         : util.desktopFolder,
   'exportSpriteImage'     : true,
   'exportCSSFile'         : true,
   'closeGeneratedDocument': true,
@@ -28,3 +33,8 @@ module.exports = {
   'selectorSuffix'        : '',
   'includeWidthHeight'    : true
 };
+
+module.exports = _.extend(defaults, {
+  'separator': '-',
+  'dataList': []
+});

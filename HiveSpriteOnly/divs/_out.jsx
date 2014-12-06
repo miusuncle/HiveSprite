@@ -60,9 +60,9 @@ var OUT = take({
   },
 
   initView: function () {
-    this.txtOutputFolder.text = util.desktopFolder;
     util.disable(this.txtOutputFolder);
 
+    this.txtOutputFolder.text            = defaults.desktopFolder;
     this.chkExportSpriteImage.value      = defaults.exportSpriteImage;
     this.chkExportCSSFile.value          = defaults.exportCSSFile;
     this.chkCloseGeneratedDocument.value = defaults.closeGeneratedDocument;

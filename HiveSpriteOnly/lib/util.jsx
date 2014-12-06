@@ -42,7 +42,12 @@ var util = module.exports = {
   },
 
   inject: function (obj, name, value) {
-    obj[name] = value;
+    if (util.isPlainObject(name)) {
+      _.extend(obj, name);
+    } else {
+      obj[name] = value;
+    }
+
     return obj;
   },
 
@@ -157,6 +162,25 @@ var util = module.exports = {
     myOpenDescriptor.putList(keyfileList, myFileList);
 
     app.executeAction(keyAddLayerFromFile, myOpenDescriptor, DialogModes.NO);
+  },
+
+  fitOnScreen: function () {
+    // this method must work with current active document
+    // so we check it first
+    try { app.activeDocument; } catch (e) { return; }
+
+    var idslct = charIDToTypeID('slct');
+    var desc3  = new ActionDescriptor();
+    var idnull = charIDToTypeID('null');
+    var ref1   = new ActionReference();
+    var idMn   = charIDToTypeID('Mn  ');
+    var idMnIt = charIDToTypeID('MnIt');
+    var idFtOn = charIDToTypeID('FtOn');
+
+    ref1.putEnumerated(idMn, idMnIt, idFtOn);
+    desc3.putReference(idnull, ref1);
+
+    executeAction(idslct, desc3, DialogModes.NO);
   },
 
   viewDocumentInActualSize: function () {

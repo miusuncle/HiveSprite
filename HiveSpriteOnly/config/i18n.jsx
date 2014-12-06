@@ -19,6 +19,10 @@ var nls = {
       zh: '单列',
       en: 'Vertical'
     },
+    GROUPED: {
+      zh: '分隔符分组',
+      en: 'Divide By Seps.',
+    },
     TILED: {
       zh: '平铺',
       en: 'Tiled'
@@ -63,11 +67,11 @@ var nls = {
     },
     INCLUDE_SUBFOLDERS: {
       zh: '包括所有子文件夹图片',
-      en: 'Include Images in All Subfolders'
+      en: 'Include All Subfolders'
     },
     PREVIEW_IMAGES: {
       zh: '预览选中的图片',
-      en: 'Preview Selected Images'
+      en: 'Preview Selected'
     },
     BROWSE: {
       zh: '浏览...',
@@ -351,6 +355,10 @@ module.exports = _.extend(nls, {
         util.localize(nls.UI.EXPORT_CSS_FILE)
       ]),
       en: 'It\'s only make sense to Open Output Folder if at least Export Sprite Image or Export CSS File enabled.'
+    },
+    UNKNOWN_IMAGES: {
+      zh: '抱歉！由于某些图片不能被Photoshop所识别和打开，操作取消。',
+      en: 'Abort building cause there are some images that cannot be identified and opened by Photoshop!'
     }
   }
 });

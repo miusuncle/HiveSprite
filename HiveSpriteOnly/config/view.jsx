@@ -62,7 +62,7 @@ module.exports = """dialog {
           alignChildren: ['fill', 'fill'],
 
           lstSourceImages: ListBox {
-            preferredSize: [700, -1],
+            preferredSize: [600, -1],
             properties: {
               name: 'lstSourceImages',
               multiselect: true
@@ -138,7 +138,7 @@ module.exports = """dialog {
 
           cmdChooseFolder: Button {
             text: 'Choose Folder...',
-            preferredSize: [70, -1],
+            preferredSize: [100, -1],
             properties: {
               name: 'cmdChooseFolder'
             }

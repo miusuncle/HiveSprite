@@ -1,5 +1,5 @@
 var nls          = require('../config/i18n');
-var constants    = require('../config/constants');
+var choices      = require('../config/choices');
 var defaults     = require('../config/defaults');
 var take         = require('../lib/take');
 var on           = require('../lib/on');
@@ -8,8 +8,8 @@ var util         = require('../lib/util');
 
 var CHC          = nls.CHC;
 var UI           = nls.UI;
-var BuildMethods = constants.BuildMethods;
-var ArrangeBy    = constants.ArrangeBy;
+var BuildMethods = choices.BuildMethods;
+var ArrangeBy    = choices.ArrangeBy;
 
 var SPRITE = take({
   init: function ($) {
@@ -122,6 +122,7 @@ var SPRITE = take({
     var ddlArrangeBy   = self.ddlArrangeBy;
     var lblColsPerRow  = self.lblColsPerRow;
     var lblRowsPerCol  = self.lblRowsPerCol;
+    var txtRowNums     = self.txtRowNums;
     var grpSoloSpacing = self.grpSoloSpacing;
     var grpDualSpacing = self.grpDualSpacing;
 
@@ -130,7 +131,9 @@ var SPRITE = take({
 
     on(self, {
       'buildmethod:change': function () {
-        switch (+ddlBuildMethod.selection) {
+        var selection = +ddlBuildMethod.selection;
+
+        switch (selection) {
         case BuildMethods.HORIZONTAL:
         case BuildMethods.VERTICAL:
           grpArrangement.visible = false;
@@ -138,15 +141,26 @@ var SPRITE = take({
           grpSoloSpacing.visible = true;
           break;
         case BuildMethods.TILED:
+        case BuildMethods.GROUPED:
           grpSoloSpacing.visible = false;
           grpArrangement.visible = true;
           grpDualSpacing.visible = true;
+
+          _.each(
+            [lblRowsPerCol, lblColsPerRow, txtRowNums],
+            _.partial(util.inject, _, 'visible', selection === BuildMethods.TILED)
+          );
+
           self.trigger('arrangement:change');
           break;
         }
       },
 
       'arrangement:change': function () {
+        if (+ddlBuildMethod.selection !== BuildMethods.TILED) {
+          return;
+        }
+
         switch (+ddlArrangeBy.selection) {
         case ArrangeBy.ROWS:
           lblRowsPerCol.visible = false;

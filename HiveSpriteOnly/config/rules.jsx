@@ -1,9 +1,9 @@
-var constants = require('../config/constants');
+var choices   = require('../config/choices');
 var MSG       = require('../config/i18n').MSG;
 var util      = require('../lib/util');
 var _         = require('../lib/underscore');
 
-var ArrangeBy = constants.ArrangeBy;
+var ArrangeBy = choices.ArrangeBy;
 
 var rules = module.exports = {
   'hivesprite': {

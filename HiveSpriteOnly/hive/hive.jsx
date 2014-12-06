@@ -43,7 +43,12 @@ var Hive = Base.take({
       }
 
       window.close(1);
-      builder.build();
+
+      try {
+        builder.build();
+      } catch (e) {
+        util.alert(e.message);
+      }
     });
 
     on(cmdCancel, 'click', function () {

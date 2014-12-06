@@ -1,5 +1,5 @@
 var nls         = require('../config/i18n');
-var constants   = require('../config/constants');
+var choices     = require('../config/choices');
 var defaults    = require('../config/defaults');
 var take        = require('../lib/take');
 var on          = require('../lib/on');
@@ -10,12 +10,12 @@ var CHC         = nls.CHC;
 var DLG         = nls.DLG;
 var UI          = nls.UI;
 var MSG         = nls.MSG;
-var BrowseUsing = constants.BrowseUsing;
+var BrowseUsing = choices.BrowseUsing;
 
 var SOURCE = take({
   init: function ($) {
-    this.separator = '-';
-    this.dataList  = [];
+    this.separator = defaults.separator;
+    this.dataList  = defaults.dataList;
 
     this.bindCtrls($);
     this.localizeUI();
@@ -27,9 +27,38 @@ var SOURCE = take({
   },
 
   getData: function () {
-    return {
-      sourceImages: _.clone(this.dataList)
-    };
+    var dataList = _.clone(this.dataList);
+
+    return util.inject({}, {
+      'sourceImages': this.rejectSeparators(dataList),
+      'groupedMarks': this.squashSeparators(dataList)
+    });
+  },
+
+  rejectSeparators: function (dataList) {
+    return _.reject(dataList, _.compose(
+      _.partial(_.isEqual, _, this.separator),
+      _.property('name')
+    ), this);
+  },
+
+  squashSeparators: function (dataList) {
+    var sep = this.separator;
+
+    return _.chain(dataList)
+      .map(function (item) {
+        return item.name === sep ? sep : {};
+      })
+      .foldl(function (ret, item, idx, ary) {
+        if (item !== sep || (idx !== 0 && ary[idx - 1] !== sep)) {
+          ret.push(item);
+        }
+        return ret;
+      }, [])
+      .foldr(function (ret, item) {
+        return _.isEmpty(ret) && item === sep ? ret : _(ret).unshift(item);
+      }, [])
+      .value();
   },
 
   bindCtrls: function ($) {
@@ -48,7 +77,8 @@ var SOURCE = take({
       'cmdMoveUp',
       'cmdMoveDown',
 
-      'pnlImagePreview'
+      'pnlImagePreview',
+      'ddlBuildMethod'
     ], function (name) {
       this[name] = $(name);
     }, this);
@@ -116,7 +146,8 @@ var SOURCE = take({
 
       switch (+ddlBrowseUsing.selection) {
       case BrowseUsing.FILES:
-        images = File.openDialog(util.localize(DLG.SELECT_IMAGES), util.dialogFilter(), true);
+        var promptText = util.localize(DLG.SELECT_IMAGES);
+        images = File.openDialog(promptText, util.dialogFilter(), true);
         break;
       case BrowseUsing.FOLDER:
         var folder = Folder.selectDialog(util.localize(DLG.TARGET_FOLDER));
@@ -138,10 +169,7 @@ var SOURCE = take({
       }, self.dataList);
 
       // remove separators
-      self.dataList = _.reject(self.dataList, _.compose(
-        _.partial(_.isEqual, _, self.separator),
-        _.property('name')
-      ));
+      self.dataList = self.rejectSeparators(self.dataList);
 
       // remove duplicates
       self.dataList = _.uniq(self.dataList, _.property('path'));

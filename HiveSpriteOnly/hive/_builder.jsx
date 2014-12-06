@@ -1,12 +1,15 @@
-var constants    = require('../config/constants');
+var nls          = require('../config/i18n');
+var defaults     = require('../config/defaults');
+var choices      = require('../config/choices');
 var take         = require('../lib/take');
 var util         = require('../lib/util');
 var _            = require('../lib/underscore');
 var pack         = require('../divs/pack');
 
-var BuildMethods = constants.BuildMethods;
-var ArrangeBy    = constants.ArrangeBy;
-var CSSFormats   = constants.CSSFormats;
+var ERR          = nls.ERR;
+var BuildMethods = choices.BuildMethods;
+var ArrangeBy    = choices.ArrangeBy;
+var CSSFormats   = choices.CSSFormats;
 
 var Builder = take({
   constructor: function ($) {
@@ -32,9 +35,10 @@ var Builder = take({
 
     var buildFunc = (function () {
       switch (settings.buildMethod) {
-      case BuildMethods.HORIZONTAL: return _.bind(this.buildHorizontalSprite, this);
-      case BuildMethods.VERTICAL  : return _.bind(this.buildVerticalSprite, this);
-      case BuildMethods.TILED     : return _.bind(this.buildTiledSprite, this);
+      case BuildMethods.HORIZONTAL : return _.bind(this.buildHorizontalSprite, this);
+      case BuildMethods.VERTICAL   : return _.bind(this.buildVerticalSprite, this);
+      case BuildMethods.TILED      : return _.bind(this.buildTiledSprite, this);
+      case BuildMethods.GROUPED    : return _.bind(this.buildGroupedSprite, this);
       }
     }).call(this);
 
@@ -44,6 +48,8 @@ var Builder = take({
     // tidy up document
     doc.revealAll();
     doc.trim(TrimType.TRANSPARENT);
+
+    util.fitOnScreen();
     util.viewDocumentInActualSize();
 
     // export generated document as PNG file
@@ -90,6 +96,16 @@ var Builder = take({
 
     // remove the last empty layer
     layers.pop().remove();
+
+    if (defaults.abortOnUnknownImages && layers.length < imagePaths.length) {
+      // util.inspect({ 'before': imagePaths.length, 'after': layers.length });
+
+      // close generated document immediately
+      doc.close(SaveOptions.DONOTSAVECHANGES);
+
+      var errorMessage = util.localize(ERR.UNKNOWN_IMAGES);
+      throw Error(errorMessage);
+    }
 
     // obtain each layer's basic info
     return _.map(layers, function (layer) {
@@ -147,12 +163,12 @@ var Builder = take({
   },
 
   buildTiledSprite: function (settings, layersInfo) {
-    var offsetSpacing     = settings.offsetSpacing;
     var selectorPrefix    = settings.selectorPrefix;
     var classPrefix       = settings.classPrefix;
     var selectorSuffix    = settings.selectorSuffix;
     var horizontalSpacing = settings.horizontalSpacing;
     var verticalSpacing   = settings.verticalSpacing;
+    var arrangeBy         = settings.arrangeBy;
     var rowNums           = settings.rowNums;
 
     var maxWidth  = _.chain(layersInfo).pluck('width').max().value();
@@ -163,6 +179,10 @@ var Builder = take({
       var x = offset.x;
       var y = offset.y;
 
+      item.selector = selectorPrefix + '.' + classPrefix + item.name + selectorSuffix;
+      item.width    = item.width + 'px';
+      item.height   = item.height + 'px';
+
       item['background-position'] = [
         -x + (x === 0 ? '' : 'px'),
         -y + (y === 0 ? '' : 'px')
@@ -170,15 +190,10 @@ var Builder = take({
 
       // position layer according to offset
       item.layer.translate(x, y);
-
-      item.selector = selectorPrefix + '.' + classPrefix + item.name + selectorSuffix;
-      item.width    = item.width + 'px';
-      item.height   = item.height + 'px';
-
       delete item.layer;
       delete item.name;
 
-      switch (settings.arrangeBy) {
+      switch (arrangeBy) {
       case ArrangeBy.ROWS:
         if (index % rowNums === rowNums - 1) {
           offset.y += (maxHeight + verticalSpacing);
@@ -199,6 +214,74 @@ var Builder = take({
 
       return offset;
     }, { x: 0, y: 0 });
+
+    return layersInfo;
+  },
+
+  buildGroupedSprite: function (settings, layersInfo) {
+    var horizontalSpacing = settings.horizontalSpacing;
+    var verticalSpacing   = settings.verticalSpacing;
+    var selectorPrefix    = settings.selectorPrefix;
+    var classPrefix       = settings.classPrefix;
+    var selectorSuffix    = settings.selectorSuffix;
+
+    _.reduce(settings.groupedMarks, function (offset, mark) {
+      // encounter one separator
+      if (_.isString(mark)) {
+        switch (settings.arrangeBy) {
+        case ArrangeBy.ROWS:
+          var maxHeight = _.chain(offset.memo).pluck('height').max().value();
+          offset.y += (maxHeight + verticalSpacing);
+          offset.x = 0;
+          break;
+        case ArrangeBy.COLUMNS:
+          var maxWidth = _.chain(offset.memo).pluck('width').max().value();
+          offset.x += (maxWidth + horizontalSpacing);
+          offset.y = 0;
+          break;
+        }
+
+        // reset memo
+        offset.memo.length = 0;
+      } else {
+        var x    = offset.x;
+        var y    = offset.y;
+        var item = layersInfo[offset.index++];
+
+        if (!item) {
+          return offset;
+        }
+
+        // util.inspect(_.pick(item, ['width', 'height']))
+        offset.memo.push(_.pick(item, ['width', 'height']));
+
+        switch (settings.arrangeBy) {
+        case ArrangeBy.ROWS:
+          offset.x += (item.width + horizontalSpacing);
+          break;
+        case ArrangeBy.COLUMNS:
+          offset.y += (item.height + verticalSpacing);
+          break;
+        }
+
+        item.selector = selectorPrefix + '.' + classPrefix + item.name + selectorSuffix;
+        item.width    = item.width + 'px';
+        item.height   = item.height + 'px';
+
+        item['background-position'] = [
+          -x + (x === 0 ? '' : 'px'),
+          -y + (y === 0 ? '' : 'px')
+        ].join(' ');
+
+        // position layer according to offset
+        item.layer.translate(x, y);
+        delete item.layer;
+        delete item.name;
+      }
+
+      // util.inspect(offset.memo);
+      return offset;
+    }, { x: 0, y: 0, index: 0, memo: [] });
 
     return layersInfo;
   },
