@@ -36,6 +36,7 @@ var SOURCE = take({
       'chkIncludeSubFolders',
       'chkPreviewImages',
       'lstSourceImages',
+      'lblSourceImagesStat',
 
       'cmdBrowse',
       'cmdRemoveAll',
@@ -53,13 +54,19 @@ var SOURCE = take({
     this.pnlSourceImages.text      = util.localize(UI.SOURCE_IMAGES);
     this.ddlBrowseUsing.title      = util.localize(UI.BROWSE_USING);
     this.chkIncludeSubFolders.text = util.localize(UI.INCLUDE_SUBFOLDERS);
+    this.chkPreviewImages.text     = util.localize(UI.PREVIEW_IMAGES);
+
     this.cmdBrowse.text            = util.localize(UI.BROWSE);
     this.cmdRemoveAll.text         = util.localize(UI.REMOVE_ALL);
     this.cmdRemove.text            = util.localize(UI.REMOVE);
     this.cmdMoveUp.text            = util.localize(UI.MOVE_UP);
     this.cmdMoveDown.text          = util.localize(UI.MOVE_DOWN);
-    this.chkPreviewImages.text     = util.localize(UI.PREVIEW_IMAGES);
+
     this.pnlImagePreview.text      = util.localize(UI.PREVIEW);
+
+    if (util.locale === 'zh') {
+      this.ddlBrowseUsing.preferredSize = [180, -1];
+    }
   },
 
   initView: function () {
@@ -94,6 +101,7 @@ var SOURCE = take({
     var ddlBrowseUsing       = self.ddlBrowseUsing;
     var chkIncludeSubFolders = self.chkIncludeSubFolders;
     var lstSourceImages      = self.lstSourceImages;
+    var lblSourceImagesStat  = self.lblSourceImagesStat;
     var cmdBrowse            = self.cmdBrowse;
     var cmdRemoveAll         = self.cmdRemoveAll;
     var cmdRemove            = self.cmdRemove;
@@ -202,14 +210,6 @@ var SOURCE = take({
       chkIncludeSubFolders.enabled = useFolder;
     }
 
-    function toggleImagePreview() {
-      if (chkPreviewImages.value) {
-        updateImagePreview();
-      } else {
-        pnlImagePreview.visible = false;
-      }
-    }
-
     function updateListBox() {
       var selection = lstSourceImages.selection;
       var items     = lstSourceImages.items;
@@ -243,6 +243,27 @@ var SOURCE = take({
       } else {
         util.enable([cmdRemoveAll, cmdRemove]);
         util.disable([cmdMoveUp, cmdMoveDown]);
+      }
+
+      updateStatInfo(length, (selection || []).length);
+    }
+
+    function updateStatInfo(total, selected) {
+      var tmpl = '${total}: ${tot_num}  ${selected}: ${sel_num}';
+
+      lblSourceImagesStat.text = util.vsub(tmpl, {
+        'total'   : util.localize(UI.TOTAL),
+        'tot_num' : total,
+        'selected': util.localize(UI.SELECTED),
+        'sel_num' : selected
+      });
+    }
+
+    function toggleImagePreview() {
+      if (chkPreviewImages.value) {
+        updateImagePreview();
+      } else {
+        pnlImagePreview.visible = false;
       }
     }
 

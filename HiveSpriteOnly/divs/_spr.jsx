@@ -84,6 +84,12 @@ var SPRITE = take({
     this.lblVerticalSpacingUnit.text   = util.localize(UI.PIXELS);
 
     if (util.locale === 'zh') {
+      this.ddlArrangeBy.preferredSize = [120, -1];
+      this.lblArrangeBy.preferredSize = [120, -1];
+
+      this.lblColsPerRow.preferredSize = [120, -1];
+      this.lblRowsPerCol.preferredSize = [120, -1];
+
       this.lblVerticalSpacing.preferredSize = [84, -1];
     }
   },

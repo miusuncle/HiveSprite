@@ -217,6 +217,14 @@ var nls = {
       zh: '(字符输入范围: 0-20)',
       en: '(characters: 0-20)'
     },
+    TOTAL: {
+      zh: '总计',
+      en: 'Total'
+    },
+    SELECTED: {
+      zh: '选中',
+      en: 'Selected'
+    },
     PIXELS: {
       zh: '像素',
       en: 'px'
@@ -325,7 +333,7 @@ module.exports = _.extend(nls, {
       en: 'You can only have Close Generated Document checked if you choose to export sprite image.'
     },
     UNCHK_OPEN_OUT_DIR: {
-      zh: util.vsub('要${0}, 请至少先勾选 [${1}] 或 [${2}] 复选框。', [
+      zh: util.vsub('文档生成后要${0}, 请至少先勾选 [${1}] 或 [${2}] 复选框。', [
         util.localize(nls.UI.OPEN_OUTPUT_FOLDER),
         util.localize(nls.UI.EXPORT_SPRITE_IMAGE),
         util.localize(nls.UI.EXPORT_CSS_FILE)

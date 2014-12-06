@@ -14,91 +14,98 @@ module.exports = """dialog {
 
       pnlSourceImages: Panel {
         text: 'Source Images',
-        orientation: 'row',
-        alignChildren: 'top',
+        orientation: 'column',
         margins: 15,
         properties: {
           name: 'pnlSourceImages'
         },
 
-        g: Group {
-          orientation: 'column',
-          alignChildren: 'fill',
+        g1: Group {
+          orientation: 'row',
+          alignment: 'left',
 
-          g: Group {
-            orientation: 'row',
-            alignChildren: 'fill',
-
-            ddlBrowseUsing: DropDownList {
-              title: 'Browse Using: ',
-              preferredSize: [200, -1],
-              properties: {
-                name: 'ddlBrowseUsing'
-              }
-            },
-
-            chkIncludeSubFolders: Checkbox {
-              text: 'Include Images in All Subfolders',
-              properties: {
-                name: 'chkIncludeSubFolders'
-              }
-            },
-
-            chkPreviewImages: Checkbox {
-              text: 'Preview Selected Images',
-              properties: {
-                name: 'chkPreviewImages'
-              }
+          ddlBrowseUsing: DropDownList {
+            title: 'Browse Using: ',
+            preferredSize: [200, -1],
+            properties: {
+              name: 'ddlBrowseUsing'
             }
           },
 
-          lstSourceImages: ListBox {
-            preferredSize: [620, 180],
-            alignment: 'right',
+          chkIncludeSubFolders: Checkbox {
+            text: 'Include Images in All Subfolders',
             properties: {
-              name: 'lstSourceImages',
-              multiselect: true
+              name: 'chkIncludeSubFolders'
+            }
+          },
+
+          chkPreviewImages: Checkbox {
+            text: 'Preview Selected Images',
+            properties: {
+              name: 'chkPreviewImages'
+            }
+          },
+
+          lblSourceImagesStat: StaticText {
+            text: 'Total: 0  Selected: 0',
+            preferredSize: [140, -1],
+            properties: {
+              name: 'lblSourceImagesStat'
             }
           }
         },
 
-        actions: Group {
-          orientation: 'column',
-          margins: [5, 30, 0, 0],
+        g2: Group {
+          orientation: 'row',
+          alignChildren: 'fill',
+          alignment: 'left',
 
-          cmdBrowse: Button {
-            text: 'Browse...',
-            preferredSize: [110, -1],
+          lstSourceImages: ListBox {
+            preferredSize: [660, 180],
             properties: {
-              name: 'cmdBrowse'
+              name: 'lstSourceImages',
+              multiselect: true
             }
           },
-          cmdRemoveAll: Button {
-            text: 'Remove All',
-            preferredSize: [110, -1],
-            properties: {
-              name: 'cmdRemoveAll'
-            }
-          },
-          cmdRemove: Button {
-            text: 'Remove',
-            preferredSize: [110, -1],
-            properties: {
-              name: 'cmdRemove'
-            }
-          },
-          cmdMoveUp: Button {
-            text: 'Move Up',
-            preferredSize: [110, -1],
-            properties: {
-              name: 'cmdMoveUp'
-            }
-          },
-          cmdMoveDown: Button {
-            text: 'Move Down',
-            preferredSize: [110, -1],
-            properties: {
-              name: 'cmdMoveDown'
+
+          actions: Group {
+            orientation: 'column',
+            margins: [5, 0, 0, 0],
+
+            cmdBrowse: Button {
+              text: 'Browse...',
+              preferredSize: [110, -1],
+              properties: {
+                name: 'cmdBrowse'
+              }
+            },
+            cmdRemoveAll: Button {
+              text: 'Remove All',
+              preferredSize: [110, -1],
+              properties: {
+                name: 'cmdRemoveAll'
+              }
+            },
+            cmdRemove: Button {
+              text: 'Remove',
+              preferredSize: [110, -1],
+              properties: {
+                name: 'cmdRemove'
+              }
+            },
+            cmdMoveUp: Button {
+              text: 'Move Up',
+              preferredSize: [110, -1],
+              properties: {
+                name: 'cmdMoveUp'
+              }
+            },
+            cmdMoveDown: Button {
+              text: 'Move Down',
+              preferredSize: [110, -1],
+              properties: {
+                name: 'cmdMoveDown'
+              }
             }
           }
         }
@@ -107,6 +114,7 @@ module.exports = """dialog {
       pnlOutputSettings: Panel {
         text: 'Output Settings',
         orientation: 'column',
+        alignment: 'fill',
         alignChildren: 'fill',
         margins: 15,
         spacing: 10,
@@ -116,11 +124,11 @@ module.exports = """dialog {
 
         g1: Group {
           orientation: 'row',
+          alignChildren: ['fill', 'fill'],
 
           txtOutputFolder: EditText {
             text: '',
-            alignment: 'fill',
-            preferredSize: [580, -1],
+            preferredSize: [600, -1],
             properties: {
               name: 'txtOutputFolder'
             }
@@ -128,8 +136,7 @@ module.exports = """dialog {
 
           cmdChooseFolder: Button {
             text: 'Choose Folder...',
-            alignment: 'fill',
-            preferredSize: [120, -1],
+            preferredSize: [100, -1],
             properties: {
               name: 'cmdChooseFolder'
             }
@@ -229,7 +236,7 @@ module.exports = """dialog {
             },
 
             s: StaticText {
-              preferredSize: [120, -1],
+              preferredSize: [150, -1],
               justify: 'right',
               text: 'Arrange By: ',
               properties: {
@@ -248,7 +255,7 @@ module.exports = """dialog {
               orientation: 'stack',
 
               lblColsPerRow: StaticText {
-                preferredSize: [160, -1],
+                preferredSize: [170, -1],
                 justify: 'right',
                 text: 'Columns per Row: ',
                 visible: false,
@@ -258,7 +265,7 @@ module.exports = """dialog {
               },
 
               lblRowsPerCol: StaticText {
-                preferredSize: [160, -1],
+                preferredSize: [170, -1],
                 justify: 'right',
                 text: 'Rows per Column: ',
                 visible: false,
