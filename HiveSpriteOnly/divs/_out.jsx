@@ -1,8 +1,9 @@
-var nls  = require('../config/i18n');
-var take = require('../lib/take');
-var on   = require('../lib/on');
-var _    = require('../lib/underscore');
-var util = require('../lib/util');
+var nls      = require('../config/i18n');
+var defaults = require('../config/defaults');
+var take     = require('../lib/take');
+var on       = require('../lib/on');
+var _        = require('../lib/underscore');
+var util     = require('../lib/util');
 
 var UI   = nls.UI;
 var ERR  = nls.ERR;
@@ -52,16 +53,20 @@ var OUT = take({
     this.chkExportCSSFile.text          = util.localize(UI.EXPORT_CSS_FILE);
     this.chkCloseGeneratedDocument.text = util.localize(UI.CLOSE_GEN_DOC);
     this.chkOpenOutputFolder.text       = util.localize(UI.OPEN_OUTPUT_FOLDER);
+
+    if (util.zhify()) {
+      this.cmdChooseFolder.preferredSize = [120, -1];
+    }
   },
 
   initView: function () {
     this.txtOutputFolder.text = util.desktopFolder;
     util.disable(this.txtOutputFolder);
 
-    this.chkExportSpriteImage.value      = true;
-    this.chkExportCSSFile.value          = true;
-    this.chkCloseGeneratedDocument.value = true;
-    this.chkOpenOutputFolder.value       = true;
+    this.chkExportSpriteImage.value      = defaults.exportSpriteImage;
+    this.chkExportCSSFile.value          = defaults.exportCSSFile;
+    this.chkCloseGeneratedDocument.value = defaults.closeGeneratedDocument;
+    this.chkOpenOutputFolder.value       = defaults.openOutputFolder;
   },
 
   bindEvents: function () {
@@ -130,6 +135,18 @@ var OUT = take({
         alert(util.localize(ERR.UNCHK_OPEN_OUT_DIR));
       }
     });
+
+    if (chkCloseGeneratedDocument.value) {
+      _.times(2, function () {
+        chkCloseGeneratedDocument.notify('onClick');
+      });
+    }
+
+    if (chkOpenOutputFolder.value) {
+      _.times(2, function () {
+        chkOpenOutputFolder.notify('onClick');
+      });
+    }
   }
 });
 

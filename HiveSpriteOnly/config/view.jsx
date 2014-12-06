@@ -5,24 +5,25 @@ module.exports = """dialog {
     orientation: 'row',
     alignChildren: 'top',
     margins: 0,
-    spacing: 16,
 
     g: Group {
       orientation: 'column',
-      alignChildren: 'fill',
+      alignChildren: ['fill', 'fill'],
       spacing: 10,
 
       pnlSourceImages: Panel {
         text: 'Source Images',
         orientation: 'column',
+        alignChildren: ['fill', 'fill'],
         margins: 15,
+        spacing: 10,
         properties: {
           name: 'pnlSourceImages'
         },
 
         g1: Group {
           orientation: 'row',
-          alignment: 'left',
+          alignChildren: 'fill',
 
           ddlBrowseUsing: DropDownList {
             title: 'Browse Using: ',
@@ -47,8 +48,9 @@ module.exports = """dialog {
           },
 
           lblSourceImagesStat: StaticText {
-            text: 'Total: 0  Selected: 0',
-            preferredSize: [140, -1],
+            alignment: 'middle',
+            text: 'Total: 0 Selected: 0 Images: 0',
+            preferredSize: [230, -1],
             properties: {
               name: 'lblSourceImagesStat'
             }
@@ -57,11 +59,10 @@ module.exports = """dialog {
 
         g2: Group {
           orientation: 'row',
-          alignChildren: 'fill',
-          alignment: 'left',
+          alignChildren: ['fill', 'fill'],
 
           lstSourceImages: ListBox {
-            preferredSize: [660, 180],
+            preferredSize: [700, -1],
             properties: {
               name: 'lstSourceImages',
               multiselect: true
@@ -70,39 +71,41 @@ module.exports = """dialog {
 
           actions: Group {
             orientation: 'column',
-            margins: [5, 0, 0, 0],
+            alignChildren: 'fill',
+            preferredSize: [100, -1],
 
             cmdBrowse: Button {
               text: 'Browse...',
-              preferredSize: [110, -1],
               properties: {
                 name: 'cmdBrowse'
               }
             },
             cmdRemoveAll: Button {
               text: 'Remove All',
-              preferredSize: [110, -1],
               properties: {
                 name: 'cmdRemoveAll'
               }
             },
             cmdRemove: Button {
               text: 'Remove',
-              preferredSize: [110, -1],
               properties: {
                 name: 'cmdRemove'
               }
             },
+            cmdInsertSeparator: Button {
+              text: 'Add Separator',
+              properties: {
+                name: 'cmdInsertSeparator'
+              }
+            },
             cmdMoveUp: Button {
               text: 'Move Up',
-              preferredSize: [110, -1],
               properties: {
                 name: 'cmdMoveUp'
               }
             },
             cmdMoveDown: Button {
               text: 'Move Down',
-              preferredSize: [110, -1],
               properties: {
                 name: 'cmdMoveDown'
               }
@@ -114,7 +117,6 @@ module.exports = """dialog {
       pnlOutputSettings: Panel {
         text: 'Output Settings',
         orientation: 'column',
-        alignment: 'fill',
         alignChildren: 'fill',
         margins: 15,
         spacing: 10,
@@ -136,7 +138,7 @@ module.exports = """dialog {
 
           cmdChooseFolder: Button {
             text: 'Choose Folder...',
-            preferredSize: [100, -1],
+            preferredSize: [70, -1],
             properties: {
               name: 'cmdChooseFolder'
             }
@@ -453,7 +455,7 @@ module.exports = """dialog {
           },
           txtClassPrefix: EditText {
             preferredSize: [250, -1],
-            helpTip: 'can\\'t begin with number',
+            helpTip: 'can\\'t begin with number.',
             properties: {
               name: 'txtClassPrefix'
             }

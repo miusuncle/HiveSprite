@@ -1,5 +1,6 @@
 var nls        = require('../config/i18n');
 var constants  = require('../config/constants');
+var defaults   = require('../config/defaults');
 var take       = require('../lib/take');
 var _          = require('../lib/underscore');
 var util       = require('../lib/util');
@@ -60,7 +61,7 @@ var CSS = take({
     this.lblSelectorSuffix.text        = util.localize(UI.SELECTOR_SUFFIX);
 
 
-    if (util.locale === 'zh') {
+    if (util.zhify()) {
       this.txtSelectorPrefix.helpTip  = util.localize(UI.CHAR_RANGE_0_20);
       this.lblSelectorPrefixHint.text = util.localize(UI.EMPTY);
 
@@ -87,13 +88,11 @@ var CSS = take({
       this.ddlCSSFormat.add('item', util.localize(CHC[text]));
     }, this);
 
-    // `CSS Format` default to `Expanded`
-    this.ddlCSSFormat.selection = 0;
-
-    this.txtSelectorPrefix.text      = '';
-    this.txtClassPrefix.text         = 'sp-';
-    this.txtSelectorSuffix.text      = '';
-    this.chkIncludeWidthHeight.value = true;
+    this.ddlCSSFormat.selection      = defaults.cssFormat;
+    this.txtSelectorPrefix.text      = defaults.selectorPrefix;
+    this.txtClassPrefix.text         = defaults.classPrefix;
+    this.txtSelectorSuffix.text      = defaults.selectorSuffix;
+    this.chkIncludeWidthHeight.value = defaults.includeWidthHeight;
   }
 });
 

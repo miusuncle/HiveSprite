@@ -5,7 +5,7 @@ var CONSTANTS = {
   BrowseUsing : ['FILES', 'FOLDER'],
   BuildMethods: ['HORIZONTAL', 'VERTICAL', 'TILED'],
   ArrangeBy   : ['ROWS', 'COLUMNS'],
-  CSSFormats  : ['EXPANDED', 'COMPACT']
+  CSSFormats  : ['COMPACT', 'EXPANDED']
 };
 
 module.exports = _.reduce(CONSTANTS, function (ret, values, key) {

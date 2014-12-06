@@ -19,17 +19,23 @@ function defaultPixels(func) {
 
 var util = module.exports = {
   locale             : $.locale.split('_').shift(),
-  localize           : _.partial($.global.localize),
+  localize           : _.bind($.global.localize, $.global),
+
+  alert              : _.bind($.global.alert, $.global),
+  confirm            : _.bind($.global.confirm, $.global),
+  prompt             : _.bind($.global.prompt, $.global),
+
   isFile             : isFile,
   isFolder           : isFolder,
   isImageType        : isImageType,
   isFolderOrImageType: isFolderOrImageType,
   dialogFilter       : dialogFilter,
+
+  defaultPixels      : defaultPixels,
   newDocument        : newDocument,
   saveAsPNG          : saveAsPNG,
   exportAsPNG        : exportAsPNG,
   saveAsTextFile     : saveAsTextFile,
-  defaultPixels      : defaultPixels,
 
   inspect: function (obj) {
     alert(JSON.stringify(obj, null, 2));
@@ -38,6 +44,10 @@ var util = module.exports = {
   inject: function (obj, name, value) {
     obj[name] = value;
     return obj;
+  },
+
+  zhify: function () {
+    return this.locale === 'zh';
   },
 
   platform: function () {
@@ -71,6 +81,16 @@ var util = module.exports = {
 
   titleCase: function (s) {
     return s[0].toUpperCase() + s.slice(1).toLowerCase();
+  },
+
+  strRepeat: function(str, qty) {
+    if (qty < 1) return '';
+    var result = '';
+    while (qty > 0) {
+      if (qty & 1) result += str;
+      qty >>= 1, str += str;
+    }
+    return result;
   },
 
   disable: function (controls) {
@@ -275,3 +295,4 @@ function saveAsTextFile(text, where) {
   file.write(text);
   file.close();
 }
+

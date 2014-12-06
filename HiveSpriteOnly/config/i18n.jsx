@@ -73,10 +73,6 @@ var nls = {
       zh: '浏览...',
       en: 'Browse...'
     },
-    INSERT_SEPARATOR: {
-      zh: '插入分隔符',
-      en: 'Insert Separator'
-    },
     REMOVE_ALL: {
       zh: '移除所有',
       en: 'Remove All'
@@ -84,6 +80,10 @@ var nls = {
     REMOVE: {
       zh: '移除',
       en: 'Remove'
+    },
+    INSERT_SEPARATOR: {
+      zh: '插入分隔符',
+      en: 'Add Separator'
     },
     MOVE_UP: {
       zh: '上移',
@@ -183,7 +183,7 @@ var nls = {
     },
     CLASS_PREFIX_TIP: {
       zh: "不能以数字开头",
-      en: "can't begin with number"
+      en: "can't begin with number."
     },
     SELECTOR_SUFFIX: {
       zh: '选择器后缀: ',
@@ -224,6 +224,10 @@ var nls = {
     SELECTED: {
       zh: '选中',
       en: 'Selected'
+    },
+    IMAGES: {
+      zh: '图片',
+      en: 'Images'
     },
     PIXELS: {
       zh: '像素',
@@ -319,6 +323,14 @@ var nls = {
     ROWS_PER_COLUMN: {
       zh: '每列行数',
       en: 'Rows per Column'
+    },
+    CONFIRM_REMOVE_ALL: {
+      zh: '是否清除列表中的所有图片或分隔符？',
+      en: 'Do you really want to ERASE all the item(s) in the list?'
+    },
+    CONFIRM_REMOVE: {
+      zh: '是否清除列表中选中的图片或分隔符？',
+      en: 'Do you really want to ERASE the selected item(s) in the list?'
     }
   }
 };

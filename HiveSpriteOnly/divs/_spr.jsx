@@ -1,5 +1,6 @@
 var nls          = require('../config/i18n');
 var constants    = require('../config/constants');
+var defaults     = require('../config/defaults');
 var take         = require('../lib/take');
 var on           = require('../lib/on');
 var _            = require('../lib/underscore');
@@ -83,7 +84,7 @@ var SPRITE = take({
     this.txtVerticalSpacing.helpTip    = util.localize(UI.INPUT_RANGE_0_200);
     this.lblVerticalSpacingUnit.text   = util.localize(UI.PIXELS);
 
-    if (util.locale === 'zh') {
+    if (util.zhify()) {
       this.ddlArrangeBy.preferredSize = [120, -1];
       this.lblArrangeBy.preferredSize = [120, -1];
 
@@ -104,16 +105,14 @@ var SPRITE = take({
       this.ddlArrangeBy.add('item', util.localize(CHC[text]));
     }, this);
 
-    // `Build Method` default to `Vertical`
-    this.ddlBuildMethod.selection = 1;
+    this.ddlBuildMethod.selection  = defaults.buildMethod;
+    this.ddlArrangeBy.selection    = defaults.arrangeBy;
 
-    // `Arrangement` default to `Rows`
-    this.ddlArrangeBy.selection = 0;
+    this.txtOffsetSpacing.text     = defaults.offsetSpacing;
+    this.txtHorizontalSpacing.text = defaults.horizontalSpacing;
+    this.txtVerticalSpacing.text   = defaults.verticalSpacing;
 
-    this.txtOffsetSpacing.text     = '1';
-    this.txtHorizontalSpacing.text = '1';
-    this.txtVerticalSpacing.text   = '1';
-    this.txtRowNums.text           = '1';
+    this.txtRowNums.text           = defaults.rowNumbers;
   },
 
   bindEvents: function () {
@@ -126,13 +125,8 @@ var SPRITE = take({
     var grpSoloSpacing = self.grpSoloSpacing;
     var grpDualSpacing = self.grpDualSpacing;
 
-    on(ddlBuildMethod, 'change', function () {
-      self.trigger('buildmethod:change');
-    });
-
-    on(ddlArrangeBy, 'change', function () {
-      self.trigger('arrangement:change');
-    });
+    on(ddlBuildMethod, 'change', _.bind(self.trigger, self, 'buildmethod:change'));
+    on(ddlArrangeBy, 'change', _.bind(self.trigger, self, 'arrangement:change'));
 
     on(self, {
       'buildmethod:change': function () {

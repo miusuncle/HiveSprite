@@ -1,5 +1,6 @@
 var nls         = require('../config/i18n');
 var constants   = require('../config/constants');
+var defaults    = require('../config/defaults');
 var take        = require('../lib/take');
 var on          = require('../lib/on');
 var _           = require('../lib/underscore');
@@ -8,11 +9,13 @@ var util        = require('../lib/util');
 var CHC         = nls.CHC;
 var DLG         = nls.DLG;
 var UI          = nls.UI;
+var MSG         = nls.MSG;
 var BrowseUsing = constants.BrowseUsing;
 
 var SOURCE = take({
   init: function ($) {
-    this.dataList = [];
+    this.separator = '-';
+    this.dataList  = [];
 
     this.bindCtrls($);
     this.localizeUI();
@@ -41,6 +44,7 @@ var SOURCE = take({
       'cmdBrowse',
       'cmdRemoveAll',
       'cmdRemove',
+      'cmdInsertSeparator',
       'cmdMoveUp',
       'cmdMoveDown',
 
@@ -59,13 +63,15 @@ var SOURCE = take({
     this.cmdBrowse.text            = util.localize(UI.BROWSE);
     this.cmdRemoveAll.text         = util.localize(UI.REMOVE_ALL);
     this.cmdRemove.text            = util.localize(UI.REMOVE);
+    this.cmdInsertSeparator.text   = util.localize(UI.INSERT_SEPARATOR);
     this.cmdMoveUp.text            = util.localize(UI.MOVE_UP);
     this.cmdMoveDown.text          = util.localize(UI.MOVE_DOWN);
 
     this.pnlImagePreview.text      = util.localize(UI.PREVIEW);
 
-    if (util.locale === 'zh') {
+    if (util.zhify()) {
       this.ddlBrowseUsing.preferredSize = [180, -1];
+      this.lstSourceImages.preferredSize = [600, -1];
     }
   },
 
@@ -75,17 +81,11 @@ var SOURCE = take({
       this.ddlBrowseUsing.add('item', util.localize(CHC[text]));
     }, this);
 
-    // `Browse Use` default to `Folder`
-    this.ddlBrowseUsing.selection = 1;
-
-    // `Include SubFolders` default to be checked
-    this.chkIncludeSubFolders.value = true;
-
-    // `Preview Selected Images` default to be unchecked
-    this.chkPreviewImages.value = false;
+    this.ddlBrowseUsing.selection   = defaults.browseUsing;
+    this.chkIncludeSubFolders.value = defaults.includeSubfolders;
+    this.chkPreviewImages.value     = defaults.previewImages;
 
     this.renderListBox();
-    this.pnlImagePreview.visible = false;
   },
 
   renderListBox: function () {
@@ -105,6 +105,7 @@ var SOURCE = take({
     var cmdBrowse            = self.cmdBrowse;
     var cmdRemoveAll         = self.cmdRemoveAll;
     var cmdRemove            = self.cmdRemove;
+    var cmdInsertSeparator   = self.cmdInsertSeparator;
     var cmdMoveUp            = self.cmdMoveUp;
     var cmdMoveDown          = self.cmdMoveDown;
     var chkPreviewImages     = self.chkPreviewImages;
@@ -124,13 +125,23 @@ var SOURCE = take({
         break;
       }
 
+      if (_.isEmpty(images)) {
+        return;
+      }
+
       // filling data list with image info
-      _.reduce(images || [], function (ret, image) {
+      _.reduce(images, function (ret, image) {
         return _(ret).push({
           name: image.name,
           path: image.fsName
         });
       }, self.dataList);
+
+      // remove separators
+      self.dataList = _.reject(self.dataList, _.compose(
+        _.partial(_.isEqual, _, self.separator),
+        _.property('name')
+      ));
 
       // remove duplicates
       self.dataList = _.uniq(self.dataList, _.property('path'));
@@ -139,22 +150,52 @@ var SOURCE = take({
       self.trigger('listbox:update');
     });
 
-    on(cmdRemoveAll, 'click', function () {
-      lstSourceImages.removeAll();
-      self.dataList.length = 0;
+    on(cmdInsertSeparator, 'click', function () {
+      var selection = _(lstSourceImages.selection).sortBy('index');
+      var separator = self.separator;
+      var divisions = util.strRepeat(separator, 100);
+
+      var tracks = _.reduce(selection, function (ret, item, index) {
+        ret[1].push(index = item.index + ret[0]);
+
+        self.dataList.splice(index, 0, {
+          name: separator,
+          path: divisions
+        });
+
+        return util.inject(ret, 0, ret[0] + 1);
+      }, [0, []]);
+
+      self.renderListBox();
+      lstSourceImages.selection = tracks.pop();
       self.trigger('listbox:update');
     });
 
+    on(cmdRemoveAll, 'click', function () {
+      var positive = util.confirm(util.localize(MSG.CONFIRM_REMOVE_ALL));
+
+      if (positive) {
+        lstSourceImages.removeAll();
+        self.dataList.length = 0;
+        self.trigger('listbox:update');
+      }
+    });
+
     on(cmdRemove, 'click', function () {
-      var selection = lstSourceImages.selection;
+      var positive = util.confirm(util.localize(MSG.CONFIRM_REMOVE));
+
+      if (!positive) {
+        return;
+      }
+
+      var selection = _(lstSourceImages.selection).sortBy('index');
       var stayIndex = Math.max(0, selection[0].index - 1);
 
       _.foldr(selection, function (yes, item, index) {
-        index = item.index;
-        lstSourceImages.remove(index);
-        self.dataList.splice(index, 1);
+        self.dataList.splice(item.index, 1);
       }, 'ignore me?');
 
+      self.renderListBox();
       lstSourceImages.selection = stayIndex;
       self.trigger('listbox:update');
     });
@@ -173,7 +214,6 @@ var SOURCE = take({
 
       self.renderListBox();
       lstSourceImages.selection = idx;
-
       self.trigger('listbox:update');
     });
 
@@ -191,23 +231,26 @@ var SOURCE = take({
 
       self.renderListBox();
       lstSourceImages.selection = idx + 1;
-
       self.trigger('listbox:update');
     });
 
-    on(ddlBrowseUsing, 'change', browseUseChanged);
+    on(ddlBrowseUsing, 'change', _.bind(self.trigger, self, 'browseusing:change'));
+    on(lstSourceImages, 'change', _.bind(self.trigger, self, 'listbox:update'));
     on(chkPreviewImages, 'click', toggleImagePreview);
 
-    on(lstSourceImages, 'change', function () {
-      self.trigger('listbox:update');
+    on(self, {
+      'browseusing:change': browseUseChanged,
+      'listbox:update': listboxChanged
     });
-
-    on(self, { 'listbox:update': updateListBox });
-    on(self, { 'listbox:update': toggleImagePreview });
 
     function browseUseChanged() {
       var useFolder = (+ddlBrowseUsing.selection === BrowseUsing.FOLDER);
       chkIncludeSubFolders.enabled = useFolder;
+    }
+
+    function listboxChanged() {
+      updateListBox();
+      toggleImagePreview();
     }
 
     function updateListBox() {
@@ -216,10 +259,10 @@ var SOURCE = take({
       var length    = items.length;
 
       if (!length) {
-        util.disable([cmdRemoveAll, cmdRemove, cmdMoveUp, cmdMoveDown]);
+        util.disable([cmdRemoveAll, cmdRemove, cmdInsertSeparator, cmdMoveUp, cmdMoveDown]);
       } else if (!selection) {
         util.enable(cmdRemoveAll);
-        util.disable([cmdRemove, cmdMoveUp, cmdMoveDown]);
+        util.disable([cmdRemove, cmdInsertSeparator, cmdMoveUp, cmdMoveDown]);
       } else if (selection.length === 1) {
         if (length === 1) {
           util.disable([cmdMoveUp, cmdMoveDown]);
@@ -239,23 +282,33 @@ var SOURCE = take({
           }
         }
 
-        util.enable([cmdRemoveAll, cmdRemove]);
+        util.enable([cmdRemoveAll, cmdRemove, cmdInsertSeparator]);
       } else {
-        util.enable([cmdRemoveAll, cmdRemove]);
+        util.enable([cmdRemoveAll, cmdRemove, cmdInsertSeparator]);
         util.disable([cmdMoveUp, cmdMoveDown]);
       }
 
-      updateStatInfo(length, (selection || []).length);
+      var images = _.reject(selection || (selection = []), function (item) {
+        return self.dataList[item.index].name === self.separator;
+      });
+
+      updateStatInfo(length, selection.length, images.length);
     }
 
-    function updateStatInfo(total, selected) {
-      var tmpl = '${total}: ${tot_num}  ${selected}: ${sel_num}';
+    function updateStatInfo(total, selected, img_num) {
+      var tmpl = [
+        '${total}: ${tot_num}',
+        '${selected}: ${sel_num}',
+        '${images}: ${img_num}'
+      ].join('   ');
 
       lblSourceImagesStat.text = util.vsub(tmpl, {
         'total'   : util.localize(UI.TOTAL),
         'tot_num' : total,
         'selected': util.localize(UI.SELECTED),
-        'sel_num' : selected
+        'sel_num' : selected,
+        'images'  : util.localize(UI.IMAGES),
+        'img_num' : img_num
       });
     }
 
@@ -273,18 +326,30 @@ var SOURCE = take({
       var imgCount    = imgControls.length;
 
       pnlImagePreview.visible = true;
-
       _.each(imgControls, function (img) {
         img.visible = false;
       });
 
       if (selection) {
-        var filtered = selection.slice(0, imgCount);
-        var sorted   = _(filtered).sortBy('index');
+        var dataList  = self.dataList;
+        var separator = self.separator;
 
-        _.each(sorted, function (item, index, image) {
+        selection = _.chain(selection)
+          .sortBy('index')
+          .reject(function (item) {
+            return dataList[item.index].name === separator;
+          })
+          .value()
+          .slice(0, imgCount);
+
+        if (_.isEmpty(selection)) {
+          pnlImagePreview.visible = false;
+          return;
+        }
+
+        _.each(selection, function (item, index, image) {
           image         = imgControls[index];
-          image.image   = self.dataList[item.index].path;
+          image.image   = dataList[item.index].path;
           image.visible = true;
         });
       } else {
@@ -294,6 +359,7 @@ var SOURCE = take({
   },
 
   reviveView: function () {
+    this.trigger('browseusing:change');
     this.trigger('listbox:update');
   }
 });
