@@ -106,7 +106,7 @@ var nls = {
       en: 'Choose Folder...'
     },
     AFTER_BUILD: {
-      zh: '文档生成后执行动作: ',
+      zh: '文档生成后执行操作: ',
       en: 'After Finished Building: '
     },
     EXPORT_SPRITE_IMAGE: {
@@ -130,7 +130,7 @@ var nls = {
       en: 'Sprite Building Options'
     },
     BUILD_METHOD: {
-      zh: '生成风格: ',
+      zh: '生成规格: ',
       en: 'Building Method: '
     },
     ARRANGE_BY: {
