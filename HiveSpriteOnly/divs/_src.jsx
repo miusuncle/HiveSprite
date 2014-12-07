@@ -200,9 +200,14 @@ var SOURCE = take({
     });
 
     on(cmdRemoveAll, 'click', function () {
-      var positive = util.confirm(util.localize(MSG.CONFIRM_REMOVE_ALL));
+      var confirmation = true;
 
-      if (positive) {
+      if (defaults.confirmRemoveAll) {
+        var message = util.localize(MSG.CONFIRM_REMOVE_ALL);
+        confirmation = util.confirm(message);
+      }
+
+      if (confirmation) {
         lstSourceImages.removeAll();
         self.dataList.length = 0;
         self.trigger('listbox:update');
@@ -210,9 +215,14 @@ var SOURCE = take({
     });
 
     on(cmdRemove, 'click', function () {
-      var positive = util.confirm(util.localize(MSG.CONFIRM_REMOVE));
+      var confirmation = true;
 
-      if (!positive) {
+      if (defaults.confirmRemove) {
+        var message = util.localize(MSG.CONFIRM_REMOVE);
+        confirmation = util.confirm(message);
+      }
+
+      if (!confirmation) {
         return;
       }
 

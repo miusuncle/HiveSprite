@@ -8,6 +8,9 @@ var ArrangeBy    = choices.ArrangeBy;
 var CSSFormats   = choices.CSSFormats;
 
 var defaults = {
+  'confirmRemoveAll'      : true,
+  'confirmRemove'         : false,
+
   'abortOnUnknownImages'  : true,
 
   'browseUsing'           : BrowseUsing.FILES,
