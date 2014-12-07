@@ -161,9 +161,11 @@ module.exports = """dialog {
           },
 
           g1: Group {
+            alignment: ['center', 'fill'],
+
             chkExportSpriteImage: Checkbox {
               alignment: 'left',
-              preferredSize: [310, -1],
+              preferredSize: [346, -1],
               text: 'Export Sprite Image to Output Folder',
               properties: {
                 name: 'chkExportSpriteImage'
@@ -172,7 +174,7 @@ module.exports = """dialog {
 
             chkExportCSSFile: Checkbox {
               alignment: 'left',
-              preferredSize: [310, -1],
+              preferredSize: [346, -1],
               text: 'Export CSS File to Output Folder',
               properties: {
                 name: 'chkExportCSSFile'
@@ -181,9 +183,11 @@ module.exports = """dialog {
           },
 
           g2: Group {
+            alignment: ['center', 'fill'],
+
             chkCloseGeneratedDocument: Checkbox {
               alignment: 'left',
-              preferredSize: [310, -1],
+              preferredSize: [346, -1],
               text: 'Close Generated Document',
               properties: {
                 name: 'chkCloseGeneratedDocument'
@@ -192,7 +196,7 @@ module.exports = """dialog {
 
             chkOpenOutputFolder: Checkbox {
               alignment: 'left',
-              preferredSize: [310, -1],
+              preferredSize: [346, -1],
               text: 'Open Output Folder',
               properties: {
                 name: 'chkOpenOutputFolder'
