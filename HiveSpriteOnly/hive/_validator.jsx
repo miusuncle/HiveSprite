@@ -21,7 +21,7 @@ var VR = module.exports = take({
     }, [], this).flatten().value();
 
     // util.inspect(result);
-    return _.isEmpty(result) || !!alert(result[0]);
+    return _.isEmpty(result) || !!util.alert(result[0]);
   },
 
   check: function (ctrl, rules) {

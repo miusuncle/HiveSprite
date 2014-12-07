@@ -40,7 +40,7 @@ var util = module.exports = {
   saveAsTextFile     : saveAsTextFile,
 
   inspect: function (obj) {
-    alert(JSON.stringify(obj, null, 2));
+    this.alert(JSON.stringify(obj, null, 2));
   },
 
   inject: function (obj, name, value) {
@@ -285,7 +285,7 @@ function exportAsPNG(doc, where) {
   ].join('-');
 
   var destination   = [where, filename].join('/');
-  // alert(destination);
+  // util.alert(destination);
 
   var exportIn      = new File(destination);
   var exportAs      = ExportType.SAVEFORWEB;
@@ -310,7 +310,7 @@ function saveAsTextFile(text, where) {
   ].join('-');
 
   var destination = [where, filename].join('/');
-  // alert(destination);
+  // util.alert(destination);
 
   var file = new File(destination);
 

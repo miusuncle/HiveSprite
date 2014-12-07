@@ -121,7 +121,7 @@ var OUT = take({
 
       if (!exportImage && closeDocument) {
         chkCloseGeneratedDocument.value = !closeDocument;
-        alert(util.localize(ERR.UNCHK_CLOSE_DOC));
+        util.alert(util.localize(ERR.UNCHK_CLOSE_DOC));
       }
     });
 
@@ -132,7 +132,7 @@ var OUT = take({
 
       if (openFolder && !exportImage && !exportCSS) {
         chkOpenOutputFolder.value = !openFolder;
-        alert(util.localize(ERR.UNCHK_OPEN_OUT_DIR));
+        util.alert(util.localize(ERR.UNCHK_OPEN_OUT_DIR));
       }
     });
 
