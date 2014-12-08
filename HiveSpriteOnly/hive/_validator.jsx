@@ -62,7 +62,7 @@ var VR = module.exports = take({
     var func = this._checkers[name];
 
     if (!func) {
-      throw Error('[' + name + '] checker does not exist');
+      throw new Error('[' + name + '] checker does not exist');
     }
 
     return _.bind(func, this._checkers);
