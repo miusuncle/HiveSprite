@@ -28,7 +28,7 @@ var defaults = {
   'offsetSpacing'         : '5',
   'horizontalSpacing'     : '5',
   'verticalSpacing'       : '5',
-  'rowNumbers'            : '1',
+  'rowNums'               : '1',
 
   'cssFormat'             : CSSFormats.COMPACT,
   'selectorPrefix'        : '',

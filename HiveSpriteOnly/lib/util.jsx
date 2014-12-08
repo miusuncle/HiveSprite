@@ -70,7 +70,8 @@ var util = module.exports = {
       }
     }
 
-    return JSON.parse(contents);
+    fileHandle = null;
+    return JSON.parse(contents || null);
   },
 
   writeJSON: function (filePath, jsonVal) {
@@ -87,13 +88,14 @@ var util = module.exports = {
       fileHandle.close();
     }
 
+    fileHandle = null;
     return contents;
   },
 
   platform: function () {
     return ({
       'Macintosh': 'osx',
-      'Windows': 'windows'
+      'Windows'  : 'windows'
     })[File.fs];
   }(),
 

@@ -112,7 +112,7 @@ var SPRITE = take({
     this.txtHorizontalSpacing.text = defaults.horizontalSpacing;
     this.txtVerticalSpacing.text   = defaults.verticalSpacing;
 
-    this.txtRowNums.text           = defaults.rowNumbers;
+    this.txtRowNums.text           = defaults.rowNums;
   },
 
   bindEvents: function () {

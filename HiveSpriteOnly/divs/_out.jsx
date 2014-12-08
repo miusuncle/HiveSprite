@@ -137,16 +137,18 @@ var OUT = take({
       }
     });
 
+    _.times(2, function () {
+      chkExportCSSFile.notify('onClick');
+    });
+
     if (chkCloseGeneratedDocument.value) {
       _.times(2, function () {
         chkCloseGeneratedDocument.notify('onClick');
       });
     }
 
-    if (chkOpenOutputFolder.value) {
-      _.times(2, function () {
-        chkOpenOutputFolder.notify('onClick');
-      });
+    if (defaults.openOutputFolder && !chkOpenOutputFolder.value) {
+      chkOpenOutputFolder.notify('onClick');
     }
   }
 });

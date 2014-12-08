@@ -73,7 +73,7 @@ var Builder = take({
       var jsonVal = _.pick(config, _.keys(defaults));
       // util.inspect(jsonVal);
 
-      util.writeJSON(settings.lastSettingsFilePath, jsonVal);
+      settings.save(jsonVal);
     }
 
     var pickWhiteList = [
