@@ -53,6 +53,10 @@ var nls = {
     TARGET_FOLDER: {
       zh: '请选择包含图片的目标文件夹',
       en: 'Select target folder that contains images'
+    },
+    OUTPUT_FOLDER: {
+      zh: '请选择要导出Sprite图片文件和CSS样式文件的目标文件夹',
+      en: 'Select target folder you want to export Sprite Image file and CSS style file into'
     }
   },
 

@@ -5,8 +5,9 @@ var on       = require('../lib/on');
 var _        = require('../lib/underscore');
 var util     = require('../lib/util');
 
-var UI   = nls.UI;
-var ERR  = nls.ERR;
+var UI       = nls.UI;
+var ERR      = nls.ERR;
+var DLG      = nls.DLG;
 
 var OUT = take({
   init: function ($) {
@@ -80,7 +81,7 @@ var OUT = take({
     var pnlCSSExportOptions       = self.pnlCSSExportOptions;
 
     on(cmdChooseFolder, 'click', function () {
-      var folder = Folder.selectDialog();
+      var folder = Folder.selectDialog(util.localize(DLG.OUTPUT_FOLDER));
 
       if (folder) {
         txtOutputFolder.text = folder.fsName;
