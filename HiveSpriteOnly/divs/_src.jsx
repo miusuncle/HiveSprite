@@ -231,24 +231,16 @@ var SOURCE = take({
         return;
       }
 
-      var selection     = _(lstSourceImages.selection).sortBy('index');
-      var stayIndex     = Math.max(0, selection[0].index - 1);
-      var previewImages = chkPreviewImages.value;
-
-      if (previewImages) {
-        chkPreviewImages.value = false;
-      }
+      var selection = _(lstSourceImages.selection).sortBy('index');
+      var stayIndex = Math.max(0, selection[0].index - 1);
 
       _.foldr(selection, function (yes, item, index) {
         self.dataList.splice(item.index, 1);
-        lstSourceImages.remove(item.index);
       }, 'ignore me?');
 
+      self.renderListBox();
       lstSourceImages.selection = stayIndex;
       self.trigger('listbox:update');
-
-      chkPreviewImages.value = previewImages;
-      toggleImagePreview();
     });
 
     on(cmdMoveUp, 'click', function () {
@@ -286,7 +278,7 @@ var SOURCE = take({
     });
 
     on(ddlBrowseUsing, 'change', _.bind(self.trigger, self, 'browseusing:change'));
-    on(lstSourceImages, 'change', _.bind(self.trigger, self, 'listbox:update'));
+    on(lstSourceImages, 'click', _.bind(self.trigger, self, 'listbox:update'));
     on(chkPreviewImages, 'click', toggleImagePreview);
 
     on(self, {

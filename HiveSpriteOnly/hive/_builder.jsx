@@ -28,6 +28,11 @@ var Builder = take({
     var config = this.pack.getData();
     // util.inspect(config);
 
+    if (_.isEmpty(config.sourceImages)) {
+      var errorMessage = util.localize(ERR.NO_IMAGES);
+      throw new Error(errorMessage);
+    }
+
     // generate a fresh default document
     var doc = util.newDocument();
 
@@ -113,7 +118,7 @@ var Builder = take({
       doc.close(SaveOptions.DONOTSAVECHANGES);
 
       var errorMessage = util.localize(ERR.UNKNOWN_IMAGES);
-      throw Error(errorMessage);
+      throw new Error(errorMessage);
     }
 
     // obtain each layer's basic info

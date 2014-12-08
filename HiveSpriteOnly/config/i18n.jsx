@@ -360,6 +360,10 @@ module.exports = _.extend(nls, {
       ]),
       en: 'It\'s only make sense to Open Output Folder if at least Export Sprite Image or Export CSS File enabled.'
     },
+    NO_IMAGES: {
+      zh: '抱歉！由于您未添加任务图片，操作取消。',
+      en: 'Abort building for there is no image specified.'
+    },
     UNKNOWN_IMAGES: {
       zh: '抱歉！由于某些图片不能被Photoshop所识别和打开，操作取消。',
       en: 'Abort building cause there are some images that cannot be identified and opened by Photoshop!'

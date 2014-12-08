@@ -67,7 +67,7 @@
             var extension = exts.shift();
 
             if (!extension) {
-              throw Error(File.decode(moduleId) + ' is NOT a MODULE!');
+              throw new Error(File.decode(moduleId) + ' is NOT a MODULE!');
               return;
             }
 
