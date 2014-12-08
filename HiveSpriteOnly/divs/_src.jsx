@@ -1,6 +1,7 @@
 var nls         = require('../config/i18n');
 var choices     = require('../config/choices');
 var defaults    = require('../config/defaults');
+var settings    = require('../config/settings');
 var take        = require('../lib/take');
 var on          = require('../lib/on');
 var _           = require('../lib/underscore');
@@ -30,8 +31,12 @@ var SOURCE = take({
     var dataList = _.clone(this.dataList);
 
     return util.inject({}, {
-      'sourceImages': this.rejectSeparators(dataList),
-      'groupedMarks': this.squashSeparators(dataList)
+      'browseUsing'      : +this.ddlBrowseUsing.selection,
+      'includeSubfolders': this.chkIncludeSubFolders.value,
+      'previewImages'    : this.chkPreviewImages.value,
+
+      'sourceImages'     : this.rejectSeparators(dataList),
+      'groupedMarks'     : this.squashSeparators(dataList)
     });
   },
 
@@ -202,7 +207,7 @@ var SOURCE = take({
     on(cmdRemoveAll, 'click', function () {
       var confirmation = true;
 
-      if (defaults.confirmRemoveAll) {
+      if (settings.confirmRemoveAll) {
         var message = util.localize(MSG.CONFIRM_REMOVE_ALL);
         confirmation = util.confirm(message);
       }
@@ -217,7 +222,7 @@ var SOURCE = take({
     on(cmdRemove, 'click', function () {
       var confirmation = true;
 
-      if (defaults.confirmRemove) {
+      if (settings.confirmRemove) {
         var message = util.localize(MSG.CONFIRM_REMOVE);
         confirmation = util.confirm(message);
       }

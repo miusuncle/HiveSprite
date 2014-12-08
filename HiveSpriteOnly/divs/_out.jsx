@@ -63,7 +63,7 @@ var OUT = take({
   initView: function () {
     util.disable(this.txtOutputFolder);
 
-    this.txtOutputFolder.text            = defaults.desktopFolder;
+    this.txtOutputFolder.text            = defaults.outputFolder;
     this.chkExportSpriteImage.value      = defaults.exportSpriteImage;
     this.chkExportCSSFile.value          = defaults.exportCSSFile;
     this.chkCloseGeneratedDocument.value = defaults.closeGeneratedDocument;

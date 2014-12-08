@@ -57,11 +57,48 @@ var util = module.exports = {
     return this.locale === 'zh';
   },
 
+  readJSON: function (filePath) {
+    var fileHandle = new File(filePath);
+    var contents = null;
+
+    if (fileHandle.exists) {
+      try {
+        fileHandle.open();
+        contents = fileHandle.read();
+      } finally {
+        fileHandle.close();
+      }
+    }
+
+    return JSON.parse(contents);
+  },
+
+  writeJSON: function (filePath, jsonVal) {
+    var fileHandle = new File(filePath);
+    var contents = JSON.stringify(jsonVal, null, 2);
+
+    try {
+      fileHandle.encoding = 'UTF8';
+      fileHandle.lineFeed = File.fs;
+
+      fileHandle.open('w');
+      fileHandle.write(contents);
+    } finally {
+      fileHandle.close();
+    }
+
+    return contents;
+  },
+
   platform: function () {
     return ({
       'Macintosh': 'osx',
       'Windows': 'windows'
     })[File.fs];
+  }(),
+
+  homeFolder: function () {
+    return Folder.myDocuments.parent.fsName;
   }(),
 
   tempFolder: function () {

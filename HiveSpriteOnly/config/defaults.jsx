@@ -1,6 +1,8 @@
 var _            = require('../lib/underscore');
 var util         = require('../lib/util');
+var JSON         = require('../lib/json2');
 var choices      = require('./choices');
+var settings     = require('./settings');
 
 var BrowseUsing  = choices.BrowseUsing;
 var BuildMethods = choices.BuildMethods;
@@ -8,16 +10,14 @@ var ArrangeBy    = choices.ArrangeBy;
 var CSSFormats   = choices.CSSFormats;
 
 var defaults = {
-  'confirmRemoveAll'      : true,
-  'confirmRemove'         : false,
-
-  'abortOnUnknownImages'  : true,
+  'separator'             : '-',
+  'dataList'              : [],
 
   'browseUsing'           : BrowseUsing.FILES,
   'includeSubfolders'     : false,
   'previewImages'         : false,
 
-  'desktopFolder'         : util.desktopFolder,
+  'outputFolder'          : util.desktopFolder,
   'exportSpriteImage'     : true,
   'exportCSSFile'         : true,
   'closeGeneratedDocument': true,
@@ -37,7 +37,11 @@ var defaults = {
   'includeWidthHeight'    : true
 };
 
-module.exports = _.extend(defaults, {
-  'separator': '-',
-  'dataList': []
-});
+var exports = _.extend({}, defaults);
+
+if (settings.applyLastSettings) {
+  var filepath = settings.lastSettingsFilePath;
+  _.extend(exports, util.readJSON(filepath));
+}
+
+module.exports = exports;

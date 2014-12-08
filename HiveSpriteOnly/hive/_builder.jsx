@@ -1,5 +1,6 @@
 var nls          = require('../config/i18n');
 var defaults     = require('../config/defaults');
+var settings     = require('../config/settings');
 var choices      = require('../config/choices');
 var take         = require('../lib/take');
 var util         = require('../lib/util');
@@ -24,17 +25,17 @@ var Builder = take({
   },
 
   buildSprite: function () {
-    var settings = this.pack.getData();
-    // util.inspect(settings);
+    var config = this.pack.getData();
+    // util.inspect(config);
 
     // generate a fresh default document
     var doc = util.newDocument();
 
-    var layersInfo = this.populateImagesToLayers(settings, doc);
+    var layersInfo = this.populateImagesToLayers(config, doc);
     // util.inspect(layersInfo);
 
     var buildFunc = (function () {
-      switch (settings.buildMethod) {
+      switch (config.buildMethod) {
       case BuildMethods.HORIZONTAL : return _.bind(this.buildHorizontalSprite, this);
       case BuildMethods.VERTICAL   : return _.bind(this.buildVerticalSprite, this);
       case BuildMethods.TILED      : return _.bind(this.buildTiledSprite, this);
@@ -42,7 +43,7 @@ var Builder = take({
       }
     }).call(this);
 
-    layersInfo = buildFunc(settings, layersInfo);
+    layersInfo = buildFunc(config, layersInfo);
     // util.inspect(layersInfo);
 
     // tidy up document
@@ -53,18 +54,26 @@ var Builder = take({
     util.viewDocumentInActualSize();
 
     // export generated document as PNG file
-    if (settings.exportSpriteImage) {
-      util.exportAsPNG(doc, settings.outputFolder);
+    if (config.exportSpriteImage) {
+      util.exportAsPNG(doc, config.outputFolder);
     }
 
     // close document if necessary
-    if (settings.closeGeneratedDocument) {
+    if (config.closeGeneratedDocument) {
       doc.close(SaveOptions.DONOTSAVECHANGES);
     }
 
     // open output folder if necessary
-    if (settings.openOutputFolder) {
-      new Folder(settings.outputFolder).execute();
+    if (config.openOutputFolder) {
+      new Folder(config.outputFolder).execute();
+    }
+
+    // save last settings if necessary
+    if (settings.saveLastSettings) {
+      var jsonVal = _.pick(config, _.keys(defaults));
+      // util.inspect(jsonVal);
+
+      util.writeJSON(settings.lastSettingsFilePath, jsonVal);
     }
 
     var pickWhiteList = [
@@ -77,14 +86,14 @@ var Builder = take({
     // provide result info to outside
     var result = _.extend({
       'cssInfo': layersInfo
-    }, _.pick(settings, pickWhiteList));
+    }, _.pick(config, pickWhiteList));
 
     // util.inspect(result);
     return result;
   },
 
-  populateImagesToLayers: function (settings, doc) {
-    var imagePaths = _(settings.sourceImages).pluck('path');
+  populateImagesToLayers: function (config, doc) {
+    var imagePaths = _(config.sourceImages).pluck('path');
 
     // set doc as active document for safety
     app.activeDocuement = doc;
@@ -97,7 +106,7 @@ var Builder = take({
     // remove the last empty layer
     layers.pop().remove();
 
-    if (defaults.abortOnUnknownImages && layers.length < imagePaths.length) {
+    if (settings.abortOnUnknownImages && layers.length < imagePaths.length) {
       // util.inspect({ 'before': imagePaths.length, 'after': layers.length });
 
       // close generated document immediately
@@ -120,8 +129,8 @@ var Builder = take({
     });
   },
 
-  buildHorizontalSprite: function (settings, layersInfo) {
-    return this.buildSoloSprite(settings, layersInfo, function (memoOffset, item, index) {
+  buildHorizontalSprite: function (config, layersInfo) {
+    return this.buildSoloSprite(config, layersInfo, function (memoOffset, item, index) {
       item['background-position'] = (-memoOffset) + (memoOffset === 0 ? '' : 'px') + ' 0';
 
       // translate each layer from left to right
@@ -130,8 +139,8 @@ var Builder = take({
     });
   },
 
-  buildVerticalSprite: function (settings, layersInfo) {
-    return this.buildSoloSprite(settings, layersInfo, function (memoOffset, item, index) {
+  buildVerticalSprite: function (config, layersInfo) {
+    return this.buildSoloSprite(config, layersInfo, function (memoOffset, item, index) {
       item['background-position'] = '0 ' + (-memoOffset) + (memoOffset === 0 ? '' : 'px');
 
       // translate layer from top to bottom
@@ -140,11 +149,11 @@ var Builder = take({
     });
   },
 
-  buildSoloSprite: function (settings, layersInfo, involver) {
-    var offsetSpacing  = settings.offsetSpacing;
-    var selectorPrefix = settings.selectorPrefix;
-    var classPrefix    = settings.classPrefix;
-    var selectorSuffix = settings.selectorSuffix;
+  buildSoloSprite: function (config, layersInfo, involver) {
+    var offsetSpacing  = config.offsetSpacing;
+    var selectorPrefix = config.selectorPrefix;
+    var classPrefix    = config.classPrefix;
+    var selectorSuffix = config.selectorSuffix;
 
     _.reduce(layersInfo, function (memoOffset, item, index) {
       memoOffset    = involver(memoOffset, item, index);
@@ -162,14 +171,14 @@ var Builder = take({
     return layersInfo;
   },
 
-  buildTiledSprite: function (settings, layersInfo) {
-    var selectorPrefix    = settings.selectorPrefix;
-    var classPrefix       = settings.classPrefix;
-    var selectorSuffix    = settings.selectorSuffix;
-    var horizontalSpacing = settings.horizontalSpacing;
-    var verticalSpacing   = settings.verticalSpacing;
-    var arrangeBy         = settings.arrangeBy;
-    var rowNums           = settings.rowNums;
+  buildTiledSprite: function (config, layersInfo) {
+    var selectorPrefix    = config.selectorPrefix;
+    var classPrefix       = config.classPrefix;
+    var selectorSuffix    = config.selectorSuffix;
+    var horizontalSpacing = config.horizontalSpacing;
+    var verticalSpacing   = config.verticalSpacing;
+    var arrangeBy         = config.arrangeBy;
+    var rowNums           = config.rowNums;
 
     var maxWidth  = _.chain(layersInfo).pluck('width').max().value();
     var maxHeight = _.chain(layersInfo).pluck('height').max().value();
@@ -218,17 +227,17 @@ var Builder = take({
     return layersInfo;
   },
 
-  buildGroupedSprite: function (settings, layersInfo) {
-    var horizontalSpacing = settings.horizontalSpacing;
-    var verticalSpacing   = settings.verticalSpacing;
-    var selectorPrefix    = settings.selectorPrefix;
-    var classPrefix       = settings.classPrefix;
-    var selectorSuffix    = settings.selectorSuffix;
+  buildGroupedSprite: function (config, layersInfo) {
+    var horizontalSpacing = config.horizontalSpacing;
+    var verticalSpacing   = config.verticalSpacing;
+    var selectorPrefix    = config.selectorPrefix;
+    var classPrefix       = config.classPrefix;
+    var selectorSuffix    = config.selectorSuffix;
 
-    _.reduce(settings.groupedMarks, function (offset, mark) {
+    _.reduce(config.groupedMarks, function (offset, mark) {
       // encounter one separator
       if (_.isString(mark)) {
-        switch (settings.arrangeBy) {
+        switch (config.arrangeBy) {
         case ArrangeBy.ROWS:
           var maxHeight = _.chain(offset.memo).pluck('height').max().value();
           offset.y += (maxHeight + verticalSpacing);
@@ -255,7 +264,7 @@ var Builder = take({
         // util.inspect(_.pick(item, ['width', 'height']))
         offset.memo.push(_.pick(item, ['width', 'height']));
 
-        switch (settings.arrangeBy) {
+        switch (config.arrangeBy) {
         case ArrangeBy.ROWS:
           offset.x += (item.width + horizontalSpacing);
           break;
@@ -286,24 +295,24 @@ var Builder = take({
     return layersInfo;
   },
 
-  buildCss: function (settings) {
-    // util.inspect(settings);
+  buildCss: function (config) {
+    // util.inspect(config);
 
-    if (!settings.exportCSSFile) {
+    if (!config.exportCSSFile) {
       return;
     }
 
     var tmplCss = this.getCssTemplate(
-      settings.cssFormat,
-      settings.includeWidthHeight
+      config.cssFormat,
+      config.includeWidthHeight
     );
 
     var compiled = _.partial(util.vsub, tmplCss);
-    var contents = _.map(settings.cssInfo, compiled).join('\n');
+    var contents = _.map(config.cssInfo, compiled).join('\n');
     // util.alert(contents);
 
     // save generated CSS to text file
-    util.saveAsTextFile(contents, settings.outputFolder);
+    util.saveAsTextFile(contents, config.outputFolder);
   },
 
   getCssTemplate: function (cssFormat, includeWidthHeight) {
