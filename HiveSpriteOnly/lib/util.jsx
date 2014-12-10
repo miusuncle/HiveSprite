@@ -339,6 +339,7 @@ function exportAsPNG(doc, where) {
   });
 
   doc.exportDocument(exportIn, exportAs, exportOptions);
+  return filename;
 }
 
 function saveAsTextFile(text, where) {
@@ -359,5 +360,7 @@ function saveAsTextFile(text, where) {
   file.open('w');
   file.write(text);
   file.close();
+
+  return filename;
 }
 

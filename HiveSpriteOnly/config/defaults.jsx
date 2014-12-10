@@ -31,10 +31,11 @@ var defaults = {
   'rowNums'               : '1',
 
   'cssFormat'             : CSSFormats.COMPACT,
+  'includeWidthHeight'    : true,
+  'includeBGI'            : true,
   'selectorPrefix'        : '',
   'classPrefix'           : 'sp-',
-  'selectorSuffix'        : '',
-  'includeWidthHeight'    : true
+  'selectorSuffix'        : ''
 };
 
 var exports = _.extend({}, defaults);

@@ -2,10 +2,12 @@ var nls        = require('../config/i18n');
 var choices    = require('../config/choices');
 var defaults   = require('../config/defaults');
 var take       = require('../lib/take');
+var on         = require('../lib/on');
 var _          = require('../lib/underscore');
 var util       = require('../lib/util');
 
 var CHC        = nls.CHC;
+var ERR        = nls.ERR;
 var UI         = nls.UI;
 var CSSFormats = choices.CSSFormats;
 
@@ -14,16 +16,18 @@ var CSS = take({
     this.bindCtrls($);
     this.localizeUI();
     this.initView();
+    this.bindEvents();
     return this;
   },
 
   getData: function () {
     return {
       cssFormat         : +this.ddlCSSFormat.selection,
+      includeWidthHeight: this.chkIncludeWidthHeight.value,
+      includeBGI        : this.chkIncludeBGI.value,
       selectorPrefix    : this.txtSelectorPrefix.text,
       classPrefix       : this.txtClassPrefix.text,
-      selectorSuffix    : this.txtSelectorSuffix.text,
-      includeWidthHeight: this.chkIncludeWidthHeight.value
+      selectorSuffix    : this.txtSelectorSuffix.text
     };
   },
 
@@ -33,6 +37,7 @@ var CSS = take({
       'lblCSSFormat',
       'ddlCSSFormat',
       'chkIncludeWidthHeight',
+      'chkIncludeBGI',
 
       'lblSelectorPrefix',
       'txtSelectorPrefix',
@@ -44,7 +49,9 @@ var CSS = take({
 
       'lblSelectorSuffix',
       'txtSelectorSuffix',
-      'lblSelectorSuffixHint'
+      'lblSelectorSuffixHint',
+
+      'chkExportSpriteImage'
     ], function (name) {
       this[name] = $(name);
     }, this);
@@ -53,8 +60,12 @@ var CSS = take({
   localizeUI: function () {
     this.pnlCSSExportOptions.text      = util.localize(UI.CSS_EXPORT_OPTIONS);
     this.lblCSSFormat.text             = util.localize(UI.CSS_FORMAT);
+
     this.chkIncludeWidthHeight.text    = util.localize(UI.INC_WIDTH_HEIGHT);
     this.chkIncludeWidthHeight.helpTip = util.localize(UI.INC_WIDTH_HEIGHT_TIP);
+
+    this.chkIncludeBGI.text            = util.localize(UI.INC_BGI);
+    this.chkIncludeBGI.helpTip         = util.localize(UI.INC_BGI_TIP);
 
     this.lblSelectorPrefix.text        = util.localize(UI.SELECTOR_PREFIX);
     this.lblClassPrefix.text           = util.localize(UI.CLASS_PREFIX);
@@ -89,10 +100,29 @@ var CSS = take({
     }, this);
 
     this.ddlCSSFormat.selection      = defaults.cssFormat;
+    this.chkIncludeWidthHeight.value = defaults.includeWidthHeight;
+    this.chkIncludeBGI.value         = defaults.includeBGI;
     this.txtSelectorPrefix.text      = defaults.selectorPrefix;
     this.txtClassPrefix.text         = defaults.classPrefix;
     this.txtSelectorSuffix.text      = defaults.selectorSuffix;
-    this.chkIncludeWidthHeight.value = defaults.includeWidthHeight;
+  },
+
+  bindEvents: function () {
+    var chkIncludeBGI        = this.chkIncludeBGI;
+    var chkExportSpriteImage = this.chkExportSpriteImage;
+
+    on(chkIncludeBGI, 'click', includeBGIClicked);
+    chkIncludeBGI.value && _.times(2, includeBGIClicked);
+
+    function includeBGIClicked() {
+      var exportImage = chkExportSpriteImage.value;
+      var includeBGI  = chkIncludeBGI.value;
+
+      if (!exportImage && includeBGI) {
+        chkIncludeBGI.value = !includeBGI;
+        util.alert(util.localize(ERR.CHK_INCLUDE_BGI));
+      }
+    }
   }
 });
 

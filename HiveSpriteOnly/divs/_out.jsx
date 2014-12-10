@@ -40,7 +40,8 @@ var OUT = take({
       'chkCloseGeneratedDocument',
       'chkOpenOutputFolder',
 
-      'pnlCSSExportOptions'
+      'pnlCSSExportOptions',
+      'chkIncludeBGI'
     ], function (name) {
       this[name] = $(name);
     }, this);
@@ -78,7 +79,9 @@ var OUT = take({
     var chkExportCSSFile          = self.chkExportCSSFile;
     var chkCloseGeneratedDocument = self.chkCloseGeneratedDocument;
     var chkOpenOutputFolder       = self.chkOpenOutputFolder;
+
     var pnlCSSExportOptions       = self.pnlCSSExportOptions;
+    var chkIncludeBGI             = self.chkIncludeBGI;
 
     on(cmdChooseFolder, 'click', function () {
       var folder = Folder.selectDialog(util.localize(DLG.OUTPUT_FOLDER));
@@ -94,6 +97,7 @@ var OUT = take({
 
       if (!exportImage) {
         chkCloseGeneratedDocument.value = false;
+        chkIncludeBGI.value = false;
 
         if (!exportCSS) {
           chkOpenOutputFolder.value = false;
@@ -122,7 +126,7 @@ var OUT = take({
 
       if (!exportImage && closeDocument) {
         chkCloseGeneratedDocument.value = !closeDocument;
-        util.alert(util.localize(ERR.UNCHK_CLOSE_DOC));
+        util.alert(util.localize(ERR.CHK_CLOSE_DOC));
       }
     });
 
@@ -133,7 +137,7 @@ var OUT = take({
 
       if (openFolder && !exportImage && !exportCSS) {
         chkOpenOutputFolder.value = !openFolder;
-        util.alert(util.localize(ERR.UNCHK_OPEN_OUT_DIR));
+        util.alert(util.localize(ERR.CHK_OPEN_OUT_DIR));
       }
     });
 

@@ -412,10 +412,17 @@ module.exports = """dialog {
 
           chkIncludeWidthHeight: Checkbox {
             text: 'Include Width and Height',
-            preferredSize: [200, -1],
             helpTip: 'Provides the width and height of each sprite in the CSS.',
             properties: {
               name: 'chkIncludeWidthHeight'
+            }
+          },
+
+          chkIncludeBGI: Checkbox {
+            text: 'Include Background Image',
+            helpTip: 'Provides background image of each sprite in the CSS.',
+            properties: {
+              name: 'chkIncludeBGI'
             }
           }
         },

@@ -177,6 +177,14 @@ var nls = {
       zh: '输出的CSS样式中将包括宽度和高度属性值.',
       en: 'Provides the width and height of each sprite in the CSS.'
     },
+    INC_BGI: {
+      zh: '包括背景图片',
+      en: 'Include Background Image'
+    },
+    INC_BGI_TIP: {
+      zh: '输出的CSS样式中将包括背景图片属性值.',
+      en: 'Provides background image of each sprite in the CSS.'
+    },
     SELECTOR_PREFIX: {
       zh: '选择器前缀: ',
       en: 'Selector Prefix: '
@@ -345,20 +353,27 @@ var nls = {
 
 module.exports = _.extend(nls, {
   'ERR': {
-    UNCHK_CLOSE_DOC: {
+    CHK_CLOSE_DOC: {
       zh: util.vsub('要${0}, 请先勾选 [${1}] 复选框。', [
         util.localize(nls.UI.CLOSE_GEN_DOC),
         util.localize(nls.UI.EXPORT_SPRITE_IMAGE)
       ]),
-      en: 'You can only have Close Generated Document checked if you choose to export sprite image.'
+      en: 'You can only have Close Generated Document checked if you choose to Export Sprite Image.'
     },
-    UNCHK_OPEN_OUT_DIR: {
+    CHK_OPEN_OUT_DIR: {
       zh: util.vsub('文档生成后要${0}, 请至少先勾选 [${1}] 或 [${2}] 复选框。', [
         util.localize(nls.UI.OPEN_OUTPUT_FOLDER),
         util.localize(nls.UI.EXPORT_SPRITE_IMAGE),
         util.localize(nls.UI.EXPORT_CSS_FILE)
       ]),
       en: 'It\'s only make sense to Open Output Folder if at least Export Sprite Image or Export CSS File enabled.'
+    },
+    CHK_INCLUDE_BGI: {
+      zh: util.vsub('要${0}, 请先勾选 [${1}] 复选框。', [
+        util.localize(nls.UI.INC_BGI),
+        util.localize(nls.UI.EXPORT_SPRITE_IMAGE)
+      ]),
+      en: 'It\'s only make sense to Include Background Image if you choose to Export Sprite Image.'
     },
     NO_IMAGES: {
       zh: '抱歉！由于您未添加任务图片，操作取消。',

@@ -60,7 +60,8 @@ var Builder = take({
 
     // export generated document as PNG file
     if (config.exportSpriteImage) {
-      util.exportAsPNG(doc, config.outputFolder);
+      var filename = util.exportAsPNG(doc, config.outputFolder);
+      util.inject(config, 'backgroundImage', filename);
     }
 
     // close document if necessary
@@ -85,7 +86,9 @@ var Builder = take({
       'exportCSSFile',
       'outputFolder',
       'cssFormat',
-      'includeWidthHeight'
+      'includeWidthHeight',
+      'includeBGI',
+      'backgroundImage'
     ];
 
     // provide result info to outside
@@ -316,6 +319,10 @@ var Builder = take({
     var contents = _.map(config.cssInfo, compiled).join('\n');
     // util.alert(contents);
 
+    if (config.includeBGI) {
+      contents = [this.echoBGI(config), contents].join('\n');
+    }
+
     // save generated CSS to text file
     util.saveAsTextFile(contents, config.outputFolder);
   },
@@ -338,6 +345,35 @@ var Builder = take({
     var ret = '${selector} {';
     includeWidthHeight && (ret += ' width: ${width}; height: ${height};');
     return (ret += ' background-position: ${background-position}; }');
+  },
+
+  echoBGI: function (config) {
+    var selectors = _.pluck(config.cssInfo, 'selector');
+    var selector, template;
+
+    switch (config.cssFormat) {
+    case CSSFormats.EXPANDED:
+      selector = selectors.join(', \n');
+      template =
+        '${selector} {\n' +
+          '\tbackground-image: url(${backimage});\n' +
+          '\tbackground-repeat: no-repeat;\n' +
+        '}\n';
+      break;
+    case CSSFormats.COMPACT:
+      selector = selectors.join(', ');
+      template =
+        '${selector} { ' +
+          'background-image: url(${backimage}); ' +
+          'background-repeat: no-repeat; ' +
+        '}';
+      break;
+    }
+
+    return util.vsub(template, {
+      'selector' : selector,
+      'backimage': config.backgroundImage
+    });
   }
 });
 
