@@ -109,13 +109,13 @@ var Builder = take({
     // place selected images into each layer
     util.newLayersFromFiles(imagePaths.reverse());
 
-    var layers = _.toArray(doc.layers);
+    var abortOnUnknownImages = settings.abortOnUnknownImages;
+    var layers               = _.toArray(doc.layers);
+    var layerLength          = layers.length - 1; // omit empty layer
+    var imageLength          = imagePaths.length;
 
-    // remove the last empty layer
-    layers.pop().remove();
-
-    if (settings.abortOnUnknownImages && layers.length < imagePaths.length) {
-      // util.inspect({ 'before': imagePaths.length, 'after': layers.length });
+    if (!layerLength || (abortOnUnknownImages && layerLength < imageLength)) {
+      // util.inspect({ 'before': imageLength, 'after': layerLength });
 
       // close generated document immediately
       doc.close(SaveOptions.DONOTSAVECHANGES);
@@ -123,6 +123,9 @@ var Builder = take({
       var errorMessage = util.localize(ERR.UNKNOWN_IMAGES);
       throw new Error(errorMessage);
     }
+
+    // remove the last empty layer
+    layers.pop().remove();
 
     // obtain each layer's basic info
     return _.map(layers, function (layer) {

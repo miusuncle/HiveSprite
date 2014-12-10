@@ -377,11 +377,11 @@ module.exports = _.extend(nls, {
     },
     NO_IMAGES: {
       zh: '抱歉！由于您未添加任务图片，操作取消。',
-      en: 'Abort building for there is no image specified.'
+      en: 'Abort building because there is no image specified.'
     },
     UNKNOWN_IMAGES: {
       zh: '抱歉！由于某些图片不能被Photoshop所识别和打开，操作取消。',
-      en: 'Abort building cause there are some images that cannot be identified and opened by Photoshop!'
+      en: 'Abort building because there are some images cannot be identified and opened by Photoshop!'
     }
   }
 });
