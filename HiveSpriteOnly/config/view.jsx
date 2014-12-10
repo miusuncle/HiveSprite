@@ -3,7 +3,7 @@ module.exports = """dialog {
 
   g: Group {
     orientation: 'row',
-    alignChildren: 'top',
+    alignChildren: 'fill',
     margins: 0,
 
     g: Group {
@@ -509,6 +509,7 @@ module.exports = """dialog {
 
     actions: Group {
       orientation: 'column',
+      alignChildren: ['fill', 'fill'],
       margins: [0, 5, 0, 0],
       spacing: 20,
 
@@ -534,6 +535,7 @@ module.exports = """dialog {
       pnlImagePreview: Panel {
         text: 'Preview',
         orientation: 'column',
+        alignChildren: ['fill', 'fill'],
         margins: [5, 20, 5, 5],
         spacing: 6,
         properties: {
