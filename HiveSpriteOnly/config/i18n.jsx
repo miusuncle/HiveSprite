@@ -21,7 +21,7 @@ var nls = {
     },
     GROUPED: {
       zh: '分隔符分组',
-      en: 'Divide By Seps.',
+      en: 'Divide By Seps.'
     },
     TILED: {
       zh: '平铺',
@@ -134,7 +134,7 @@ var nls = {
       en: 'Sprite Building Options'
     },
     BUILD_METHOD: {
-      zh: '生成规格: ',
+      zh: '生成方法: ',
       en: 'Building Method: '
     },
     ARRANGE_BY: {
