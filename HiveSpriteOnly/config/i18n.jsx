@@ -89,6 +89,10 @@ var nls = {
       zh: '移除',
       en: 'Remove'
     },
+    DUPLICATE: {
+      zh: '复制',
+      en: 'Duplicate'
+    },
     INSERT_SEPARATOR: {
       zh: '插入分隔符',
       en: 'Add Separator'

@@ -78,6 +78,7 @@ var SOURCE = take({
       'cmdBrowse',
       'cmdRemoveAll',
       'cmdRemove',
+      'cmdDuplicate',
       'cmdInsertSeparator',
       'cmdMoveUp',
       'cmdMoveDown',
@@ -98,6 +99,7 @@ var SOURCE = take({
     this.cmdBrowse.text            = util.localize(UI.BROWSE);
     this.cmdRemoveAll.text         = util.localize(UI.REMOVE_ALL);
     this.cmdRemove.text            = util.localize(UI.REMOVE);
+    this.cmdDuplicate.text         = util.localize(UI.DUPLICATE);
     this.cmdInsertSeparator.text   = util.localize(UI.INSERT_SEPARATOR);
     this.cmdMoveUp.text            = util.localize(UI.MOVE_UP);
     this.cmdMoveDown.text          = util.localize(UI.MOVE_DOWN);
@@ -140,6 +142,7 @@ var SOURCE = take({
     var cmdBrowse            = self.cmdBrowse;
     var cmdRemoveAll         = self.cmdRemoveAll;
     var cmdRemove            = self.cmdRemove;
+    var cmdDuplicate         = self.cmdDuplicate;
     var cmdInsertSeparator   = self.cmdInsertSeparator;
     var cmdMoveUp            = self.cmdMoveUp;
     var cmdMoveDown          = self.cmdMoveDown;
@@ -167,10 +170,7 @@ var SOURCE = take({
 
       // filling data list with image info
       _.reduce(images, function (ret, image) {
-        return _(ret).push({
-          name: image.name,
-          path: image.fsName
-        });
+        return _(ret).push({ 'name': image.name, 'path': image.fsName });
       }, self.dataList);
 
       // remove separators
@@ -183,26 +183,35 @@ var SOURCE = take({
       self.trigger('listbox:update');
     });
 
+    on(cmdDuplicate, 'click', dupHandler(function (targetList, targetIndex) {
+      targetList.splice(targetIndex, 0, _.clone(targetList[targetIndex]));
+      return targetIndex + 1;
+    }));
+
     on(cmdInsertSeparator, 'click', function () {
-      var selection = _(lstSourceImages.selection).sortBy('index');
       var separator = self.separator;
       var divisions = util.strRepeat(separator, 100);
 
-      var tracks = _.reduce(selection, function (ret, item, index) {
-        ret[1].push(index = item.index + ret[0]);
+      return dupHandler(function (targetList, targetIndex) {
+        targetList.splice(targetIndex, 0, { 'name': separator, 'path': divisions });
+        return targetIndex;
+      });
+    }());
 
-        self.dataList.splice(index, 0, {
-          name: separator,
-          path: divisions
-        });
+    function dupHandler(dodup) {
+      return function () {
+        var selection = _(lstSourceImages.selection).sortBy('index');
 
-        return util.inject(ret, 0, ret[0] + 1);
-      }, [0, []]);
+        var tracks = _.reduce(selection, function (ret, item) {
+          ret[1].push(dodup(self.dataList, item.index + ret[0]));
+          return util.inject(ret, 0, ret[0] + 1);
+        }, [0, []]);
 
-      self.renderListBox();
-      lstSourceImages.selection = tracks.pop();
-      self.trigger('listbox:update');
-    });
+        self.renderListBox();
+        lstSourceImages.selection = tracks.pop();
+        self.trigger('listbox:update');
+      };
+    }
 
     on(cmdRemoveAll, 'click', function () {
       var confirmation = true;
@@ -250,9 +259,7 @@ var SOURCE = take({
 
       dataList.splice.apply(
         dataList,
-        [idx, 2].concat(
-          dataList.slice(idx, idx + 2).reverse()
-        )
+        [idx, 2].concat(dataList.slice(idx, idx + 2).reverse())
       );
 
       self.renderListBox();
@@ -267,9 +274,7 @@ var SOURCE = take({
 
       dataList.splice.apply(
         dataList,
-        [idx, 2].concat(
-          dataList.slice(idx, idx + 2).reverse()
-        )
+        [idx, 2].concat(dataList.slice(idx, idx + 2).reverse())
       );
 
       self.renderListBox();
@@ -302,10 +307,12 @@ var SOURCE = take({
       var length    = items.length;
 
       if (!length) {
-        util.disable([cmdRemoveAll, cmdRemove, cmdInsertSeparator, cmdMoveUp, cmdMoveDown]);
+        util.disable([
+          cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator, cmdMoveUp, cmdMoveDown
+        ]);
       } else if (!selection) {
         util.enable(cmdRemoveAll);
-        util.disable([cmdRemove, cmdInsertSeparator, cmdMoveUp, cmdMoveDown]);
+        util.disable([cmdRemove, cmdDuplicate, cmdInsertSeparator, cmdMoveUp, cmdMoveDown]);
       } else if (selection.length === 1) {
         if (length === 1) {
           util.disable([cmdMoveUp, cmdMoveDown]);
@@ -325,9 +332,9 @@ var SOURCE = take({
           }
         }
 
-        util.enable([cmdRemoveAll, cmdRemove, cmdInsertSeparator]);
+        util.enable([cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator]);
       } else {
-        util.enable([cmdRemoveAll, cmdRemove, cmdInsertSeparator]);
+        util.enable([cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator]);
         util.disable([cmdMoveUp, cmdMoveDown]);
       }
 

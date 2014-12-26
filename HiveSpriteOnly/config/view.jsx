@@ -92,6 +92,12 @@ module.exports = """dialog {
                 name: 'cmdRemove'
               }
             },
+            cmdDuplicate: Button {
+              text: 'Duplicate',
+              properties: {
+                name: 'cmdDuplicate'
+              }
+            },
             cmdInsertSeparator: Button {
               text: 'Add Separator',
               properties: {

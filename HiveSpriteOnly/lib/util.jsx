@@ -129,7 +129,7 @@ var util = module.exports = {
     return s[0].toUpperCase() + s.slice(1).toLowerCase();
   },
 
-  strRepeat: function(str, qty) {
+  strRepeat: function (str, qty) {
     if (qty < 1) return '';
     var result = '';
     while (qty > 0) {
@@ -363,4 +363,3 @@ function saveAsTextFile(text, where) {
 
   return filename;
 }
-
