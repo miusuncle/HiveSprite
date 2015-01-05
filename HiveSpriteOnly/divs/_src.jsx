@@ -300,57 +300,36 @@ var SOURCE = take({
     }
 
     function updateListBox() {
-      var selection = lstSourceImages.selection;
-      var items     = lstSourceImages.items;
-      var length    = items.length;
+      var entrySize = lstSourceImages.items.length;
+      var selection = _(lstSourceImages.selection || []).sortBy('index');
 
-      if (!length) {
-        util.disable([
-          cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator, cmdMoveUp, cmdMoveDown
-        ]);
-      } else if (!selection) {
+      var images = _.reject(selection, function (item) {
+        return self.dataList[item.index].name === self.separator;
+      });
+
+      updateCmdState(entrySize, selection);
+      updateStatInfo(entrySize, selection.length, images.length);
+    }
+
+    function updateCmdState(totalNums, selection) {
+      if (!totalNums) {
+        util.disable([cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator]);
+        util.disable([cmdMoveUp, cmdMoveDown]);
+      } else if (!_.size(selection)) {
         util.enable(cmdRemoveAll);
         util.disable([cmdRemove, cmdDuplicate, cmdInsertSeparator, cmdMoveUp, cmdMoveDown]);
-      } else if (selection.length === 1) {
-        if (length === 1) {
-          util.disable([cmdMoveUp, cmdMoveDown]);
-        } else {
-          switch (selection[0].index) {
-          case 0:
-            util.disable(cmdMoveUp);
-            util.enable(cmdMoveDown);
-            break;
-          case length - 1:
-            util.disable(cmdMoveDown);
-            util.enable(cmdMoveUp);
-            break;
-          default:
-            util.enable([cmdMoveUp, cmdMoveDown]);
-            break;
-          }
-        }
-
-        util.enable([cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator]);
       } else {
         util.enable([cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator]);
         util.enable([cmdMoveUp, cmdMoveDown]);
 
-        selection = _(selection).sortBy('index');
-
-        if (selection.shift().index === 0) {
+        if (_.first(selection).index === 0) {
           util.disable(cmdMoveUp);
         }
 
-        if (selection.pop().index === length - 1) {
+        if (_.last(selection).index === totalNums - 1) {
           util.disable(cmdMoveDown);
         }
       }
-
-      var images = _.reject(selection || (selection = []), function (item) {
-        return self.dataList[item.index].name === self.separator;
-      });
-
-      updateStatInfo(length, selection.length, images.length);
     }
 
     function updateStatInfo(total, selected, img_num) {

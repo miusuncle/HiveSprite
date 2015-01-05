@@ -71,7 +71,6 @@ var CSS = take({
     this.lblClassPrefix.text           = util.localize(UI.CLASS_PREFIX);
     this.lblSelectorSuffix.text        = util.localize(UI.SELECTOR_SUFFIX);
 
-
     if (util.zhify()) {
       this.txtSelectorPrefix.helpTip  = util.localize(UI.CHAR_RANGE_0_20);
       this.lblSelectorPrefixHint.text = util.localize(UI.EMPTY);
