@@ -78,8 +78,8 @@ var SOURCE = take({
       'cmdBrowse',
       'cmdRemoveAll',
       'cmdRemove',
-      'cmdDuplicate',
       'cmdInsertSeparator',
+      'cmdDuplicate',
       'cmdMoveUp',
       'cmdMoveDown',
 
@@ -99,8 +99,8 @@ var SOURCE = take({
     this.cmdBrowse.text            = util.localize(UI.BROWSE);
     this.cmdRemoveAll.text         = util.localize(UI.REMOVE_ALL);
     this.cmdRemove.text            = util.localize(UI.REMOVE);
-    this.cmdDuplicate.text         = util.localize(UI.DUPLICATE);
     this.cmdInsertSeparator.text   = util.localize(UI.INSERT_SEPARATOR);
+    this.cmdDuplicate.text         = util.localize(UI.DUPLICATE);
     this.cmdMoveUp.text            = util.localize(UI.MOVE_UP);
     this.cmdMoveDown.text          = util.localize(UI.MOVE_DOWN);
 
@@ -142,8 +142,8 @@ var SOURCE = take({
     var cmdBrowse            = self.cmdBrowse;
     var cmdRemoveAll         = self.cmdRemoveAll;
     var cmdRemove            = self.cmdRemove;
-    var cmdDuplicate         = self.cmdDuplicate;
     var cmdInsertSeparator   = self.cmdInsertSeparator;
+    var cmdDuplicate         = self.cmdDuplicate;
     var cmdMoveUp            = self.cmdMoveUp;
     var cmdMoveDown          = self.cmdMoveDown;
     var chkPreviewImages     = self.chkPreviewImages;
@@ -183,11 +183,6 @@ var SOURCE = take({
       self.trigger('listbox:update');
     });
 
-    on(cmdDuplicate, 'click', dupHandler(function (targetList, targetIndex) {
-      targetList.splice(targetIndex, 0, _.clone(targetList[targetIndex]));
-      return targetIndex + 1;
-    }));
-
     on(cmdInsertSeparator, 'click', function () {
       var separator = self.separator;
       var divisions = util.strRepeat(separator, 100);
@@ -197,6 +192,11 @@ var SOURCE = take({
         return targetIndex;
       });
     }());
+
+    on(cmdDuplicate, 'click', dupHandler(function (targetList, targetIndex) {
+      targetList.splice(targetIndex, 0, _.clone(targetList[targetIndex]));
+      return targetIndex + 1;
+    }));
 
     function dupHandler(dodup) {
       return function () {
@@ -243,7 +243,7 @@ var SOURCE = take({
       var selection = _(lstSourceImages.selection).sortBy('index');
       var stayIndex = Math.max(0, selection[0].index - 1);
 
-      _.foldr(selection, function (yes, item, index) {
+      _.foldr(selection, function (yes, item) {
         self.dataList.splice(item.index, 1);
       }, 'ignore me?');
 
@@ -252,35 +252,33 @@ var SOURCE = take({
       self.trigger('listbox:update');
     });
 
-    on(cmdMoveUp, 'click', function () {
-      var item     = lstSourceImages.selection[0];
-      var idx      = item.index - 1;
-      var dataList = self.dataList;
+    on(cmdMoveUp, 'click', moveHandler(function (selection) {
+      return selection[0].index - 1;
+    }));
 
-      dataList.splice.apply(
-        dataList,
-        [idx, 2].concat(dataList.slice(idx, idx + 2).reverse())
-      );
+    on(cmdMoveDown, 'click', moveHandler(function (selection) {
+      var size = selection.length;
+      return selection[size - 1].index - size + 2;
+    }));
 
-      self.renderListBox();
-      lstSourceImages.selection = idx;
-      self.trigger('listbox:update');
-    });
+    function moveHandler(doMove) {
+      return function () {
+        var dataList  = self.dataList;
+        var selection = _(lstSourceImages.selection).sortBy('index');
+        var insertIdx = doMove(selection);
+        var resultSel = _.range(insertIdx, insertIdx + selection.length);
 
-    on(cmdMoveDown, 'click', function () {
-      var item     = lstSourceImages.selection[0];
-      var idx      = item.index;
-      var dataList = self.dataList;
+        var insertion = _.foldr(selection, function (ret, item) {
+          return _(ret).unshift(dataList.splice(item.index, 1).pop());
+        }, []);
 
-      dataList.splice.apply(
-        dataList,
-        [idx, 2].concat(dataList.slice(idx, idx + 2).reverse())
-      );
+        dataList.splice.apply(dataList, [insertIdx, 0].concat(insertion));
 
-      self.renderListBox();
-      lstSourceImages.selection = idx + 1;
-      self.trigger('listbox:update');
-    });
+        self.renderListBox();
+        lstSourceImages.selection = resultSel;
+        self.trigger('listbox:update');
+      };
+    }
 
     on(ddlBrowseUsing, 'change', _.bind(self.trigger, self, 'browseusing:change'));
     on(lstSourceImages, 'click', _.bind(self.trigger, self, 'listbox:update'));
@@ -335,7 +333,17 @@ var SOURCE = take({
         util.enable([cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator]);
       } else {
         util.enable([cmdRemoveAll, cmdRemove, cmdDuplicate, cmdInsertSeparator]);
-        util.disable([cmdMoveUp, cmdMoveDown]);
+        util.enable([cmdMoveUp, cmdMoveDown]);
+
+        selection = _(selection).sortBy('index');
+
+        if (selection.shift().index === 0) {
+          util.disable(cmdMoveUp);
+        }
+
+        if (selection.pop().index === length - 1) {
+          util.disable(cmdMoveDown);
+        }
       }
 
       var images = _.reject(selection || (selection = []), function (item) {
