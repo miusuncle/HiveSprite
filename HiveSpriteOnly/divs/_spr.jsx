@@ -105,14 +105,20 @@ var SPRITE = take({
       this.ddlArrangeBy.add('item', util.localize(CHC[text]));
     }, this);
 
-    this.ddlBuildMethod.selection  = defaults.buildMethod;
-    this.ddlArrangeBy.selection    = defaults.arrangeBy;
+    this.setView(defaults);
+  },
 
-    this.txtOffsetSpacing.text     = defaults.offsetSpacing;
-    this.txtHorizontalSpacing.text = defaults.horizontalSpacing;
-    this.txtVerticalSpacing.text   = defaults.verticalSpacing;
+  setView: function (settings) {
+    settings = _.defaults({}, settings, defaults);
 
-    this.txtRowNums.text           = defaults.rowNums;
+    this.ddlBuildMethod.selection  = settings.buildMethod;
+    this.ddlArrangeBy.selection    = settings.arrangeBy;
+
+    this.txtOffsetSpacing.text     = settings.offsetSpacing;
+    this.txtHorizontalSpacing.text = settings.horizontalSpacing;
+    this.txtVerticalSpacing.text   = settings.verticalSpacing;
+
+    this.txtRowNums.text           = settings.rowNums;
   },
 
   bindEvents: function () {

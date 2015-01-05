@@ -15,8 +15,7 @@ var BrowseUsing = choices.BrowseUsing;
 
 var SOURCE = take({
   init: function ($) {
-    this.separator = defaults.separator;
-    this.dataList  = defaults.dataList;
+
 
     this.bindCtrls($);
     this.localizeUI();
@@ -27,17 +26,22 @@ var SOURCE = take({
     return this;
   },
 
-  getData: function () {
+  getData: function (includeMore) {
     var dataList = _.clone(this.dataList);
 
-    return util.inject({}, {
+    var ret = util.inject({}, {
       'browseUsing'      : +this.ddlBrowseUsing.selection,
       'includeSubfolders': this.chkIncludeSubFolders.value,
       'previewImages'    : this.chkPreviewImages.value,
-
       'sourceImages'     : this.rejectSeparators(dataList),
       'groupedMarks'     : this.squashSeparators(dataList)
     });
+
+    if (includeMore) {
+      ret.dataList = dataList;
+    }
+
+    return ret;
   },
 
   rejectSeparators: function (dataList) {
@@ -118,9 +122,17 @@ var SOURCE = take({
       this.ddlBrowseUsing.add('item', util.localize(CHC[text]));
     }, this);
 
-    this.ddlBrowseUsing.selection   = defaults.browseUsing;
-    this.chkIncludeSubFolders.value = defaults.includeSubfolders;
-    this.chkPreviewImages.value     = defaults.previewImages;
+    this.setView(defaults);
+  },
+
+  setView: function (settings) {
+    settings = _.defaults({}, settings, defaults);
+
+    this.ddlBrowseUsing.selection   = settings.browseUsing;
+    this.chkIncludeSubFolders.value = settings.includeSubfolders;
+    this.chkPreviewImages.value     = settings.previewImages;
+    this.separator                  = settings.separator;
+    this.dataList                   = settings.dataList;
 
     this.renderListBox();
   },
@@ -155,7 +167,7 @@ var SOURCE = take({
       switch (+ddlBrowseUsing.selection) {
       case BrowseUsing.FILES:
         var promptText = util.localize(DLG.SELECT_IMAGES);
-        images = File.openDialog(promptText, util.dialogFilter(), true);
+        images = File.openDialog(promptText, util.imageFilter(), true);
         break;
       case BrowseUsing.FOLDER:
         var folder = Folder.selectDialog(util.localize(DLG.TARGET_FOLDER));

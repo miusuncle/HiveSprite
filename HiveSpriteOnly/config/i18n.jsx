@@ -57,6 +57,14 @@ var nls = {
     OUTPUT_FOLDER: {
       zh: '请选择要导出Sprite图片文件和CSS样式文件的目标文件夹',
       en: 'Select target folder you want to export Sprite Image file and CSS style file into'
+    },
+    IMPORT_SETTINGS: {
+      zh: '从指定文件导入设定',
+      en: 'Import settings from specified file'
+    },
+    EXPORT_SETTINGS: {
+      zh: '导出当前设定到指定文件',
+      en: 'Export current settings to specified file'
     }
   },
 
@@ -220,6 +228,14 @@ var nls = {
     CANCEL: {
       zh: '取消',
       en: 'Cancel'
+    },
+    IMPORT: {
+      zh: '导入设定...',
+      en: 'Import...'
+    },
+    EXPORT: {
+      zh: '导出设定...',
+      en: 'Export...'
     },
     PREVIEW: {
       zh: '预览',
@@ -386,6 +402,10 @@ module.exports = _.extend(nls, {
     UNKNOWN_IMAGES: {
       zh: '抱歉！由于某些图片不能被Photoshop所识别和打开，操作取消。',
       en: 'Abort building because there are some images cannot be identified and opened by Photoshop!'
+    },
+    UNKNOWN_ERROR: {
+      zh: '未知错误，操作取消。',
+      en: 'Abort operation due to unknown error!'
     }
   }
 });

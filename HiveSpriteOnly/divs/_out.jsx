@@ -63,12 +63,19 @@ var OUT = take({
 
   initView: function () {
     util.disable(this.txtOutputFolder);
+    this.setView(defaults);
+  },
 
-    this.txtOutputFolder.text            = defaults.outputFolder;
-    this.chkExportSpriteImage.value      = defaults.exportSpriteImage;
-    this.chkExportCSSFile.value          = defaults.exportCSSFile;
-    this.chkCloseGeneratedDocument.value = defaults.closeGeneratedDocument;
-    this.chkOpenOutputFolder.value       = defaults.openOutputFolder;
+  setView: function (settings) {
+    settings = _.defaults({}, settings, defaults);
+
+    this.txtOutputFolder.text            = settings.outputFolder;
+    this.chkExportSpriteImage.value      = settings.exportSpriteImage;
+    this.chkExportCSSFile.value          = settings.exportCSSFile;
+    this.chkCloseGeneratedDocument.value = settings.closeGeneratedDocument;
+    this.chkOpenOutputFolder.value       = settings.openOutputFolder;
+
+    _.result(this, 'doNotify');
   },
 
   bindEvents: function () {
@@ -141,19 +148,23 @@ var OUT = take({
       }
     });
 
-    _.times(2, function () {
-      chkExportCSSFile.notify('onClick');
-    });
-
-    if (chkCloseGeneratedDocument.value) {
+    self.doNotify = function () {
       _.times(2, function () {
-        chkCloseGeneratedDocument.notify('onClick');
+        chkExportCSSFile.notify('onClick');
       });
-    }
 
-    if (defaults.openOutputFolder && !chkOpenOutputFolder.value) {
-      chkOpenOutputFolder.notify('onClick');
-    }
+      if (chkCloseGeneratedDocument.value) {
+        _.times(2, function () {
+          chkCloseGeneratedDocument.notify('onClick');
+        });
+      }
+
+      if (defaults.openOutputFolder && !chkOpenOutputFolder.value) {
+        chkOpenOutputFolder.notify('onClick');
+      }
+    };
+
+    _.result(self, 'doNotify');
   }
 });
 

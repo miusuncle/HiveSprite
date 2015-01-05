@@ -521,9 +521,11 @@ module.exports = """dialog {
 
       actions: Group {
         orientation: 'column',
+        alignChildren: 'fill',
+        preferredSize: [120, -1],
+
         cmdBuild: Button {
           text: 'Build',
-          preferredSize: [110, -1],
           properties: {
             name: 'cmdBuild'
           }
@@ -531,9 +533,26 @@ module.exports = """dialog {
 
         cmdCancel: Button {
           text: 'Cancel',
-          preferredSize: [110, -1],
           properties: {
             name: 'cmdCancel'
+          }
+        },
+
+        p: Panel {
+          preferredSize: [-1, 0]
+        },
+
+        cmdImport: Button {
+          text: 'Import...',
+          properties: {
+            name: 'cmdImport'
+          }
+        },
+
+        cmdExport: Button {
+          text: 'Export...',
+          properties: {
+            name: 'cmdExport'
           }
         }
       },
@@ -548,12 +567,11 @@ module.exports = """dialog {
           name: 'pnlImagePreview'
         },
 
-        img0: Image { preferredSize: [100, 86] },
-        img1: Image { preferredSize: [100, 86] },
-        img2: Image { preferredSize: [100, 86] },
-        img3: Image { preferredSize: [100, 86] },
-        img4: Image { preferredSize: [100, 86] },
-        img5: Image { preferredSize: [100, 86] }
+        img0: Image { preferredSize: [100, 100] },
+        img1: Image { preferredSize: [100, 100] },
+        img2: Image { preferredSize: [100, 100] },
+        img3: Image { preferredSize: [100, 100] },
+        img4: Image { preferredSize: [100, 100] }
       }
     }
   }

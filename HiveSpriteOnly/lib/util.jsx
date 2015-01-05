@@ -31,7 +31,8 @@ var util = module.exports = {
   isFolder           : isFolder,
   isImageType        : isImageType,
   isFolderOrImageType: isFolderOrImageType,
-  dialogFilter       : dialogFilter,
+  imageFilter        : imageFilter,
+  textFilter         : textFilter,
 
   defaultPixels      : defaultPixels,
   newDocument        : newDocument,
@@ -253,19 +254,36 @@ function isFolder(target) {
 }
 
 function isImageType(target) {
-  return isFile(target) && /\.(jpg|jpeg|png|gif)$/i.test(target.name);
+  return isFile(target) && /\.(?:jpg|jpeg|png|gif)$/i.test(target.name);
+}
+
+function isTextType(target) {
+  return isFile(target) && /\.(?:txt|json)$/i.test(target.name);
 }
 
 function isFolderOrImageType(target) {
   return isFolder(target) || isImageType(target);
 }
 
-function dialogFilter() {
+function isFolderOrTextType(target) {
+  return isFolder(target) || isTextType(target);
+}
+
+function imageFilter() {
   switch (util.platform) {
   case 'osx':
     return isFolderOrImageType;
   case 'windows':
     return 'Image Files:*.JPG;*.JPEG;*.PNG;*.GIF';
+  }
+}
+
+function textFilter() {
+  switch (util.platform) {
+  case 'osx':
+    return isFolderOrTextType;
+  case 'windows':
+    return 'Text Files:*.txt;*.json';
   }
 }
 

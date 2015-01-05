@@ -98,20 +98,33 @@ var CSS = take({
       this.ddlCSSFormat.add('item', util.localize(CHC[text]));
     }, this);
 
-    this.ddlCSSFormat.selection      = defaults.cssFormat;
-    this.chkIncludeWidthHeight.value = defaults.includeWidthHeight;
-    this.chkIncludeBGI.value         = defaults.includeBGI;
-    this.txtSelectorPrefix.text      = defaults.selectorPrefix;
-    this.txtClassPrefix.text         = defaults.classPrefix;
-    this.txtSelectorSuffix.text      = defaults.selectorSuffix;
+    this.setView(defaults);
+  },
+
+  setView: function (settings) {
+    settings = _.defaults({}, settings, defaults);
+
+    this.ddlCSSFormat.selection      = settings.cssFormat;
+    this.chkIncludeWidthHeight.value = settings.includeWidthHeight;
+    this.chkIncludeBGI.value         = settings.includeBGI;
+    this.txtSelectorPrefix.text      = settings.selectorPrefix;
+    this.txtClassPrefix.text         = settings.classPrefix;
+    this.txtSelectorSuffix.text      = settings.selectorSuffix;
+
+    _.result(this, 'doNotify');
   },
 
   bindEvents: function () {
-    var chkIncludeBGI        = this.chkIncludeBGI;
+    var chkIncludeBGI = this.chkIncludeBGI;
     var chkExportSpriteImage = this.chkExportSpriteImage;
 
     on(chkIncludeBGI, 'click', includeBGIClicked);
-    chkIncludeBGI.value && _.times(2, includeBGIClicked);
+
+    this.doNotify = function () {
+      chkIncludeBGI.value && _.times(2, includeBGIClicked);
+    };
+
+    _.result(this, 'doNotify');
 
     function includeBGIClicked() {
       var exportImage = chkExportSpriteImage.value;
