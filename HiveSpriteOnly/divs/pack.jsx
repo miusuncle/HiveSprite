@@ -15,8 +15,7 @@ module.exports = function ($) {
   var DLG = nls.DLG;
   var ERR = nls.ERR;
 
-  // util.inspect(targetImages);
-  var SEPARATOR = settings.placeholderSymbol;
+  var SEPARATOR    = settings.placeholderSymbol;
   var IMG_NAME_SEP = settings.imageNameSeparator;
 
   var divs = [divSrc($), divOut($), divSpr($), divCss($)];
@@ -81,19 +80,23 @@ module.exports = function ($) {
 
   on(cmdExport, 'click', function () {
     var output = getData(true);
+    // util.inspect(output);
+
     var sourceImages = util.deepClone(output.sourceImages);
+    // util.inspect(sourceImages);
 
     output = _.pick(getData(true), _.keys(defaults));
     // util.inspect(output);
 
     // remove duplicates
     sourceImages = _.uniq(sourceImages, _.property('path'));
+    // util.inspect(sourceImages);
 
-    var confirmation = !!_.size(sourceImages);
-    var exportImageTips = util.localize(DLG.EXPORT_IMAGES_TIPS);
-    var exportImage = confirmation ? util.confirm(exportImageTips) : false;
+    var confirmation     = !!_.size(sourceImages);
+    var exportImagesTips = util.localize(DLG.EXPORT_IMAGES_TIPS);
+    var exportImages     = confirmation && util.confirm(exportImagesTips);
 
-    if (!exportImage) {
+    if (!exportImages) {
       var promptFile = util.localize(DLG.EXPORT_SETTINGS_TO_FILE);
       var exportFile = File.saveDialog(promptFile);
 
@@ -111,27 +114,25 @@ module.exports = function ($) {
         return;
       }
 
-      var fname = [exportFolder.fullName, 'settings.hivesprite'].join('/');
-      var fileHandle = new File(fname);
+      var fileName      = [exportFolder.fullName, 'settings.hivesprite'].join('/');
+      var fileHandle    = new File(fileName);
       var imgFolderName = 'images';
 
       var imageSubDir = [exportFolder.fullName, imgFolderName].join('/');
       var imageFolder = new Folder(imageSubDir);
       imageFolder.create();
 
-      var targetImages = _.map(sourceImages, function (image) {
-        var sep = IMG_NAME_SEP + (+String(Math.random()).slice(2)).toString(36);
-        sep = sep.toUpperCase();
-
+      var targetImages = _.map(sourceImages, function (image, index) {
+        var sep   = IMG_NAME_SEP + (index + 1);
         var parts = image.name.split('.');
-        var ext = parts.pop();
+        var ext   = parts.pop();
 
         parts = [parts.join('.'), ext];
         parts = [parts[0].split(IMG_NAME_SEP)[0], parts[1]];
 
         var sepname = parts.join(sep + '.');
 
-        image.name = parts.join('.');
+        image.name    = parts.join('.');
         image.relpath = [imgFolderName, sepname].join('/');
         image.newpath = [imageSubDir, sepname].join('/');
 
@@ -142,6 +143,7 @@ module.exports = function ($) {
 
         return image;
       });
+      // util.inspect(targetImages);
 
       var dataList = _.reduce(output.dataList, function (ret, item, index) {
         if (item.name !== SEPARATOR) {
@@ -155,7 +157,6 @@ module.exports = function ($) {
 
         return util.inject(ret, index, item);
       }, []);
-
       // util.inspect(dataList);
 
       output.isImagePathRelatived = true;

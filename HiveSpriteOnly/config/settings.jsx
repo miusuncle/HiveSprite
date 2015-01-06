@@ -6,7 +6,7 @@ var settings = {
   'confirmRemove'       : false,
 
   'placeholderSymbol'   : '-',
-  'imageNameSeparator'  : '#!',
+  'imageNameSeparator'  : '!@',
 
   'noSeparatorsOnBrowse': false,
   'noDuplicatesOnBrowse': false,

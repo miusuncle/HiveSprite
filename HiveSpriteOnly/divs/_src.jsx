@@ -48,7 +48,7 @@ var SOURCE = take({
     return _.reject(dataList, _.compose(
       _.partial(_.isEqual, _, this.SEPARATOR),
       _.property('name')
-    ), this);
+    ));
   },
 
   squashSeparators: function (dataList) {
