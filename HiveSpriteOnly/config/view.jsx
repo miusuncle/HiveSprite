@@ -567,11 +567,11 @@ module.exports = """dialog {
           name: 'pnlImagePreview'
         },
 
-        img0: Image { preferredSize: [100, 100] },
-        img1: Image { preferredSize: [100, 100] },
-        img2: Image { preferredSize: [100, 100] },
-        img3: Image { preferredSize: [100, 100] },
-        img4: Image { preferredSize: [100, 100] }
+        img0: Image { preferredSize: [100, 96] },
+        img1: Image { preferredSize: [100, 96] },
+        img2: Image { preferredSize: [100, 96] },
+        img3: Image { preferredSize: [100, 96] },
+        img4: Image { preferredSize: [100, 96] }
       }
     }
   }

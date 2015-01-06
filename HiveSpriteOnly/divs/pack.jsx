@@ -24,19 +24,31 @@ module.exports = function ($) {
 
   on(cmdImport, 'click', function () {
     var promptText = util.localize(DLG.IMPORT_SETTINGS);
-    var fileHandle = File.openDialog(promptText, util.textFilter(), false);
+    var unknownErr = util.localize(ERR.UNKNOWN_ERROR);
+
+    var fileHandle = File.openDialog(promptText, undefined, false);
     if (!fileHandle) { return; }
 
     try {
       var input = util.readJSON(fileHandle.fsName);
-      _.isObject(input) || (input = {});
       // util.inspect(input);
+
+      if (!_.isObject(input)) {
+        throw new TypeError(unknownErr);
+      }
+
+      var intersect = _.intersection(_.keys(defaults), _.keys(input));
+      // util.inspect(intersect);
+
+      if (!_.size(intersect)) {
+        throw new TypeError(unknownErr);
+      }
 
       _.each(divs, function (div) {
         div.setView(input);
       });
     } catch (e) {
-      util.alert(util.localize(ERR.UNKNOWN_ERROR));
+      util.alert(unknownErr);
     }
   });
 

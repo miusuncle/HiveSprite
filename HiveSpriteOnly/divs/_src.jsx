@@ -185,11 +185,15 @@ var SOURCE = take({
         return _(ret).push({ 'name': image.name, 'path': image.fsName });
       }, self.dataList);
 
-      // remove separators
-      self.dataList = self.rejectSeparators(self.dataList);
+      if (settings.noSeparatorsOnBrowse) {
+        // remove separators
+        self.dataList = self.rejectSeparators(self.dataList);
+      }
 
-      // remove duplicates
-      self.dataList = _.uniq(self.dataList, _.property('path'));
+      if (settings.noDuplicatesOnBrowse) {
+        // remove duplicates
+        self.dataList = _.uniq(self.dataList, _.property('path'));
+      }
 
       self.renderListBox();
       self.trigger('listbox:update');

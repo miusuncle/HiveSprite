@@ -5,6 +5,9 @@ var settings = {
   'confirmRemoveAll'    : true,
   'confirmRemove'       : false,
 
+  'noSeparatorsOnBrowse': false,
+  'noDuplicatesOnBrowse': false,
+
   'abortOnUnknownImages': true,
 
   'saveLastSettings'    : true,
