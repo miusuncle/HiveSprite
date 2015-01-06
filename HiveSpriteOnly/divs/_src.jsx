@@ -15,7 +15,7 @@ var BrowseUsing = choices.BrowseUsing;
 
 var SOURCE = take({
   init: function ($) {
-
+    this.SEPARATOR = settings.placeholderSymbol;
 
     this.bindCtrls($);
     this.localizeUI();
@@ -27,7 +27,7 @@ var SOURCE = take({
   },
 
   getData: function (includeMore) {
-    var dataList = _.clone(this.dataList);
+    var dataList = util.deepClone(this.dataList);
 
     var ret = util.inject({}, {
       'browseUsing'      : +this.ddlBrowseUsing.selection,
@@ -46,26 +46,26 @@ var SOURCE = take({
 
   rejectSeparators: function (dataList) {
     return _.reject(dataList, _.compose(
-      _.partial(_.isEqual, _, this.separator),
+      _.partial(_.isEqual, _, this.SEPARATOR),
       _.property('name')
     ), this);
   },
 
   squashSeparators: function (dataList) {
-    var sep = this.separator;
+    var SEP = this.SEPARATOR;
 
     return _.chain(dataList)
       .map(function (item) {
-        return item.name === sep ? sep : {};
+        return item.name === SEP ? SEP : {};
       })
       .foldl(function (ret, item, idx, ary) {
-        if (item !== sep || (idx !== 0 && ary[idx - 1] !== sep)) {
+        if (item !== SEP || (idx !== 0 && ary[idx - 1] !== SEP)) {
           ret.push(item);
         }
         return ret;
       }, [])
       .foldr(function (ret, item) {
-        return _.isEmpty(ret) && item === sep ? ret : _(ret).unshift(item);
+        return _.isEmpty(ret) && item === SEP ? ret : _(ret).unshift(item);
       }, [])
       .value();
   },
@@ -131,7 +131,6 @@ var SOURCE = take({
     this.ddlBrowseUsing.selection   = settings.browseUsing;
     this.chkIncludeSubFolders.value = settings.includeSubfolders;
     this.chkPreviewImages.value     = settings.previewImages;
-    this.separator                  = settings.separator;
     this.dataList                   = settings.dataList;
 
     this.renderListBox();
@@ -200,11 +199,11 @@ var SOURCE = take({
     });
 
     on(cmdInsertSeparator, 'click', function () {
-      var separator = self.separator;
-      var divisions = util.strRepeat(separator, 100);
+      var SEPARATOR = self.SEPARATOR;
+      var divisions = util.strRepeat(SEPARATOR, 100);
 
       return dupHandler(function (targetList, targetIndex) {
-        targetList.splice(targetIndex, 0, { 'name': separator, 'path': divisions });
+        targetList.splice(targetIndex, 0, { 'name': SEPARATOR, 'path': divisions });
         return targetIndex;
       });
     }());
@@ -320,7 +319,7 @@ var SOURCE = take({
       var selection = _(lstSourceImages.selection || []).sortBy('index');
 
       var images = _.reject(selection, function (item) {
-        return self.dataList[item.index].name === self.separator;
+        return self.dataList[item.index].name === self.SEPARATOR;
       });
 
       updateCmdState(entrySize, selection);
@@ -385,12 +384,12 @@ var SOURCE = take({
 
       if (selection) {
         var dataList  = self.dataList;
-        var separator = self.separator;
+        var SEPARATOR = self.SEPARATOR;
 
         selection = _.chain(selection)
           .sortBy('index')
           .reject(function (item) {
-            return dataList[item.index].name === separator;
+            return dataList[item.index].name === SEPARATOR;
           })
           .value()
           .slice(0, imgCount);

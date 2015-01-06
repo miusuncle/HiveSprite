@@ -5,10 +5,14 @@ var settings = {
   'confirmRemoveAll'    : true,
   'confirmRemove'       : false,
 
+  'placeholderSymbol'   : '-',
+  'imageNameSeparator'  : '#!',
+
   'noSeparatorsOnBrowse': false,
   'noDuplicatesOnBrowse': false,
 
   'abortOnUnknownImages': true,
+  'hideImportExport'    : false,
 
   'saveLastSettings'    : true,
   'applyLastSettings'   : true,

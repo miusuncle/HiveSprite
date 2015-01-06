@@ -10,7 +10,6 @@ var ArrangeBy    = choices.ArrangeBy;
 var CSSFormats   = choices.CSSFormats;
 
 var defaults = {
-  'separator'             : '-',
   'dataList'              : [],
 
   'browseUsing'           : BrowseUsing.FILES,

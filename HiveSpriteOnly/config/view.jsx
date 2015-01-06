@@ -540,6 +540,9 @@ module.exports = """dialog {
 
         p: Panel {
           preferredSize: [-1, 0]
+          properties: {
+            name: 'pnlImpExpSep'
+          }
         },
 
         cmdImport: Button {

@@ -58,13 +58,25 @@ var nls = {
       zh: '请选择要导出Sprite图片文件和CSS样式文件的目标文件夹',
       en: 'Select target folder you want to export Sprite Image file and CSS style file into'
     },
-    IMPORT_SETTINGS: {
+    IMPORT_SETTINGS_FORM_FILE: {
       zh: '从指定文件导入设定',
       en: 'Import settings from specified file'
     },
-    EXPORT_SETTINGS: {
+    EXPORT_SETTINGS_TO_FILE: {
       zh: '导出当前设定到指定文件',
       en: 'Export current settings to specified file'
+    },
+    EXPORT_SETTINGS_TO_FOLDER: {
+      zh: '导出当前设定到指定文件夹',
+      en: 'Export current settings to specified folder'
+    },
+    EXPORT_IMAGES_TIPS: {
+      zh: '当前设置图片源非空，是否同时导出图片源？',
+      en: 'Current source images is not empty, do you want to export source images simultaneously?'
+    },
+    EXPORT_SUCCEED: {
+      zh: '当前设置导出成功，是否打开导出目录？',
+      en: 'Export current settings successfully, do you want to reveal export folder?'
     }
   },
 
@@ -406,6 +418,10 @@ module.exports = _.extend(nls, {
     UNKNOWN_ERROR: {
       zh: '未知错误，操作取消。',
       en: 'Abort operation due to unknown error!'
+    },
+    DEST_ACCESS_DENIED: {
+      zh: '目标文件访问受限，操作取消。',
+      en: 'Abort operation due to destination folder access denied!'
     }
   }
 });

@@ -58,6 +58,10 @@ var util = module.exports = {
     return this.locale === 'zh';
   },
 
+  deepClone: function (obj) {
+    return JSON.parse(JSON.stringify(obj));
+  },
+
   readJSON: function (filePath) {
     var fileHandle = new File(filePath);
     var contents = null;

@@ -127,13 +127,16 @@ var Builder = take({
     // remove the last empty layer
     layers.pop().remove();
 
+    var IMG_NAME_SEP = settings.imageNameSeparator;
+
     // obtain each layer's basic info
     return _.map(layers, function (layer) {
       var bounds = _.map(layer.bounds, Number);
+      var name = layer.name.replace(/\s+/g, '').split(IMG_NAME_SEP)[0];
 
       return {
         'layer' : layer,
-        'name'  : layer.name.replace(/\s+/g, ''),
+        'name'  : name,
         'width' : bounds[2] - bounds[0],
         'height': bounds[3] - bounds[1]
       };
