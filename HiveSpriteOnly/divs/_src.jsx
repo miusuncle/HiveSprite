@@ -401,9 +401,14 @@ var SOURCE = take({
         }
 
         _.each(selection, function (item, index, image) {
-          image         = imgControls[index];
-          image.image   = dataList[item.index].path;
+          image = imgControls[index];
           image.visible = true;
+
+          try {
+            image.image = dataList[item.index].path;
+          } catch (e) {
+            image.visible = false;
+          }
         });
       } else {
         pnlImagePreview.visible = false;
