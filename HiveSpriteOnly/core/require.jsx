@@ -1,117 +1,78 @@
 !(function () {
-  var global = this;
-
   var MODULE_CACHES = {};
-  var SHIM = {};
   var DIR_QUEUE = [];
 
-  var EXT = /\.jsx?$/;
-  var WAP = '_wrapped';
-  var SEP = '/';
+  function rel2abs(mid, filename, _) {
+    mid = mid.replace(/^\.\//, '');
+
+    if (DIR_QUEUE.length) {
+      _ = DIR_QUEUE.slice(-1).concat(mid);
+    } else {
+      _ = filename.split('/');
+      _.splice(_.length - 1, 1, mid);
+    }
+
+    return normpath(_.join('/'));
+  }
 
   function normpath(path) {
     while (path.indexOf('/../') !== -1) {
       path = path.replace(/[^\/]+\/\.{2}\//, '');
     }
-    return path;
+    return File.decode(path);
   }
 
-  function wrap(contents) {
-    var prefix = '!(function (require, exports, module) {';
-    var suffix = '}).call(global, require, exports, module);';
-    return [prefix, contents, suffix].join('\n');
+  function getFile(mid) {
+    var fileHandle = File(mid);
+    var exts = ['.jsx', '.js'];
+
+    while (!fileHandle.exists || isFolder(fileHandle)) {
+      var ext = exts.shift();
+      if (!ext) throw Error(File.decode(mid) + ' is NOT a MODULE!');
+      fileHandle = new File(mid + ext);
+    }
+
+    return fileHandle;
   }
 
-  function haswrap(path) {
-    var parts = path.split(SEP);
-    return RegExp(WAP + '(\.jsx?)?$').test(parts.pop());
-  }
-
-  function wrapmid(F) {
-    var mid = '#' + Date.now() + '@' + F.name.replace(EXT, WAP + '$&');
-    return [Folder.temp, mid].join(SEP);
-  }
-
-  function mixin(target, source, _) {
-    for (_ in source) target[_] = source[_];
-  }
-
-  function isfolder(target) {
+  function isFolder(target) {
     return target instanceof Folder;
   }
 
-  function require() {
-    return global['eval'].call(global, """(function require(moduleId) {
-      var filepath = $.fileName, parts;
+  function readFile(file) {
+    try {
+      return file.open('r') && file.read() || '';
+    } finally {
+      file.close();
+    }
+  }
 
-      if (moduleId.indexOf('./') === 0) {
-        moduleId = moduleId.slice(2);
+  function buildRequire() {
+    return eval("""(function require(mid) {
+      var moduleId = rel2abs(mid, $.fileName);
+      if (moduleId in MODULE_CACHES) return MODULE_CACHES[moduleId];
+
+      try {
+        var exports = function () {};
+        var module = { 'exports': exports };
+
+        var fileHandle = getFile(moduleId);
+        var contents = readFile(fileHandle);
+        var func = new Function('require, exports, module', contents);
+
+        DIR_QUEUE.push(fileHandle.path);
+        func(require, exports, module);
+        DIR_QUEUE.pop();
+
+        fileHandle = null;
+        moduleId = moduleId.replace(/\.jsx?$/, '');
+
+        return (MODULE_CACHES[moduleId] = (module || {}).exports);
+      } catch (e) {
+        alert(e.message);
       }
-
-      if (haswrap(filepath)) {
-        parts = DIR_QUEUE.slice(-1).concat(moduleId);
-      } else {
-        parts = filepath.split(SEP);
-        parts.splice(parts.length - 1, 1, moduleId);
-      }
-
-      moduleId = normpath(parts.join(SEP));
-      moduleId = File.decode(moduleId);
-
-      return MODULE_CACHES[moduleId] || (function () {
-        try {
-          var nakedFile = File(moduleId);
-          var exts = ['.jsx', '.js'];
-
-          while (!nakedFile.exists || isfolder(nakedFile)) {
-            var extension = exts.shift();
-
-            if (!extension) {
-              throw new Error(File.decode(moduleId) + ' is NOT a MODULE!');
-              return;
-            }
-
-            nakedFile = new File(moduleId + extension);
-          }
-
-          moduleId = nakedFile.fullName;
-
-          var module = { exports: function () {} };
-          var basename = nakedFile.displayName.split('.')[0];
-
-          if (SHIM[basename]) {
-            $.evalFile(moduleId);
-            module.exports = this[SHIM[basename]];
-          } else {
-            DIR_QUEUE.push(nakedFile.path);
-
-            nakedFile.open('r');
-            var wrappedContents = wrap(nakedFile.read());
-            nakedFile.close();
-
-            var wrappedFile = new File(wrapmid(nakedFile));
-            wrappedFile.open('w');
-            wrappedFile.write(wrappedContents);
-            wrappedFile.close();
-
-            try {
-              with (module) { $.evalFile(wrappedFile); }
-            } finally {
-              wrappedFile.remove();
-              DIR_QUEUE.pop();
-            }
-          }
-
-          // the module id being cached SHOULD have no extension
-          moduleId = moduleId.replace(EXT, '');
-
-          return (MODULE_CACHES[moduleId] = (module || {}).exports);
-        } catch (e) {
-          alert(e.message);
-        }
-      })();
     })""");
   }
 
-  mixin(SHIM, (global.require = require())('./_shim'));
+  this.require = buildRequire();
 }).call($.global);
